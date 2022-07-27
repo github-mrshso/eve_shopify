@@ -42,13 +42,7 @@ jobs:
       - run: sudo apt install build-essential curl file git
       - run: sudo apt install zsh
       - name: Print github
-        env:
-            GITHUB_CONTEXT: ${{ toJson(github) }}
-            JOB_CONTEXT: ${{ toJson(job) }}
         run: echo "$GITHUB_CONTEXT" && echo "$JOB_CONTEXT"
       - run: npm run build --if-present
-      - run: ls -alh
-      - run: rm -rf node_modules && mv public public_unused && mv dist public
-      - run: zip -rv Archive.zip *
       - run: npm run push-new-theme:uk
       
