@@ -28,13 +28,9 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
       - uses: pgrimaud/action-shopify@2.1.3
-        env:
-          SHOPIFY_PASSWORD: ${{ secrets.SHOPIFY_PASSWORD }}
-          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
-          SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
-          THEME_PATH: ${{ secrets.THEME_PATH }}
+      - name: Use Node.js ${{ matrix.node-version }}
+      - uses: actions/setup-node@v3
         if: success()
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
