@@ -1,0 +1,979 @@
+@use 'sass:color';
+@use 'sass:list';
+@use 'sass:math';
+
+@import './functions';
+
+// stylelint-disable max-line-length
+// stylelint-disable color-no-hex
+// stylelint-disable scss/dollar-variable-colon-space-after
+
+// Colours
+
+$color-base-pitch:       #000;
+$color-base-yellow:      #ffce00;
+$color-base-black:       #333;
+$color-base-yellow-12:   color.mix(#fff, $color-base-yellow, 12%);
+$color-base-yellow-24:   color.mix(#fff, $color-base-yellow, 24%);
+$color-base-yellow-48:   color.mix(#fff, $color-base-yellow, 48%);
+$color-base-black-12:    color.mix(#fff, $color-base-black, 12%);
+$color-base-black-24:    color.mix(#fff, $color-base-black, 24%);
+$color-base-black-48:    color.mix(#fff, $color-base-black, 48%);
+$color-base-white:       #fff;
+$color-base-white-06:    color.mix($color-base-black, #fff, 6%);
+$color-base-white-12:    color.mix($color-base-black, #fff, 12%);
+$color-base-white-24:    color.mix($color-base-black, #fff, 24%);
+$color-base-white-48:    color.mix($color-base-black, #fff, 48%);
+$color-base-grey-01:     #f3f3f3;
+$color-base-grey-02:     #ececec;
+$color-base-grey-03:     #949494;
+$color-base-grey-04:     #767676;
+$color-base-red:         #d3482d;
+$color-base-light-red:   #c03838;
+$color-base-green:       #007228;
+$color-base-light-green: #177E3B;
+$color-base-brown:       #af4f00;
+$color-base-light-brown: #b65f17;
+
+$color-primary:          $color-base-yellow;
+$color-primary-hover:    $color-base-yellow-24;
+$color-success:          $color-base-green;
+$color-success-hover:    $color-base-light-green;
+$color-danger:           $color-base-red;
+$color-danger-hover:     $color-base-light-red;
+$color-disabled:         $color-base-grey-03;
+$color-text-muted:       $color-base-grey-04;
+$color-notify:           $color-base-light-green;
+
+// Impulse variables
+
+// stylelint-disable scss/dollar-variable-pattern
+
+// General size variables
+
+$gutter: 30px;
+$page-width: 1500px;
+$page-width-narrowest: 600px;
+$page-width-narrow: 830px;
+$layer-block-width: $page-width-narrowest;
+$input-radius: 0;
+$page-width-gutter-small: 17px;
+$page-width-gutter-large: 40px;
+$grid-gutter: 22px;
+$grid-gutter-small: 17px;
+$drawerGutterLarge: $gutter;
+$drawerGutterSmall: calc($gutter / 2);
+$body-min-height-sm: 300px;
+$body-min-height-lg: 700px;
+
+/* =============================================================================
+  Grid Breakpoints and Class Names
+  - Do not change breakpoint variable names
+  - Medium breakpoint is also set in theme.js.liquid and inline
+    throughout some templates. Be weary of changing unless you know what you're
+    doing.
+============================================================================= */
+
+$grid-medium: 769px;
+$grid-large: 960px;
+$grid-widescreen: 1050px;
+$small: 'small';
+$small-up: 'small-up';
+$medium: 'medium';
+$medium-down: 'medium-down';
+$medium-up: 'medium-up';
+$large: 'large';
+$large-down: 'large-down';
+$large-up: 'large-up';
+$widescreen: 'widescreen';
+$grid-breakpoint-has-widths: ($small, $medium-up, $widescreen);
+$grid-breakpoint-has-utility: ($small, $medium-down, $medium-up, $large-up, $widescreen);
+$grid-breakpoint-has-push: ($medium-up, $widescreen);
+
+// The `$grid-breakpoints` list is used to build our media queries.
+
+// You can use these in the media-query mixin.
+
+$grid-breakpoints: (
+  $small '(max-width: #{$grid-medium - 1})',
+  $small-up '(min-width: #{$grid-medium - 1})',
+  $medium '(min-width: #{$grid-medium}) and (max-width: #{$grid-large - 1})',
+  $medium-down '(max-width: #{$grid-large - 1})',
+  $medium-up '(min-width: #{$grid-medium})',
+  $large '(min-width: #{$grid-large}) and (max-width: #{$grid-widescreen - 1})',
+  $large-down '(max-width: #{$grid-widescreen - 1})',
+  $large-up '(min-width: #{$grid-large})',
+  $widescreen '(min-width: #{$grid-widescreen})'
+);
+
+/* ================ Color variables ================ */
+
+// Button colors
+
+$colorBtnPrimary: $color-primary;
+$colorBtnPrimaryText: $color-base-black;
+$colorCartDot: $color-base-red;
+
+// Text link colors
+
+$colorLink: $color-base-black;
+
+// Text colors
+
+$colorTextBody: $color-base-black;
+$colorPrice: $colorTextBody;
+$colorTextSavings: $color-base-red;
+$colorSaleTag: $color-base-red;
+
+// Backgrounds
+
+$colorBody: #fff;
+$colorInputBg: #fff;
+
+// Footer
+
+$colorFooter: $color-base-grey-01;
+$colorFooterText: $colorTextBody;
+
+// Border colors
+
+$colorBorder: $color-base-grey-03;
+
+// Nav and dropdown link background
+
+$colorNav: #fff;
+$colorNavText: $colorTextBody;
+$colorAnnouncement: $color-base-grey-01;
+$colorAnnouncementText: $colorTextBody;
+$colorStickyNavLinks: #fff;
+
+// Hero text color
+
+$colorHeroText: $colorTextBody;
+
+// Helper colors
+
+$disabledGrey: $color-disabled;
+$disabledBorder: $color-disabled;
+$errorRed: $color-base-red;
+$errorRedBg: #fff6f6;
+$successGreen: $color-base-green;
+$successGreenBg: #ecfef0;
+
+// Content spacing
+
+$contentTopMargin: 70px;
+$contentTopMarginSmall: 40px;
+
+// Section header & collection image
+
+$sectionHeaderBottom: 50px;
+$sectionHeaderBottomSmall: 30px;
+
+// Slideshow colors
+
+$slideshow-text-light: #fff;
+$slideshow-text-dark: $colorTextBody;
+
+// Modal
+
+$colorModalBg: $color-base-black;
+$colorModalText: #fff;
+
+// Image overlays
+
+$colorImageOverlay: #fff;
+$colorImageOverlayOpacity: 0;
+$colorImageOverlayTextShadow: 0;
+$colorSmallImageBg: #fff;
+$colorLargeImageBg: $color-base-black;
+$colorGridOverlay: $color-base-black;
+$colorGridOverlayOpacity: 0;
+
+// Button style
+
+$buttonStyle: square;
+$buttonSkew: 12;
+$button-radius: 0;
+@if $buttonStyle == 'round-slight' {
+  $button-radius: 3px;
+}
+
+@if $buttonStyle == 'round' {
+  $button-radius: 50px;
+}
+
+// Icon sizes
+
+$desktopMenuIconSize: 30px;
+$desktopMenuChevronSize: 10px;
+$colorSwatchCollectionSize: 15px;
+$colorSwatchCollectionSizeLarge: 19px;
+$colorSwatchSidebarSize: 35px;
+$swatchStyle: round;
+$siteNavItemPadding: 10px;
+$siteNavIconPadding: 12px;
+
+// Z-index
+
+// $zindexNavDropdowns: 5;
+// $zindexDrawer: 30;
+// $zindexDrawerOverlay: 26;
+// $zindexModal: 25;
+// $zindexSkipToContent: 10000;
+// $z-index-sticky-header: 6;
+// $z-index-stuck-header: 20;
+// $z-index-header-search: 28;
+// $z-index-loader: 4;
+
+/* ================ Typography ================ */
+
+// Font-face header styles
+
+$type_header_family: 'Publico';
+$type_header_fallback: serif;
+$type_header_stack: #{"'" + $type_header_family + "', " + $type_header_fallback};
+$type_header_weight: bold;
+
+// Non font-face header styles
+
+$type_header_line_height: 1.9;
+$type_header_text_center: true;
+$type_header_base_size: 42px;
+$type_header_spacing: 0.8pt;
+$type_header_spacing_compressed: 0.6pt;
+$type_header_capitalize: false;
+
+// Font-face base styles
+
+$type_base_family: 'ITCAvantGardeStd';
+$type_base_fallback: 'Helvetica Neue', 'Verdana', 'Arial', sans-serif;
+$type_base_stack: #{"'" + $type_base_family + "', " + $type_base_fallback};
+$type_base_weight: normal;
+
+// Non font-face base styles
+
+$type_body_text_center: false;
+$type_base_spacing: 0.4pt;
+$type_base_line_height: 1.5;
+$type_condensed_line_height: 1.25;
+$type_base_size: 16px;
+$type_product_capitalize: false;
+$icon_weight: 5px;
+$icon_linecaps: round;
+
+$type-font-size-helper-01: 0.75rem;
+$type-line-height-helper-01: 1rem;
+
+/* ============================================================================
+  Animations
+  - $animate_page_transition_style options:
+      page-fade-in-up
+      page-slow-fade
+      page-slide-reveal-across
+      page-slide-reveal-down
+  - $animate_sections_background_style options:
+      fade-in
+      zoom-fade
+      paint-across
+  - $animate_sections_text_style options:
+      fade-in
+      rise-up
+      paint-across
+  - $animate_images_style
+      fade-in
+      zoom-fade
+      paint-across
+============================================================================= */
+
+$animate_page_transitions: false;
+$animate_page_transition_style: page-slow-fade;
+$animate_sections: true;
+$animate_sections_background_style: zoom-fade;
+$animate_sections_text_style: rise-up;
+$animate_images: true;
+$animate_images_style: fade-in;
+$animate_underlines: true;
+
+/* ================ Drawers ================ */
+
+// $drawerNavWidth: 300px;
+// $drawerCartWidth: 100%;
+// $drawerCartWidthLarge: 420px;
+
+// small-up width
+
+// $drawerHeaderHeight: 70px;
+// $drawerHeaderHeightLarge: 119px;
+// $drawerCartFooterHeight: 130px;
+
+// default, overwritten by JS
+
+$colorDrawers: #fff;
+$colorDrawerBorder: $color-base-grey-03;
+$colorDrawerText: $color-base-black;
+$colorDrawerButton: $color-primary;
+$colorDrawerButtonText: $color-base-black;
+$colorDrawerDiscountText: $color-base-green;
+// $fixedHeightLimit: 400px;
+
+/* ================ Misc sizing vars ================ */
+
+$indexSectionMarginSmall: $gutter * 0.85;
+$indexSectionMarginLarge: $gutter * 2.5;
+$textFrameMarginSmall: 7px;
+$textFrameMarginLarge: 10px;
+
+// Buttons
+
+$btnPrimaryFontSize: $type_base_size;
+$btnPrimaryPadding: 11px 20px;
+$btnPrimaryPaddingSmall: 9px 17px;
+$btnMinHeightWhenQuickCheckout: 50px;
+
+// Form element and tertiary button padding
+
+$formElementPadding: 8px 10px;
+
+/* ================ Collapsible icon sizing and animations ================ */
+
+$collapsible-trigger-icon-width-small: 10px;
+$collapsible-trigger-icon-width: 12px;
+$collapsible-trigger-circle-width: 28px;
+$collapsible-open-transition: opacity 1s cubic-bezier(.25,.46,.45,.94), height 0.35s cubic-bezier(.25,.46,.45,.94);
+$collapsible-close-transition: opacity 0.3s cubic-bezier(.25,.46,.45,.94), height 0.3s cubic-bezier(.25,.46,.45,.94);
+$collapsible-content-open-transition: transform 0.5s cubic-bezier(.25,.46,.45,.94);
+$collapsible-content-close-transition: transform 0.3s cubic-bezier(.25,.46,.45,.94);
+
+// stylelint-enable scss/dollar-variable-pattern
+
+// eve styles
+
+// Typography
+/*
+T&M note:
+The REM values in the below Typography section have been updated to 1.6 times their original value
+to counter the '62.5% trick' that Dawn uses. 
+Read about this trick here: https://snook.ca/archives/html_and_css/font-size-with-rem
+*/
+$type-min-font-size-display-01:             4.2rem;
+$type-max-font-size-display-01:             6rem;
+$type-min-line-height-display-01:           3.25;
+$type-max-line-height-display-01:           4.75;
+
+$type-min-font-size-display-02:             4.2rem;
+$type-max-font-size-display-02:             5.4rem;
+$type-min-line-height-display-02:           3.25;
+$type-max-line-height-display-02:           4.25;
+
+$type-min-font-size-heading-01:             3.2rem;
+$type-max-font-size-heading-01:             4.2rem;
+$type-min-line-height-heading-01:           2.5;
+$type-max-line-height-heading-01:           3.25;
+
+$type-min-font-size-heading-02:             2.4rem;
+$type-max-font-size-heading-02:             3.2rem;
+$type-min-line-height-heading-02:           1.875;
+$type-max-line-height-heading-02:           2.5;
+
+$type-min-font-size-heading-03:             2rem;
+$type-max-font-size-heading-03:             2.4rem;
+$type-min-line-height-heading-03:           1.5;
+$type-max-line-height-heading-03:           1.875;
+
+$type-min-font-size-heading-04:             1.6rem;
+$type-max-font-size-heading-04:             2rem;
+$type-min-line-height-heading-04:           1.25;
+$type-max-line-height-heading-04:           1.5;
+
+$type-min-font-size-body-01:                1.6rem;
+$type-max-font-size-body-01:                2rem;
+$type-min-line-height-body-01:              $type_base_line_height;
+$type-max-line-height-body-01:              1.875;
+
+$type-font-size-body-02:                    1.4rem;
+$type-line-height-body-02:                  $type_base_line_height;
+
+$type-font-size-blockquote-01:              4rem;
+$type-line-height-blockquote-01:            1.4;
+
+$type-font-size-button-01:                  $type_base_size;
+$type-line-height-button-01:                2rem;
+
+$type-font-size-button-02:                  $type-font-size-body-02;
+$type-line-height-button-02:                1.6rem;
+
+$type-font-size-input-01:                   $type-font-size-button-01;
+$type-line-height-input-01:                 $type-line-height-button-01;
+
+$type-font-size-label-01:                   $type-font-size-body-02;
+$type-line-height-label-01:                 1.6rem;
+
+$type-font-size-caption-01:                 $type-font-size-body-02;
+$type-line-height-caption-01:               1.6rem;
+
+$type-font-size-helper-01:                  1.2rem;
+$type-line-height-helper-01:                1.6rem;
+
+$type-font-size-big-price-01:               3.2rem;
+
+// Transitions
+
+$transition-speed:                          300ms;
+$transition-ease:                           ease-in-out;
+
+// Z-Indexes
+
+$z-index-base-flat:                         0;
+$z-index-base-raised:                       10;
+$z-index-base-raised-hover:                 20;
+$z-index-base-drawers:                      30;
+$z-index-base-menu:                         40;
+$z-index-base-modal:                        50;
+
+$z-index-nav-dropdowns:                     $z-index-base-drawers;
+$z-index-drawer-overlay:                    ($z-index-base-drawers + 1);
+$z-index-drawer:                            ($z-index-base-drawers + 2);
+$z-index-modal:                             $z-index-base-modal;
+$z-index-skip-to-content:                   $z-index-base-modal;
+$z-index-sticky-header:                     $z-index-base-raised;
+$z-index-stuck-header:                      $z-index-base-drawers;
+$z-index-header-search:                     ($z-index-stuck-header + 10);
+$z-index-loader:                            $z-index-base-modal;
+$z-index-product-comparison-header:         $z-index-sticky-header;
+$z-index-promo-bar:                         $z-index-stuck-header;
+$z-index-promo-bar-stars:                   ($z-index-promo-bar + 1);
+$z-index-promo-bar-sun:                     ($z-index-promo-bar-stars + 1);
+$z-index-promo-bar-text:                    ($z-index-promo-bar-sun + 1);
+$z-index-promo-bar-code:                    ($z-index-promo-bar-sun + 1);
+$z-index-promo-bar-countdown:               $z-index-promo-bar-text;
+$z-index-modal-container:                   $z-index-base-modal;
+$z-index-modal-overlay:                     ($z-index-modal-container + 1);
+$z-index-modal-popup:                       ($z-index-modal-overlay + 1);
+$z-index-opt-label:                         ($z-index-base-flat + 1);
+$z-index-opt-proxy:                         ($z-index-opt-label + 1);
+$z-index-atc-bar:                           $z-index-base-raised;
+$z-index-product-gallery-fullscreen:        ($z-index-base-modal - 1);
+$z-index-page-go-to-top:                    ($z-index-base-flat + 1);
+$z-index-quiz-header:                       ($z-index-stuck-header - 1);
+$z-index-quiz-footer:                       ($z-index-quiz-header - 1);
+
+// Colours
+
+$color-body:                                $colorTextBody;
+$color-body-bg:                             $colorBody;
+$color-label-credit-card-form:              #737373;
+$color-border:                              $color-base-grey-03;
+$color-header-border:                       $color-primary;
+$color-grey-bg:                             $color-base-grey-01;
+
+$color-link-color:                          $color-base-grey-04;
+$color-link-border:                         $color-base-grey-03;
+$color-link-hover-color:                    $color-body;
+$color-link-inverse-color:                  $color-base-white;
+$color-link-inverse-border:                 $color-base-grey-01;
+$color-link-inverse-hover-color:            $color-base-grey-01;
+
+$color-button:                              $color-body;
+$color-button-bg:                           $color-primary;
+$color-button-hover-bg:                     $color-base-yellow-24;
+$color-button-focus-border:                 $color-body;
+$color-button-outline-bg:                   $color-body-bg;
+$color-button-outline-border:               $color-body;
+$color-button-outline-disabled-border:      $color-disabled;
+$color-button-outline-hover-border:         $color-button-bg;
+$color-button-outline-focus-border:         $color-button-outline-border;
+$color-button-outline-active-bg:            $color-button-bg;
+$color-button-disabled-color:               $color-base-grey-04;
+$color-button-disabled-bg:                  $color-base-grey-02;
+$color-button-disabled-border:              $color-base-grey-02;
+
+$color-icon:                                $color-base-grey-04;
+$color-icon-button:                         $color-icon;
+$color-icon-button-hover:                   $color-body;
+$color-icon-button-disabled:                $color-disabled;
+$color-icon-button-light:                   $color-body-bg;
+$color-icon-button-light-hover:             $color-base-grey-03;
+$color-icon-button-light-disabled:          $color-base-grey-04;
+$color-icon-button-dark:                    $color-base-grey-04;
+$color-icon-button-dark-hover:              $color-body;
+$color-icon-button-dark-disabled:           $color-button-disabled-bg;
+$color-icon-button-badge-bg:                $color-primary;
+
+$color-nav-link:                            $color-base-grey-04;
+$color-nav-link-hover:                      $color-body;
+
+$color-input-color:                         $color-body;
+$color-input-bg:                            $color-body-bg;
+$color-input-border:                        $color-border;
+$color-input-active-border:                 $color-body;
+$color-input-hover-border:                  $color-body;
+$color-input-placeholder-color:             $color-base-grey-04;
+$color-input-disabled-bg:                   $color-base-grey-01;
+
+$color-opt-active-bg:                       $color-button-outline-active-bg;
+$color-opt-bg:                              $color-button-outline-bg;
+$color-opt-border:                          $color-button-outline-border;
+$color-opt-disabled-border:                 $color-button-outline-disabled-border;
+$color-opt-disabled-color:                  $color-button-disabled-color;
+$color-opt-hover-border:                    $color-base-black-24;
+
+$color-loading-img:                         $color-primary;
+$color-loader-dark-fill:                    $color-body;
+
+$color-overlay-bg:                          fade-out($color-base-black, 0.25);
+
+$color-slider-dot:                          fade-out($color-body, 0.82);
+$color-slider-dot-active:                   $color-body;
+
+// Paddings
+
+$padding-xxs:                               0.25rem;
+$padding-xs:                                0.5rem;
+$padding-s:                                 1rem;
+$padding-m:                                 1.5rem;
+$padding-l:                                 2rem;
+$padding-xl:                                2.5rem;
+$padding-xxl:                               3rem;
+
+// Icons
+
+$nc-award: unquote("\"\\ea02\"");
+$nc-chat-round-alt: unquote("\"\\ea04\"");
+$nc-circle-check: unquote("\"\\ea05\"");
+$nc-circle-add: unquote("\"\\ea06\"");
+$nc-circle-delete: unquote("\"\\ea07\"");
+$nc-circle-down-alt: unquote("\"\\ea08\"");
+$nc-circle-left-alt: unquote("\"\\ea09\"");
+$nc-circle-remove: unquote("\"\\ea0a\"");
+$nc-circle-right-alt: unquote("\"\\ea0b\"");
+$nc-circle-up-alt: unquote("\"\\ea0c\"");
+$nc-crosshair: unquote("\"\\ea0d\"");
+$nc-email-alt: unquote("\"\\ea0e\"");
+$nc-heart-alt: unquote("\"\\ea0f\"");
+$nc-dislike-alt: unquote("\"\\ea10\"");
+$nc-like-alt: unquote("\"\\ea11\"");
+$nc-lock: unquote("\"\\ea12\"");
+$nc-logo-facebook-1: unquote("\"\\ea13\"");
+$nc-logo-instagram-1: unquote("\"\\ea14\"");
+$nc-logo-pinterest-1: unquote("\"\\ea15\"");
+$nc-logo-twitter-1: unquote("\"\\ea16\"");
+$nc-moon-stars: unquote("\"\\ea17\"");
+$nc-phone-call-alt: unquote("\"\\ea18\"");
+$nc-map-pin-alt: unquote("\"\\ea19\"");
+$nc-shop-location-alt: unquote("\"\\ea1a\"");
+$nc-snow: unquote("\"\\ea1b\"");
+$nc-time-alt: unquote("\"\\ea1c\"");
+$nc-award-alt: unquote("\"\\ea1d\"");
+$nc-cart-refresh: unquote("\"\\ea1f\"");
+$nc-chat-round: unquote("\"\\ea20\"");
+$nc-check-sm: unquote("\"\\ea21\"");
+$nc-circle-down: unquote("\"\\ea22\"");
+$nc-circle-left: unquote("\"\\ea23\"");
+$nc-circle-right: unquote("\"\\ea24\"");
+$nc-circle-up: unquote("\"\\ea25\"");
+$nc-email: unquote("\"\\ea26\"");
+$nc-heart: unquote("\"\\ea27\"");
+$nc-dislike: unquote("\"\\ea28\"");
+$nc-like: unquote("\"\\ea29\"");
+$nc-moon-stars-alt: unquote("\"\\ea2a\"");
+$nc-phone-call-1: unquote("\"\\ea2b\"");
+$nc-map-pin: unquote("\"\\ea2c\"");
+$nc-shop-location: unquote("\"\\ea2d\"");
+$nc-delete: unquote("\"\\ea2f\"");
+$nc-chevron-down-sm: unquote("\"\\ea30\"");
+$nc-chevron-left-sm: unquote("\"\\ea31\"");
+$nc-remove-sm: unquote("\"\\ea32\"");
+$nc-chevron-right-sm: unquote("\"\\ea33\"");
+$nc-chevron-up-sm: unquote("\"\\ea34\"");
+$nc-arrow-down: unquote("\"\\ea35\"");
+$nc-arrow-left: unquote("\"\\ea36\"");
+$nc-arrow-right: unquote("\"\\ea37\"");
+$nc-arrow-up: unquote("\"\\ea38\"");
+$nc-time: unquote("\"\\ea39\"");
+$nc-shape-star-alt: unquote("\"\\ea3f\"");
+$nc-shape-star: unquote("\"\\ea40\"");
+$nc-infinite: unquote("\"\\ea45\"");
+$nc-organic: unquote("\"\\ea46\"");
+$nc-sunglasses: unquote("\"\\ea47\"");
+$nc-animation: unquote("\"\\ea49\"");
+$nc-cloud-moon: unquote("\"\\ea4a\"");
+$nc-cloud-sun: unquote("\"\\ea4c\"");
+$nc-wind: unquote("\"\\ea4d\"");
+$nc-zoom-split: unquote("\"\\ea4e\"");
+$nc-cloud-sun-alt: unquote("\"\\ea4f\"");
+$nc-zoom-split-alt: unquote("\"\\ea50\"");
+$nc-chevron-up: unquote("\"\\ea52\"");
+$nc-chevron-right: unquote("\"\\ea53\"");
+$nc-chevron-left: unquote("\"\\ea54\"");
+$nc-chevron-down: unquote("\"\\ea55\"");
+$nc-scissors-dashed: unquote("\"\\ea59\"");
+$nc-settings-tool: unquote("\"\\ea5a\"");
+$nc-drops: unquote("\"\\ea5b\"");
+$nc-balloon: unquote("\"\\ea5c\"");
+$nc-sparkles: unquote("\"\\ea5d\"");
+$nc-shuffle: unquote("\"\\ea5e\"");
+$nc-curve-circuit: unquote("\"\\ea5f\"");
+$nc-swap-vertical: unquote("\"\\ea60\"");
+$nc-coins: unquote("\"\\ea61\"");
+$nc-handshake: unquote("\"\\ea62\"");
+$nc-cloud-light: unquote("\"\\ea63\"");
+$nc-flower: unquote("\"\\ea64\"");
+$nc-tshirt: unquote("\"\\ea65\"");
+$nc-wash: unquote("\"\\ea67\"");
+$nc-bubble-chart: unquote("\"\\ea70\"");
+$nc-artboard: unquote("\"\\ea71\"");
+$nc-meeting: unquote("\"\\ea72\"");
+$nc-home: unquote("\"\\ea73\"");
+$nc-euro: unquote("\"\\ea74\"");
+$nc-add-24: unquote("\"\\ea75\"");
+$nc-remove: unquote("\"\\ea76\"");
+$nc-certificate: unquote("\"\\ea77\"");
+$nc-bike-lg: unquote("\"\\ea78\"");
+$nc-cart-refresh-lg: unquote("\"\\ea79\"");
+$nc-moon-stars-lg: unquote("\"\\ea7a\"");
+$nc-award-lg: unquote("\"\\ea7b\"");
+$nc-sleep: unquote("\"\\ea7e\"");
+$nc-stock: unquote("\"\\ea80\"");
+$nc-b-love: unquote("\"\\ea81\"");
+$nc-flag-diagonal: unquote("\"\\ea82\"");
+$nc-bike: unquote("\"\\ea83\"");
+$nc-preferences-circle: unquote("\"\\ea87\"");
+$nc-wand-11: unquote("\"\\ea89\"");
+$nc-crown: unquote("\"\\ea8a\"");
+$nc-d-check: unquote("\"\\ea8b\"");
+$nc-calendar-date-2-1: unquote("\"\\ea8c\"");
+$nc-c-warning-1: unquote("\"\\ea8d\"");
+$nc-c-warning-2: unquote("\"\\ea8e\"");
+$nc-c-question-1: unquote("\"\\ea90\"");
+$nc-credit-card: unquote("\"\\ea97\"");
+$nc-logo-paypal: unquote("\"\\ea98\"");
+$nc-button-circle-play-white-48: unquote("\"\\ea99\"");
+$nc-credit-card-color: unquote("\"\\ea9b\"");
+$nc-de-flag: unquote("\"\\ea9c\"");
+$nc-logo-divido-color: unquote("\"\\ea9d\"");
+$nc-button-circle-play-white-64: unquote("\"\\ea9e\"");
+$nc-logo-paypal-color: unquote("\"\\ea9f\"");
+$nc-button-circle-play-yellow-48: unquote("\"\\eaa1\"");
+$nc-pen-edit: unquote("\"\\eaa2\"");
+$nc-swatch-24: unquote("\"\\eaa4\"");
+$nc-swatch-32: unquote("\"\\eaa5\"");
+$nc-union-jack: unquote("\"\\eaa6\"");
+$nc-wedge: unquote("\"\\eaa7\"");
+$nc-button-circle-play-yellow-64: unquote("\"\\eaa8\"");
+$nc-non-slip: unquote("\"\\eaa9\"");
+$nc-logo-divido: unquote("\"\\eaaa\"");
+$nc-mail: unquote("\"\\eaab\"");
+$nc-tags-stack: unquote("\"\\eaae\"");
+$nc-multiple-19: unquote("\"\\eaaf\"");
+$nc-pin-add-2: unquote("\"\\eab0\"");
+$nc-p-add: unquote("\"\\eab2\"");
+$nc-printer: unquote("\"\\eab3\"");
+$nc-square-download: unquote("\"\\eab4\"");
+$nc-chevron-up-sm-16: unquote("\"\\eab5\"");
+$nc-card-security-code: unquote("\"\\eab6\"");
+$nc-chevron-down-sm-16: unquote("\"\\eab8\"");
+$nc-chevron-left-sm-16: unquote("\"\\eab9\"");
+$nc-chevron-right-sm-16: unquote("\"\\eaba\"");
+$nc-amex-2: unquote("\"\\eabb\"");
+$nc-visa-2: unquote("\"\\eabc\"");
+$nc-discover-2: unquote("\"\\eabd\"");
+$nc-mastercard-2: unquote("\"\\eabe\"");
+$nc-diners-club-2: unquote("\"\\eabf\"");
+$nc-bin: unquote("\"\\eac0\"");
+$nc-remove-16: unquote("\"\\eac2\"");
+$nc-paypal-2: unquote("\"\\eac3\"");
+$nc-card-security-code-amex: unquote("\"\\eac4\"");
+$nc-no-motion-transfer: unquote("\"\\eac5\"");
+$nc-pressure-relief: unquote("\"\\eac6\"");
+$nc-fr-flag: unquote("\"\\eac7\"");
+$nc-design-2: unquote("\"\\eac9\"");
+$nc-maestro-2: unquote("\"\\eaca\"");
+$nc-ctrl-down: unquote("\"\\eacb\"");
+$nc-ctrl-left: unquote("\"\\eacc\"");
+$nc-ctrl-right: unquote("\"\\eacd\"");
+$nc-ctrl-up: unquote("\"\\eace\"");
+$nc-lock-2: unquote("\"\\ead0\"");
+$nc-palette: unquote("\"\\ead1\"");
+$nc-hourglass: unquote("\"\\ead2\"");
+$nc-cart-32: unquote("\"\\ead4\"");
+$nc-add-16: unquote("\"\\ead5\"");
+$nc-delete-16: unquote("\"\\ead6\"");
+$nc-zoom-split-24: unquote("\"\\ead7\"");
+$nc-percentage-38: unquote("\"\\ead8\"");
+$nc-medal: unquote("\"\\eada\"");
+$nc-measure-02: unquote("\"\\eadb\"");
+$nc-edit-brightness-1: unquote("\"\\eadc\"");
+$nc-alignement: unquote("\"\\eade\"");
+$nc-medium-firm: unquote("\"\\eae1\"");
+$nc-zoned-support: unquote("\"\\eae2\"");
+$nc-no-sinking: unquote("\"\\eae5\"");
+$nc-pressure-relief-2: unquote("\"\\eae6\"");
+$nc-hamburger-menu-24: unquote("\"\\eaea\"");
+$nc-hamburger-menu-32: unquote("\"\\eaeb\"");
+$nc-logo-facebook-2: unquote("\"\\eaec\"");
+$nc-logo-instagram-2: unquote("\"\\eaed\"");
+$nc-logo-twitter-2: unquote("\"\\eaee\"");
+$nc-logo-pinterest-2: unquote("\"\\eaef\"");
+$nc-phone-call-2: unquote("\"\\eaf0\"");
+$nc-light-hybrid-layers-number: unquote("\"\\eaf1\"");
+$nc-original-layers-number: unquote("\"\\eaf2\"");
+$nc-premium-layers-number: unquote("\"\\eaf4\"");
+$nc-temperature-2: unquote("\"\\eaf5\"");
+$nc-cloud-alt-24: unquote("\"\\eaf6\"");
+$nc-lightly-cushioned: unquote("\"\\eaf7\"");
+$nc-deeply-cushioned: unquote("\"\\eaf8\"");
+$nc-light-layers-number: unquote("\"\\eaf9\"");
+$nc-original-hybrid-layers-number: unquote("\"\\eafa\"");
+$nc-rowing: unquote("\"\\eafb\"");
+$nc-ellipsis-horz-24: unquote("\"\\eafc\"");
+$nc-ellipsis-vert-24: unquote("\"\\eafd\"");
+$nc-tick-circle-24: unquote("\"\\eafe\"");
+$nc-setup-24: unquote("\"\\eaff\"");
+$nc-play-24: unquote("\"\\eb00\"");
+$nc-page-24: unquote("\"\\eb01\"");
+$nc-megaphone-24: unquote("\"\\eb02\"");
+$nc-box-24: unquote("\"\\eb03\"");
+$nc-upload-24: unquote("\"\\eb04\"");
+$nc-share-24: unquote("\"\\eb05\"");
+$nc-coin-pound-16: unquote("\"\\eb06\"");
+$nc-van-16: unquote("\"\\eb07\"");
+$nc-zeds-16: unquote("\"\\eb08\"");
+$nc-coin-euro-16: unquote("\"\\eb09\"");
+$nc-premium-hybrid-layers-number: unquote("\"\\eb0a\"");
+$nc-zoom-split-32: unquote("\"\\eb0b\"");
+$nc-sloth-16: unquote("\"\\eb0c\"");
+
+// Deprecated
+
+$icon-svg-tags:                             encode-svg('<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18"><path d="M17.78 3.09C17.45 2.443 16.778 2 16 2h-5.165c-.535 0-1.046.214-1.422.593l-6.82 6.89c0 .002 0 .003-.002.003-.244.253-.412.554-.5.874L.74 8.055c-.56-.953-.24-2.178.712-2.737L9.823.425c.46-.27 1.01-.345 1.527-.205l4.99 1.337c.755.203 1.293.814 1.44 1.533z" fill="#767676" fill-opacity=".55"></path><path d="M10.835 2H16c1.105 0 2 .895 2 2v5.172c0 .53-.21 1.04-.586 1.414l-6.818 6.818c-.777.778-2.036.782-2.82.01l-5.166-5.1c-.786-.775-.794-2.04-.02-2.828.002 0 .003 0 .003-.002l6.82-6.89C9.79 2.214 10.3 2 10.835 2zM13.5 8c.828 0 1.5-.672 1.5-1.5S14.328 5 13.5 5 12 5.672 12 6.5 12.672 8 13.5 8z" fill="#767676"></path></svg>');
+$icon-svg-tick:                             encode-svg('<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><title>d-check</title><g fill="#333333"><polygon fill="#333333" points="12.4,6 11,4.6 7,8.6 5,6.6 3.6,8 7,11.4 "></polygon></g></svg>');
+$icon-svg-tick-lg:                          encode-svg('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><title>check-sm</title><g stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" fill="#111111" stroke="#111111"><polyline fill="none" stroke="#111111" stroke-miterlimit="10" points="6,12 10,16 18,8 "></polyline></g></svg>');
+$icon-svg-cross-lg:                         encode-svg('<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><title>remove-sm</title><g stroke-width="2" fill="#111111"><line fill="none" stroke="#111111" stroke-linecap="square" stroke-miterlimit="10" x1="16" y1="8" x2="8" y2="16" stroke-linejoin="miter"></line> <line fill="none" stroke="#111111" stroke-linecap="square" stroke-miterlimit="10" x1="16" y1="16" x2="8" y2="8" stroke-linejoin="miter"></line></g></svg>');
+$icon-svg-select:                           encode-svg('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="499px" height="285px" viewBox="0 0 499 285"><path d="M-2.66453526e-14,35 C-0.00506788343,20.8412166 8.52093753,8.07408275 21.6011171,2.65374389 C34.6812967,-2.76659497 49.7387394,0.227715938 59.75,10.24 L249.49,199.99 L439.23,10.24 C448.072323,1.39767621 460.960291,-2.05564449 473.039129,1.18087043 C485.117968,4.41738535 494.552615,13.8520323 497.78913,25.9308709 C501.025644,38.0097095 497.572324,50.8976767 488.73,59.74 L274.24,274.24 C267.676124,280.804546 258.773196,284.492525 249.49,284.492525 C240.206804,284.492525 231.303876,280.804546 224.74,274.24 L10.25,59.74 C3.67855857,53.1850295 -0.0101375586,44.2817766 -2.66453526e-14,35 Z" fill="#000000" fill-rule="nonzero"></path></svg>');
+$icon-svg-quote:                            encode-svg('<svg xmlns="http://www.w3.org/2000/svg" width="43" height="31" viewBox="0 0 43 31"><path fill="#333" d="M10.445 30.291c4.522 0 7.938-2.713 7.938-7.033 0-4.12-2.512-7.034-6.43-7.034-1.508 0-2.613.402-3.115.804-.1-4.923 3.718-9.847 10.952-13.163L18.685.65C7.532 3.363.9 11.1.9 20.042c0 6.431 4.421 10.25 9.545 10.25zm23.11 0c4.522 0 7.938-2.713 7.938-7.033 0-4.12-2.512-7.034-6.43-7.034-1.507 0-2.613.402-3.115.804-.1-4.923 3.718-9.847 10.952-13.163L41.795.65C30.642 3.363 24.01 11.1 24.01 20.042c0 6.431 4.421 10.25 9.546 10.25z"/></svg>');
+$svg-numbered-list-blob:                    encode-svg('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 38 40"><path fill="#ffce07" d="M38 15.7V15l-.1-.5-.1-.4-.2-.7c0-.2 0-.5-.2-.7a4.8 4.8 0 0 0-.1-.5l-.2-.4-.2-.5-.6-1-.5-1.2-.4-.6-.2-.5-.4-.6v-.2l-.4-.5-.2-.2-.2-.3-.4-.4a11.7 11.7 0 0 0-1-.9l-.6-.4-.6-.4-.5-.4a2.5 2.5 0 0 0-.5-.2l-.3-.1-.2-.1-.5-.3a11 11 0 0 0-.6-.3l-.5-.3-.5-.2-.9-.5a5.7 5.7 0 0 0-.7-.3l-.4-.2a2.3 2.3 0 0 0-.5-.2 2 2 0 0 0-.5-.1h-.5l-.1-.2H24l-.3-.1-.6-.3H23a4.3 4.3 0 0 0-.6-.3l-.8-.1h-3.3l-.2.1-.8.1-1.2.2-1.2.2-1.1.4-.6.1-.6.2-.6.2-.6.2-.5.3-.7.3-.5.2-.6.3-.6.3a12.2 12.2 0 0 0-1 .7 20 20 0 0 0-1.8 1.6l-.5.4-.6.8a13.1 13.1 0 0 0-1 1.6L3 9l-.2.6-.5 1.2-.3.6-.3.9-.2.4-.2.8a1.2 1.2 0 0 0 0 .1l-.2.5v.5c-.2.4-.3.8-.3 1.3l-.3 1.3-.2 1.4v1.2L0 20v5.4a13.4 13.4 0 0 0 .4 1.8l.3.8.1.5.5 1.4a11.4 11.4 0 0 0 .5 1.3 7.9 7.9 0 0 0 .4.7 8.3 8.3 0 0 0 .6.8l.6.8.4.4.5.4.5.5.5.4a8.5 8.5 0 0 0 1.1.9l1.2.7 1.1.6 1.2.5.7.4.4.2 1.3.4 1 .4.6.1.5.2.7.1H15.8l.8.2h2.8l.6-.1h.5l1.3-.3a9.6 9.6 0 0 0 1.2-.1l.6-.2.5-.1 1.2-.5.6-.2.7-.3.3-.2h.2l.5-.4.5-.3.5-.3.4-.4.7-.5.5-.5.1-.1.3-.4h.1l.3-.4.4-.5c0-.2.5-.6.7-1l.5-.6.3-.5.2-.3a2.4 2.4 0 0 0 .2-.2l.3-.6.3-.6.3-.6.6-1 .2-.6.3-.6.3-.8.1-.4.5-1.1.5-1.4.2-.6.2-.7.3-1.3a16.7 16.7 0 0 0 .5-2.7v-2.8" /></svg>');
+
+// Icon mapping
+
+$icon-close:                                $nc-remove-16;
+$icon-add:                                  $nc-add-16;
+$icon-discount-code:                        $icon-svg-tags;
+$icon-cart:                                 $nc-cart-32;
+$icon-tick:                                 $nc-d-check;
+$icon-mention-me:                           $nc-multiple-19;
+$icon-info:                                 $nc-c-question-1;
+$icon-share:                                $nc-share-24;
+
+// Global
+
+$sidebar-sticky-position:                   1rem;
+$min-touch-area:                            3rem;
+$list-bullet-padding-left:                  $padding-m;
+$paragraph-margin-bottom:                   $padding-s;
+$site-header-logo-width:                    70px;
+$site-header-height:                        5rem;
+// Min gap between links/icons/buttons etc.
+$link-gap:                                  $padding-s;
+$page-content-padding-y-sm:                 $indexSectionMarginSmall;
+$page-content-padding-y-lg:                 $indexSectionMarginLarge;
+$banner-padding:                            $padding-s;
+$search-bar-width:                          40%;
+$drawer-padding:                            $padding-s;
+$img-aspect-ratio:                          calc(4 / 3);
+
+// Links
+$link-icon-margin:                          $padding-xs;
+
+// Mention-Me
+$mention-me-animation-speed:                900ms;
+$mention-me-bottom-margin:                  $padding-s;
+
+// Icons & Icon buttons
+
+/*
+T&M note:
+The REM values in the below Icons & Icon buttons section have been updated to 1.6 times their original value
+to counter the '62.5% trick' that Dawn uses. 
+Read about this trick here: https://snook.ca/archives/html_and_css/font-size-with-rem
+*/
+
+$icon-width:                                1.6rem;
+$icon-width-md:                             2.4rem;
+$icon-width-lg:                             3.2rem;
+$icon-font:                                 'eveIcons', sans-serif;
+$icon-button-width:                         $min-touch-area;
+$icon-button-padding:                       calc(($icon-button-width - $icon-width) / 2);
+$icon-button-badge-width:                   2.4rem;
+
+// Buttons
+/*
+T&M note:
+The REM values in the below Buttons section have been updated to 1.6 times their original value
+to counter the '62.5% trick' that Dawn uses. 
+Read about this trick here: https://snook.ca/archives/html_and_css/font-size-with-rem
+*/
+$button-border-width:                       2px;
+$button-min-width:                          16rem;
+$button-height:                             4.75rem;
+$button-small-height:                       4rem;
+$button-padding-y:                          calc(#{$button-height} - (2 * $button-border-width));
+$button-padding-x:                          $padding-l;
+$button-spacing:                            $padding-xs;
+$button-caption-margin:                     $button-spacing;
+
+// Form
+/*
+T&M note:
+The REM values in the below Form section have been updated to 1.6 times their original value
+to counter the '62.5% trick' that Dawn uses. 
+Read about this trick here: https://snook.ca/archives/html_and_css/font-size-with-rem
+*/
+$form-horz-form-field-spacing:              $button-spacing;
+$form-field-padding-bottom:                 3.2rem;
+$form-field-padding-bottom-condensed:       $padding-s;
+$form-field-caption-padding-top:            $padding-xs;
+$form-field-icon-width:                     2.4rem;
+$form-field-small-icon-width:               $icon-width;
+$form-field-input-border-radius:            px(1.2rem);
+$form-validation-padding-bottom:            $form-field-padding-bottom;
+$search-box-form-field-margin-right:        0.8rem;
+
+// Labels
+
+$label-margin-bottom:                       $padding-xs;
+
+// Inputs
+
+$input-line-height:                         $type-line-height-input-01;
+$input-height:                              $button-height;
+$input-icon-btn-width:                      $input-height;
+$input-border-width:                        1px;
+$input-border-radius:                       0;
+$input-inner-height:                        calc(#{$input-height} - (#{2 * $input-border-width}));
+$input-padding-y:                           calc((#{$input-height - $input-line-height} - #{2 * $input-border-width}) / 2);
+$input-padding-x:                           $padding-s;
+$input-padding-icon-x:                      $padding-m;
+$input-label-space:                         ($type-line-height-label-01 + $label-margin-bottom);
+
+// Checkbox/Radio buttons
+
+$option-row-spacing-vert:                   $padding-m;
+$option-row-quantity-spacing-vert:          $padding-l;
+$option-label-margin-bottom:                $padding-xs;
+$option-button-spacing-vert:                $padding-s;
+$option-button-spacing-horz:                $padding-s;
+
+// Loader
+
+$loader-width:                              24px;
+$loader-rising-height:                      4em;
+$loader-rising-width:                       10em;
+
+// Quantity stepper
+
+$qty-min-width:                             6rem;
+$qty-button-width:                          2rem;
+$qty-button-icon-width:                     1rem;
+
+// Tags
+
+$tag-icon-width:                            20px;
+$tag-padding:                               $padding-xs;
+
+// Product views
+
+$product-list-item-margin-bottom:           $padding-s;
+$product-list-condensed-item-margin-bottom: $padding-xs;
+$product-view-img-padding-right:            $padding-s;
+$product-view-subtitle-title-margin-top:    $padding-xxs;
+$product-view-footer-margin-top:            $padding-xs;
+$product-view-caption-margin-top:           $product-view-subtitle-title-margin-top;
+$product-view-action-padding-left:          $link-gap;
+$product-view-quantity-input-padding:       $padding-xxs;
+$product-atc-spacing:                       $padding-s;
+
+// Pages
+
+$product-comparison-header-sticky-position: 51px;
+
+// Sticky header
+
+$sticky-max-width: 700px;
+$sticky-min-height: 550px;
+
+// stylelint-disable-next-line scss/no-duplicate-dollar-variables
+$grid-breakpoints: list.join($grid-breakpoints, (
+  'header-cannot-stick' '(min-width: #{$sticky-max-width}) and (max-height: #{$sticky-min-height})',
+));
+
+// Drawers
+
+$drawer-max-width:                          420px;
+$drawer-left-width:                         300px;
+$drawer-right-width:                        100%;
+
+// Mattress layers
+
+$layers-block-is-stacked:                $grid-medium;
+$layers-block-can-expand:                ($layers-block-is-stacked + 0.1);
+$layers-block-breakpoints: (
+  'layers-block-is-stacked' '(max-width: #{$layers-block-is-stacked})',
+  'layers-block-can-expand' '(min-width: #{$layers-block-can-expand})'
+);
+
+// Cards
+
+$card-img-width-article-hero-small:         360px;
+$card-img-height-article-hero-small:        320px;
+$card-img-width-article-hero-large:         750px;
+$card-img-height-article-hero-large:        560px;
+$card-img-width-feed-hero:                  1140px;
+$card-img-height-feed-hero:                 560px;
+$card-img-width-feed-full-width:            1140px;
+$card-img-height-feed-full-width:           275px;
+$card-img-width-feed-full-height:           360px;
+$card-img-height-feed-full-height:          560px;
+
+$card-img-aspect-article-hero-small:        math.percentage(math.div($card-img-height-article-hero-small, $card-img-width-article-hero-small));
+$card-img-aspect-article-hero-large:        math.percentage(math.div($card-img-height-article-hero-large, $card-img-width-article-hero-large));
+$card-img-aspect-feed-hero:                 math.percentage(math.div($card-img-height-feed-hero, $card-img-width-feed-hero));
+$card-img-aspect-feed-full-width:           math.percentage(math.div($card-img-height-feed-full-width, $card-img-width-feed-full-width));
+$card-img-aspect-feed-full-height:          math.percentage(math.div($card-img-height-feed-full-height, $card-img-width-feed-full-height));
+
+// Articles
+
+$article-tag-height:                        3.25rem;
+
+// Feed
+
+@function feed-width($cols, $item-width, $gutter) {
+  $gutter-count: ($cols - 1);
+
+  @return (($cols * $item-width) + ($gutter-count * $gutter));
+}
+
+$feed-gutter:                               30px;
+$feed-item-width:                           360px;
+$feed-item-height:                          560px;
+$feed-width-1-col:                          feed-width(1, $feed-item-width, $feed-gutter);
+$feed-width-2-col:                          feed-width(2, $feed-item-width, $feed-gutter);
+$feed-width-3-col:                          feed-width(3, $feed-item-width, $feed-gutter);
+$feed-max-width-1-col:                      ($feed-width-2-col + (2 * $page-width-gutter-large));
+$feed-min-width-2-col:                      ($feed-max-width-1-col + 0.1px);
+$feed-max-width-2-col:                      ($feed-width-3-col + (2 * $page-width-gutter-large));
+$feed-min-width-3-col:                      ($feed-max-width-2-col + 0.1px);
+
+// stylelint-disable-next-line scss/no-duplicate-dollar-variables
+$grid-breakpoints: list.join($grid-breakpoints, (
+  'feed-1-cols' '(max-width: #{$feed-max-width-1-col})',
+  'feed-2-cols' '(min-width: #{$feed-min-width-2-col})',
+  'feed-2-cols-only' '(min-width: #{$feed-min-width-2-col}) and (max-width: #{$feed-max-width-2-col})',
+  'feed-hero-leaves-full-bleed' '(min-width: #{$card-img-width-feed-hero})',
+  'feed-3-cols' '(min-width: #{$feed-min-width-3-col})'
+));
+
+// Mention-Me
+
+$mention-me-animation-speed:                900ms;
+$mention-me-bottom-margin:                  $padding-s;

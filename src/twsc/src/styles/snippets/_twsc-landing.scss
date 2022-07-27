@@ -1,0 +1,63 @@
+@use 'sass:list';
+
+// stylelint-disable scss/dollar-variable-colon-space-after
+$landing-padding-x:  3rem;
+$landing-max-width:  $page-width-narrow;
+$landing-breakpoint: ($landing-max-width + 48px);
+$page-gutter: $page-width-gutter-small;
+
+$grid-breakpoints: list.join($grid-breakpoints, (
+  'compact' '(max-width: #{$landing-breakpoint})',
+  'expanded' '(min-width: #{$landing-breakpoint + 0.1px})'
+));
+// stylelint-enable scss/dollar-variable-colon-space-after
+
+// .landing {
+// }
+
+.landing__body {
+  $margin-y: px(3rem);
+  $margin-x: 0;
+  $padding-y: $page-gutter;
+  $padding-x: $page-gutter;
+  $padding-x-lg: 2rem;
+
+  background-color: fade-out($color-body-bg, 0.2);
+  margin: #{$margin-y - $padding-y} #{$margin-x - $padding-x} 0;
+  padding: $padding-y $page-gutter;
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  @include media-query('expanded') {
+    margin: {
+      left: #{$margin-x - $padding-x-lg};
+      right: #{$margin-x - $padding-x-lg};
+    }
+    padding: {
+      left: $padding-x-lg;
+      right: $padding-x-lg;
+    }
+  }
+}
+
+.landing__title {
+  @include visually-hidden;
+}
+
+.landing__logo {
+  width: 230px;
+}
+
+.landing__controls {
+  text-align: center;
+}
+
+.landing__control {
+  margin-top: 1.5rem;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}

@@ -1,0 +1,573 @@
+@import '../partials/_variables';
+@import '../partials/_mixins';
+@import '../partials/_form';
+@import '../partials/_typography';
+
+// stylelint-disable-next-line max-line-length
+// stylelint-disable selector-id-pattern, selector-max-id, selector-max-specificity, selector-max-compound-selectors, selector-max-type
+// stylelint-disable scss/dollar-variable-colon-space-after
+$dcode-section-bottom:           $padding-m;
+$dcode-drawer-section-bottom:    $padding-xs;
+$dcode-table-row-padding:        $padding-xxs;
+$dcode-drawer-table-row-padding: 0;
+// stylelint-enable scss/dollar-variable-colon-space-after
+
+// Overridden by dcode (included for visibility). These are styles that are
+// added by dcode during it's lifecycle.
+
+.js-dcodeapp-hide-on-active  {
+  display: block;
+}
+
+.js-dcodeapp-show-on-load  {
+  display: none;
+}
+
+// dCode appears in  the cart and in the drawer. These styles extend
+// placeholders that have been scoped below.
+
+.dcodeapp__controls,
+.dcodeapp__preoutput,
+.dcodeapp__output,
+.dcDiscountBox {
+  @extend %dcode-section;
+}
+
+// Container for the subtotal. This is hidden when the dcode output is
+// visible/loaded
+.dcodeapp__preoutput {
+  table {
+    @extend %dcode-table;
+
+    td {
+      @extend %dcode-primary-price;
+    }
+  }
+}
+
+// Summary table containing discounts and subtotals
+.dcodeTable {
+  @extend %dcode-table;
+
+  td {
+    @extend %dcode-secondary-price;
+  }
+
+  .dcodeTotal {
+    td {
+      @extend %dcode-primary-price;
+    }
+  }
+}
+
+.dcodeapp {
+  .dcodeapp__inner {
+    position: relative;
+  }
+
+  .dcodeapp__input {
+    @include make-input;
+
+    margin: 0;
+    vertical-align: middle;
+    display: inline-block;
+    width: calc(100% - #{$icon-button-width});
+    border-right: none;
+
+    &:focus {
+      @include form-field-icon-button-state(focus);
+
+      + .dcodeapp__btn {
+        @include form-field-icon-button-state(focus);
+      }
+
+      + .dcodeapp__btn:hover {
+        @include form-field-icon-button-state(hover);
+      }
+
+      html.tab-outline & {
+        @include form-field-icon-button-state(tabandhover);
+        @include form-field-icon-button-state(tab);
+      }
+    }
+
+    &::placeholder {
+        opacity: 0.5;
+        line-height: 1.25;
+    }
+  }
+
+  .dcodeapp__btn {
+    bottom: 0;
+    right: 0;
+    min-width: 0;
+    width: $input-icon-btn-width;
+    height: $input-icon-btn-width;
+    padding: 0;
+    font-weight: normal;
+    border-color: $color-input-border;
+
+    &:hover {
+      border-color: $color-button-hover-bg;
+    }
+
+    &:focus {
+      @include form-field-icon-button-state(focus);
+
+      html.tab-outline & {
+        @include form-field-icon-button-state(tabandhover);
+        @include form-field-icon-button-state(tab);
+      }
+    }
+
+    &:active {
+      @include form-field-icon-button-state(active);
+    }
+
+    &:disabled {
+      @include form-field-icon-button-state(disabled);
+    }
+  }
+
+  // Error state of input field
+  .dcInvalidCode {
+    @include form-field-icon-button-state(error);
+
+    &:not(:disabled) {
+      @include form-field-icon-button-state(errorandhoverbutton);
+      @include form-field-icon-button-state(errorandfocusbutton);
+
+      html.tab-outline & {
+        @include form-field-icon-button-state(errorandtab);
+      }
+    }
+  }
+
+  // Discount code tags
+
+  .dcDiscountBox {
+    p {
+      vertical-align: middle;
+    }
+
+    #removeDiscount {
+      vertical-align: middle;
+    }
+  }
+
+  // Error message displayed above the fields
+  .dcodeErrorMessage {
+    color: $color-danger;
+    margin-bottom: $form-field-caption-padding-top;
+    text-align: left;
+    flex-basis: 100%;
+  }
+
+  .dcloading {
+    border: {
+      bottom-color: $color-body;
+      left-color: $color-body;
+    };
+  }
+
+  // Icon within the discount code tag
+  .dcIcon {
+    width: $icon-width;
+    height: $icon-width;
+  }
+
+  // Discount code within the summary table
+  .dcode-discount-label-dynamic {
+    display: none;
+  }
+
+  %dcode-section {
+    margin-bottom: $dcode-section-bottom;
+  }
+
+  %dcode-table {
+    max-width: 100%;
+    width: 100%;
+    border: 0;
+    background-color: transparent;
+    display: table;
+
+    td {
+      $padding: $dcode-table-row-padding;
+
+      text-align: right;
+      // stylelint-disable-next-line declaration-no-important
+      padding: $padding 0 $padding 3rem !important;
+      border: 0;
+
+      &:first-child {
+        // stylelint-disable-next-line declaration-no-important
+        padding: $dcode-table-row-padding 0 !important;
+        text: {
+          align: left;
+          transform: lowercase;
+        }
+      }
+    }
+
+    .dcode-discount-label-static,
+    .dcode-discount-value-cell {
+      color: $colorDrawerDiscountText;
+      font-size: 1.3rem;
+    }
+  }
+
+  %dcode-primary-price {
+    font-weight: bold;
+  }
+
+  %dcode-secondary-price {
+    font: inherit;
+  }
+
+  // Specifics
+
+  #dcodeSubmit {
+    position: absolute;
+    border: 1px solid #949494;
+
+    &:hover {
+        border: 1px solid #ffda3d;
+    }
+
+    &:before,
+    &:after {
+        display: none;
+    }
+  }
+
+  #dcodeInput {
+      box-shadow: none;
+      outline: none;
+  }
+
+  #dcodeInfo {
+    // stylelint-disable-next-line declaration-no-important
+    margin-top: 0 !important;
+    text-align: right;
+  }
+
+  #dcodeButtonLabel {
+    font-size: 0;
+    width: $form-field-small-icon-width;
+
+    &::before {
+      @include font('eve-icon');
+
+      content: $nc-add-16;
+      font-size: $icon-width;
+      vertical-align: middle;
+    }
+  }
+
+  #dcodeButtonLabelPlaceholder {
+    display: none;
+  }
+}
+
+#dcodeInnerWrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#dcodeInnerWrapper input {
+  font-family: var(--font-body-family);
+}
+
+.drawer {
+  .dcodeapp {
+    .dcDiscountBox {
+      @include font('helper-01');
+
+      color: inherit;
+      font-size: $type-font-size-helper-01;
+      padding: $padding-xxs $padding-xs;
+
+      // stylelint-disable-next-line max-nesting-depth
+      p {
+        padding-left: $padding-xxs;
+      }
+
+      #removeDiscount {
+        margin-left: $padding-xxs;
+      }
+    }
+
+    %dcode-section {
+      margin-bottom: $dcode-drawer-section-bottom;
+    }
+
+    %dcode-table {
+      td {
+        padding: {
+          // stylelint-disable declaration-no-important
+          top: $dcode-drawer-table-row-padding !important;
+          bottom: $dcode-drawer-table-row-padding !important;
+          // stylelint-enable declaration-no-important
+        };
+      }
+    }
+  }
+}
+
+// dCode styles (for reference)
+
+// input.dcDisplayAlways {
+//   display: inline-block !important;
+// }
+
+// .dcloading {
+//   font-size: 0;
+//   width: 15px;
+//   height: 15px;
+//   border-radius: 15px;
+//   padding: 0;
+//   border: 2px solid #FFFFFF;
+//   border-bottom: 2px solid rgba(255, 255, 255, 0.0);
+//   border-left: 2px solid rgba(255, 255, 255, 0.0);
+//   background-color: transparent !important;
+//   animation: rotateAnimation infinite linear 0.5s;
+//   -webkit-animation: wk-rotateAnimation infinite linear 0.5s;
+//   position: absolute;
+//   left: 0;
+//   right: 0;
+//   top: calc(50% - 7.5px);
+//   margin: 0 auto;
+//   opacity: 0;
+//   transition: opacity 300ms ease;
+// }
+
+// .loading-dark {
+//   opacity: 1 !important;
+//   border-color: #565656;
+//   border-bottom: 2px solid rgba(255, 255, 255, 0.0);
+//   border-left: 2px solid rgba(255, 255, 255, 0.0);
+// }
+
+// .loading-wrapper {
+//   position: relative;
+//   height: 10px;
+//   width: 20px;
+//   display: inline-block;
+// }
+
+// #dcodeSubmit {
+//   position: relative;
+//   outline: 0;
+// }
+
+// button#dcodeSubmit:disabled {
+//   background-color: #d4d4d4;
+// }
+
+// #dcodeInput {
+//   -webkit-user-select: auto !important;
+//   -moz-user-select: auto !important;
+//   -ms-user-select: auto !important;
+//   -o-user-select: auto !important;
+//   user-select: auto !important;
+//   -webkit-appearance: unset;
+//   -moz-appearance: unset;
+//   cursor: auto !important;
+// }
+
+// .dcodeInput,
+// .dcodeButton {
+//   display: inline-block !important;
+// }
+
+// #dcodeButtonLabelPlaceholder {
+//   opacity: 0;
+// }
+
+// #dcodeButtonLabel {
+//   position: absolute;
+//   left: 50%;
+//   top: 50%;
+//   transform: translate(-50%, -50%);
+//   transition: opacity 300ms ease;
+// }
+
+// @keyframes rotateAnimation {
+//   0% {
+//     transform: rotate(0deg);
+//   }
+
+//   100% {
+//     transform: rotate(360deg);
+//   }
+// }
+
+// @-webkit-keyframes wk-rotateAnimation {
+//   0% {
+//     -webkit-transform: rotate(0deg);
+//   }
+
+//   100% {
+//     -webkit-transform: rotate(360deg);
+//   }
+// }
+
+// .dc_smooth,
+// .dcSmooth {
+//   transition: all 200ms ease;
+// }
+
+// .dcodeLineThrough {
+//   text-decoration: line-through;
+// }
+
+// .dcodeAbsoluteTransparent {
+//   position: absolute !important;
+//   opacity: 0 !important;
+// }
+
+// /* Discount box style */
+
+// .dc-clearfix-100 {
+//   width: 100%;
+// }
+
+// .dcInvalidCode {
+//   border-color: #e32c2b !important;
+//   border-width: 2px;
+// }
+
+// p.dcodeErrorMessage {
+//   color: #e32c2b;
+//   margin: 0;
+// }
+
+// #dcodeInfo {
+//   margin-top: 20px;
+//   /*width: 100%;
+//     display: grid;
+//     justify-items: right;*/
+// }
+
+// .dcDiscountBox {
+//   background-color: rgba(113, 113, 113, 0.11);
+//   display: inline-block;
+//   padding: 7px 12px 7px 12px;
+//   margin-bottom: 20px;
+// }
+
+// .dcIcon svg {
+//   color: rgb(113, 113, 113);
+//   fill: currentcolor;
+// }
+
+// .dcIcon {
+//   width: 18px;
+//   height: 18px;
+//   transform: translateY(3px);
+// }
+
+// .dcDiscountBox p {
+//   display: inline;
+//   padding-left: 6px;
+// }
+
+// .dcodeTable {
+//   border: 0px solid transparent;
+//   /*width: 100%;*/
+//   background-color: transparent;
+//   max-width: 300px;
+//   display: inline;
+// }
+
+// .dcodeTable td {
+//   padding: 10px 0px 10px 45px;
+//   text-align: right;
+//   border: 0px solid transparent;
+// }
+
+// .dcodeTable td:first-child {
+//   padding: 10px 0px;
+//   text-align: left;
+// }
+
+// .dcodeTotal td {
+//   text-align: right;
+//   font-size: 115%;
+//   padding: 10px 0px 10px 20px;
+// }
+
+// .dcodeTotal td:first-child {
+//   padding: 20px 0px;
+//   text-align: left;
+// }
+
+// .dcRestriction {
+//   opacity: 0.5;
+// }
+
+// #crossSVG {
+//   stroke: rgba(113, 113, 113, 0.9);
+//   width: 12px;
+//   height: 12px;
+// }
+
+// #removeDiscount {
+//   background: none;
+//   border: none;
+//   padding: 0;
+//   margin: 0 0 0 5px;
+//   display: inline-block !important;
+//   width: auto !important;
+//   min-width: unset !important;
+//   height: auto !important;
+//   min-height: unset !important;
+//   vertical-align: middle !important;
+// }
+
+// #dcHiddenDiscountFrame {
+//   height: 1px;
+//   width: 1px;
+//   opacity: 0;
+//   position: absolute;
+//   left: -999px;
+// }
+
+// /* Wizard */
+// .dcodeSelected {
+//   background: unset;
+//   background-color: #cee2ff !important;
+// }
+
+// .dcodeHover {
+//   background: unset;
+//   background-color: #ebf3ff;
+// }
+
+// .dcRestriction {
+//   display: none;
+// }
+
+// .dcInline {
+//   display: inline;
+// }
+
+// div#dcodeOuterWrapper {
+//   margin: 10px 0;
+// }
+
+// div#dcodeInnerWrapper {}
+
+// input#dcodeInput {
+//   width: 69%;
+//   vertical-align: top;
+//   height: 44px;
+// }
+
+// button#dcodeSubmit {
+//   width: 29%;
+//   min-width: 0;
+//   vertical-align: top;
+//   height: 43px;
+// }

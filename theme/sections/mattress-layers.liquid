@@ -1,0 +1,213 @@
+{%- comment -%}
+The below stylesheet has had the following attributes removed:
+`media="print" onload="this.media='all'"`
+This is due to `section-mattress-layers.js` requiring the `.layers-block` to have
+its before pseudo-element content assigned before the script can run successfully
+{%- endcomment -%}
+
+<link rel="stylesheet" href="{{ 'section-mattress-layers.css' | asset_url }}">
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid 
+  assign mattress_layers_handle = product.metafields.accentuate.mattress_layers_handle | strip | handle
+
+  for block in shop.metafields.globals.ml_slug
+    assign slug = shop.metafields.globals.ml_slug[forloop.index0] | strip | handle
+    if slug == mattress_layers_handle
+      assign index = forloop.index0
+      break
+    endif
+  endfor
+
+  assign section_slug = shop.metafields.globals.ml_slug[index]
+  assign section_name = shop.metafields.globals.ml_name[index]
+  assign section_layers_count = shop.metafields.globals.ml_layers_count[index] | round
+  assign section_block_height = shop.metafields.globals.ml_block_height[index] | round
+-%}
+
+{% if mattress_layers_handle != blank %}
+  <div class="mattress-layers color-{{ section.settings.color_scheme }} gradient">
+    <div class="page-width section-{{ section.id }}-padding">
+      <mattress-layers id="layers-block-{{ section_slug }}" class="layers-block js-layers-block">
+        <div class="layers-block__diagram js-diagram">
+          <div
+            class="layers-block__diagram-inner"
+            {% if section_block_height and section_block_height > 0 %}
+            data-height="{{ section_block_height }}"
+            style="padding-bottom: {{ section_block_height }}%"
+            {% endif %}
+          >
+            <div class="layers-block__layers">
+              {%- for i in (1..section_layers_count) -%}
+                {%- comment -%} Individual Layer – Images {%- endcomment -%}
+                {%- liquid
+                  assign layer_id = section_slug | append: '-layer-' | append: i
+                  assign layer_name = 'ml_layer_' | append: i | append: '_name'
+                  assign layer_name = shop.metafields.globals[layer_name][index]
+                  assign layer_image = 'ml_layer_' | append: i | append: '_image'
+                  assign layer_image = shop.metafields.globals[layer_image][index][0]
+                  assign layer_shadow = 'ml_layer_' | append: i | append: '_shadow'
+                  assign layer_shadow = shop.metafields.globals[layer_shadow][index][0]
+                  assign layer_height = 'ml_layer_' | append: i | append: '_height'
+                  assign layer_height = shop.metafields.globals[layer_height][index] | round
+                -%}
+
+                <div
+                  id="{{ layer_id }}"
+                  class="layers-block__layer js-layer"
+                  {% if layer_height and layer_height > 0 %}
+                  data-height="{{ layer_height }}"
+                  style="padding-bottom: {{ layer_height }}%"
+                  {% endif %}
+                >
+                  <div class="layers-block__img">
+                    <button
+                      type="button"
+                      class="layers-block__btn js-btn"
+                      data-index="{{ i | minus: 1 }}"
+                    >
+                      <span>{{ layer_name }}</span>
+                    </button>
+                    <img
+                      loading="lazy"
+                      src="{{ layer_image.cloudinary_src | append: 'w_500' }}"
+                      alt="{{ layer_name | escape }}"
+                    >
+                  </div>
+                  {% if layer_shadow != blank %}
+                    <div class="layers-block__shadow">
+                      <img
+                        loading="lazy"
+                        src="{{ layer_shadow.cloudinary_src | append: 'w_500' }}"
+                        alt="{{ layer_name | escape }} shadow"
+                      >
+                    </div>
+                  {% endif %}
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+        <div class="layers-block__slider slider slider--layers-block">
+          <div class="slider__slides js-slider">
+            {%- for i in (1..section_layers_count) -%}
+              {%- comment -%} Individual Layer – Images {%- endcomment -%}
+              {%- liquid
+                assign layer_id = section_slug | append: '-layer-' | append: i
+                assign layer_name = 'ml_layer_' | append: i | append: '_name'
+                assign layer_name = shop.metafields.globals[layer_name][index]
+                assign layer_description = 'ml_layer_' | append: i | append: '_description'
+                assign layer_description = shop.metafields.globals[layer_description][index]
+              -%}
+
+              {%- if layer_name != blank and layer_description != blank -%}
+                <div class="layers-block__slide slider__slide js-slide">
+                  <a
+                    href="#{{ layer_id }}"
+                    class="layers-block__slide-btn js-title"
+                    data-index="{{ i | minus: 1 }}"
+                  >
+                    <h2 class="layers-block__slide-title slider__title">
+                      {{ layer_name }}
+                    </h2>
+                    <span class="layers-block__slide-icon">
+                      {% render 'icon-delete' %}
+                      {% render 'icon-add' %}
+                    </span>
+                  </a>
+                  <div class="layers-block__slide-content slider__content js-content">
+                    {{ layer_description }}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      </mattress-layers>
+    </div>
+  </div>
+  <script src="{{ 'section-mattress-layers.js' | asset_url }}" defer="defer"></script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Mattress layers",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "t:sections.all.colors.accent_1.label"
+        },
+        {
+          "value": "accent-2",
+          "label": "t:sections.all.colors.accent_2.label"
+        },
+        {
+          "value": "background-1",
+          "label": "t:sections.all.colors.background_1.label"
+        },
+        {
+          "value": "background-2",
+          "label": "t:sections.all.colors.background_2.label"
+        },
+        {
+          "value": "inverse",
+          "label": "t:sections.all.colors.inverse.label"
+        }
+      ],
+      "default": "background-1",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mattress layers"
+    }
+  ],
+  "templates": [
+    "product"
+  ]
+}
+{% endschema %}

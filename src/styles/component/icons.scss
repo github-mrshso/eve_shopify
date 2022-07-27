@@ -1,0 +1,1133 @@
+/* --------------------------------
+
+eveIcons Web Font
+Generated using nucleoapp.com
+
+-------------------------------- */
+// $nc-icon-font-path: "../fonts" !default;
+
+// @font-face {
+//   font-family: 'eveIcons';
+//   src: url('#{$nc-font-path}/eveIcons.eot');
+//   src: url('#{$nc-font-path}/eveIcons.eot') format('embedded-opentype'),
+//     url('#{$nc-font-path}/eveIcons.woff2') format('woff2'),
+//     url('#{$nc-font-path}/eveIcons.woff') format('woff'),
+//     url('#{$nc-font-path}/eveIcons.ttf') format('truetype'),
+//     url('#{$nc-font-path}/eveIcons.svg') format('svg');
+//   font-weight: normal;
+//   font-style: normal;
+// }
+
+@import '../partials/variables';
+@import '../partials/functions';
+
+/*------------------------
+	base class definition
+-------------------------*/
+
+.nc-icon {
+  display: inline-block;
+  font: normal normal normal 1em/1 'eveIcons';
+  color: inherit;
+  flex-shrink: 0;
+  speak: none;
+  text-transform: none;
+  /* Better Font Rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*------------------------
+  change icon size
+-------------------------*/
+
+/* relative units */
+.nc-icon-sm {
+  font-size: 0.8em;
+}
+.nc-icon-lg {
+  font-size: 1.2em;
+}
+/* absolute units */
+.nc-icon-16 {
+  font-size: 16px;
+}
+.nc-icon-24 {
+  font-size: 24px;
+}
+.nc-icon-32 {
+  font-size: 32px;
+}
+
+/*------------------------
+  spinning icons
+-------------------------*/
+
+.nc-icon-is-spinning {
+  animation: nc-icon-spin 1s infinite linear;
+}
+
+@keyframes nc-icon-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/*------------------------
+  rotated/flipped icons
+-------------------------*/
+
+.nc-icon-rotate-90  {
+	transform: rotate(90deg);
+}
+
+.nc-icon-rotate-180 {
+	transform: rotate(180deg);
+}
+
+.nc-icon-rotate-270 {
+	transform: rotate(270deg);
+}
+
+.nc-icon-flip-y {
+	transform: scaleY(-1);
+}
+.nc-icon-flip-x {
+	transform: scaleX(-1);
+}
+
+/*------------------------
+	icons
+-------------------------*/
+@function unicode($str) {
+  @return unquote("\"\\#{$str}\"");
+}
+
+// $nc-award: unicode(ea02);
+// $nc-chat-round-alt: unicode(ea04);
+// $nc-circle-check: unicode(ea05);
+// $nc-circle-add: unicode(ea06);
+// $nc-circle-delete: unicode(ea07);
+// $nc-circle-down-alt: unicode(ea08);
+// $nc-circle-left-alt: unicode(ea09);
+// $nc-circle-remove: unicode(ea0a);
+// $nc-circle-right-alt: unicode(ea0b);
+// $nc-circle-up-alt: unicode(ea0c);
+// $nc-crosshair: unicode(ea0d);
+// $nc-email-alt: unicode(ea0e);
+// $nc-heart-alt: unicode(ea0f);
+// $nc-dislike-alt: unicode(ea10);
+// $nc-like-alt: unicode(ea11);
+// $nc-lock: unicode(ea12);
+// $nc-logo-facebook-1: unicode(ea13);
+// $nc-logo-instagram-1: unicode(ea14);
+// $nc-logo-pinterest-1: unicode(ea15);
+// $nc-logo-twitter-1: unicode(ea16);
+// $nc-moon-stars: unicode(ea17);
+// $nc-phone-call-alt: unicode(ea18);
+// $nc-map-pin-alt: unicode(ea19);
+// $nc-shop-location-alt: unicode(ea1a);
+// $nc-snow: unicode(ea1b);
+// $nc-time-alt: unicode(ea1c);
+// $nc-award-alt: unicode(ea1d);
+// $nc-cart-refresh: unicode(ea1f);
+// $nc-chat-round: unicode(ea20);
+// $nc-check-sm: unicode(ea21);
+// $nc-circle-down: unicode(ea22);
+// $nc-circle-left: unicode(ea23);
+// $nc-circle-right: unicode(ea24);
+// $nc-circle-up: unicode(ea25);
+// $nc-email: unicode(ea26);
+// $nc-heart: unicode(ea27);
+// $nc-dislike: unicode(ea28);
+// $nc-like: unicode(ea29);
+// $nc-moon-stars-alt: unicode(ea2a);
+// $nc-phone-call-1: unicode(ea2b);
+// $nc-map-pin: unicode(ea2c);
+// $nc-shop-location: unicode(ea2d);
+// $nc-delete: unicode(ea2f);
+// $nc-chevron-down-sm: unicode(ea30);
+// $nc-chevron-left-sm: unicode(ea31);
+// $nc-remove-sm: unicode(ea32);
+// $nc-chevron-right-sm: unicode(ea33);
+// $nc-chevron-up-sm: unicode(ea34);
+// $nc-arrow-down: unicode(ea35);
+// $nc-arrow-left: unicode(ea36);
+// $nc-arrow-right: unicode(ea37);
+// $nc-arrow-up: unicode(ea38);
+// $nc-time: unicode(ea39);
+// $nc-shape-star-alt: unicode(ea3f);
+// $nc-shape-star: unicode(ea40);
+// $nc-infinite: unicode(ea45);
+// $nc-organic: unicode(ea46);
+// $nc-sunglasses: unicode(ea47);
+// $nc-animation: unicode(ea49);
+// $nc-cloud-moon: unicode(ea4a);
+// $nc-cloud-sun: unicode(ea4c);
+// $nc-wind: unicode(ea4d);
+// $nc-zoom-split: unicode(ea4e);
+// $nc-cloud-sun-alt: unicode(ea4f);
+// $nc-zoom-split-alt: unicode(ea50);
+// $nc-chevron-up: unicode(ea52);
+// $nc-chevron-right: unicode(ea53);
+// $nc-chevron-left: unicode(ea54);
+// $nc-chevron-down: unicode(ea55);
+// $nc-scissors-dashed: unicode(ea59);
+// $nc-settings-tool: unicode(ea5a);
+// $nc-drops: unicode(ea5b);
+// $nc-balloon: unicode(ea5c);
+// $nc-sparkles: unicode(ea5d);
+// $nc-shuffle: unicode(ea5e);
+// $nc-curve-circuit: unicode(ea5f);
+// $nc-swap-vertical: unicode(ea60);
+// $nc-coins: unicode(ea61);
+// $nc-handshake: unicode(ea62);
+// $nc-cloud-light: unicode(ea63);
+// $nc-flower: unicode(ea64);
+// $nc-tshirt: unicode(ea65);
+// $nc-wash: unicode(ea67);
+// $nc-bubble-chart: unicode(ea70);
+// $nc-artboard: unicode(ea71);
+// $nc-meeting: unicode(ea72);
+// $nc-home: unicode(ea73);
+// $nc-euro: unicode(ea74);
+// $nc-add-24: unicode(ea75);
+// $nc-remove: unicode(ea76);
+// $nc-certificate: unicode(ea77);
+// $nc-bike-lg: unicode(ea78);
+// $nc-cart-refresh-lg: unicode(ea79);
+// $nc-moon-stars-lg: unicode(ea7a);
+// $nc-award-lg: unicode(ea7b);
+// $nc-sleep: unicode(ea7e);
+// $nc-stock: unicode(ea80);
+// $nc-b-love: unicode(ea81);
+// $nc-flag-diagonal: unicode(ea82);
+// $nc-bike: unicode(ea83);
+// $nc-preferences-circle: unicode(ea87);
+// $nc-wand-11: unicode(ea89);
+// $nc-crown: unicode(ea8a);
+// $nc-d-check: unicode(ea8b);
+// $nc-calendar-date-2-1: unicode(ea8c);
+// $nc-c-warning-1: unicode(ea8d);
+// $nc-c-warning-2: unicode(ea8e);
+// $nc-c-question-1: unicode(ea90);
+// $nc-credit-card: unicode(ea97);
+// $nc-logo-paypal: unicode(ea98);
+// $nc-button-circle-play-white-48: unicode(ea99);
+// $nc-credit-card-color: unicode(ea9b);
+// $nc-de-flag: unicode(ea9c);
+// $nc-logo-divido-color: unicode(ea9d);
+// $nc-button-circle-play-white-64: unicode(ea9e);
+// $nc-logo-paypal-color: unicode(ea9f);
+// $nc-button-circle-play-yellow-48: unicode(eaa1);
+// $nc-pen-edit: unicode(eaa2);
+// $nc-swatch-24: unicode(eaa4);
+// $nc-swatch-32: unicode(eaa5);
+// $nc-union-jack: unicode(eaa6);
+// $nc-wedge: unicode(eaa7);
+// $nc-button-circle-play-yellow-64: unicode(eaa8);
+// $nc-non-slip: unicode(eaa9);
+// $nc-logo-divido: unicode(eaaa);
+// $nc-mail: unicode(eaab);
+// $nc-tags-stack: unicode(eaae);
+// $nc-multiple-19: unicode(eaaf);
+// $nc-pin-add-2: unicode(eab0);
+// $nc-p-add: unicode(eab2);
+// $nc-printer: unicode(eab3);
+// $nc-square-download: unicode(eab4);
+// $nc-chevron-up-sm-16: unicode(eab5);
+// $nc-card-security-code: unicode(eab6);
+// $nc-chevron-down-sm-16: unicode(eab8);
+// $nc-chevron-left-sm-16: unicode(eab9);
+// $nc-chevron-right-sm-16: unicode(eaba);
+// $nc-amex-2: unicode(eabb);
+// $nc-visa-2: unicode(eabc);
+// $nc-discover-2: unicode(eabd);
+// $nc-mastercard-2: unicode(eabe);
+// $nc-diners-club-2: unicode(eabf);
+// $nc-bin: unicode(eac0);
+// $nc-remove-16: unicode(eac2);
+// $nc-paypal-2: unicode(eac3);
+// $nc-card-security-code-amex: unicode(eac4);
+// $nc-no-motion-transfer: unicode(eac5);
+// $nc-pressure-relief: unicode(eac6);
+// $nc-fr-flag: unicode(eac7);
+// $nc-design-2: unicode(eac9);
+// $nc-maestro-2: unicode(eaca);
+// $nc-ctrl-down: unicode(eacb);
+// $nc-ctrl-left: unicode(eacc);
+// $nc-ctrl-right: unicode(eacd);
+// $nc-ctrl-up: unicode(eace);
+// $nc-lock-2: unicode(ead0);
+// $nc-palette: unicode(ead1);
+// $nc-hourglass: unicode(ead2);
+// $nc-cart-32: unicode(ead4);
+// $nc-add-16: unicode(ead5);
+// $nc-delete-16: unicode(ead6);
+// $nc-zoom-split-24: unicode(ead7);
+// $nc-percentage-38: unicode(ead8);
+// $nc-medal: unicode(eada);
+// $nc-measure-02: unicode(eadb);
+// $nc-edit-brightness-1: unicode(eadc);
+// $nc-alignement: unicode(eade);
+// $nc-medium-firm: unicode(eae1);
+// $nc-zoned-support: unicode(eae2);
+// $nc-no-sinking: unicode(eae5);
+// $nc-pressure-relief-2: unicode(eae6);
+// $nc-hamburger-menu-24: unicode(eaea);
+// $nc-hamburger-menu-32: unicode(eaeb);
+// $nc-logo-facebook-2: unicode(eaec);
+// $nc-logo-instagram-2: unicode(eaed);
+// $nc-logo-twitter-2: unicode(eaee);
+// $nc-logo-pinterest-2: unicode(eaef);
+// $nc-phone-call-2: unicode(eaf0);
+// $nc-light-hybrid-layers-number: unicode(eaf1);
+// $nc-original-layers-number: unicode(eaf2);
+// $nc-premium-layers-number: unicode(eaf4);
+// $nc-temperature-2: unicode(eaf5);
+// $nc-cloud-alt-24: unicode(eaf6);
+// $nc-lightly-cushioned: unicode(eaf7);
+// $nc-deeply-cushioned: unicode(eaf8);
+// $nc-light-layers-number: unicode(eaf9);
+// $nc-original-hybrid-layers-number: unicode(eafa);
+// $nc-rowing: unicode(eafb);
+// $nc-ellipsis-horz-24: unicode(eafc);
+// $nc-ellipsis-vert-24: unicode(eafd);
+// $nc-tick-circle-24: unicode(eafe);
+// $nc-setup-24: unicode(eaff);
+// $nc-play-24: unicode(eb00);
+// $nc-page-24: unicode(eb01);
+// $nc-megaphone-24: unicode(eb02);
+// $nc-box-24: unicode(eb03);
+// $nc-upload-24: unicode(eb04);
+// $nc-share-24: unicode(eb05);
+// $nc-coin-pound-16: unicode(eb06);
+// $nc-van-16: unicode(eb07);
+// $nc-zeds-16: unicode(eb08);
+// $nc-coin-euro-16: unicode(eb09);
+// $nc-premium-hybrid-layers-number: unicode(eb0a);
+// $nc-zoom-split-32: unicode(eb0b);
+// $nc-sloth-16: unicode(eb0c);
+
+.nc-award::before {
+  content: $nc-award;
+}
+
+.nc-chat-round-alt::before {
+  content: $nc-chat-round-alt;
+}
+
+.nc-circle-check::before {
+  content: $nc-circle-check;
+}
+
+.nc-circle-add::before {
+  content: $nc-circle-add;
+}
+
+.nc-circle-delete::before {
+  content: $nc-circle-delete;
+}
+
+.nc-circle-down-alt::before {
+  content: $nc-circle-down-alt;
+}
+
+.nc-circle-left-alt::before {
+  content: $nc-circle-left-alt;
+}
+
+.nc-circle-remove::before {
+  content: $nc-circle-remove;
+}
+
+.nc-circle-right-alt::before {
+  content: $nc-circle-right-alt;
+}
+
+.nc-circle-up-alt::before {
+  content: $nc-circle-up-alt;
+}
+
+.nc-crosshair::before {
+  content: $nc-crosshair;
+}
+
+.nc-email-alt::before {
+  content: $nc-email-alt;
+}
+
+.nc-heart-alt::before {
+  content: $nc-heart-alt;
+}
+
+.nc-dislike-alt::before {
+  content: $nc-dislike-alt;
+}
+
+.nc-like-alt::before {
+  content: $nc-like-alt;
+}
+
+.nc-lock::before {
+  content: $nc-lock;
+}
+
+.nc-logo-facebook-1::before {
+  content: $nc-logo-facebook-1;
+}
+
+.nc-logo-instagram-1::before {
+  content: $nc-logo-instagram-1;
+}
+
+.nc-logo-pinterest-1::before {
+  content: $nc-logo-pinterest-1;
+}
+
+.nc-logo-twitter-1::before {
+  content: $nc-logo-twitter-1;
+}
+
+.nc-moon-stars::before {
+  content: $nc-moon-stars;
+}
+
+.nc-phone-call-alt::before {
+  content: $nc-phone-call-alt;
+}
+
+.nc-map-pin-alt::before {
+  content: $nc-map-pin-alt;
+}
+
+.nc-shop-location-alt::before {
+  content: $nc-shop-location-alt;
+}
+
+.nc-snow::before {
+  content: $nc-snow;
+}
+
+.nc-time-alt::before {
+  content: $nc-time-alt;
+}
+
+.nc-award-alt::before {
+  content: $nc-award-alt;
+}
+
+.nc-cart-refresh::before {
+  content: $nc-cart-refresh;
+}
+
+.nc-chat-round::before {
+  content: $nc-chat-round;
+}
+
+.nc-check-sm::before {
+  content: $nc-check-sm;
+}
+
+.nc-circle-down::before {
+  content: $nc-circle-down;
+}
+
+.nc-circle-left::before {
+  content: $nc-circle-left;
+}
+
+.nc-circle-right::before {
+  content: $nc-circle-right;
+}
+
+.nc-circle-up::before {
+  content: $nc-circle-up;
+}
+
+.nc-email::before {
+  content: $nc-email;
+}
+
+.nc-heart::before {
+  content: $nc-heart;
+}
+
+.nc-dislike::before {
+  content: $nc-dislike;
+}
+
+.nc-like::before {
+  content: $nc-like;
+}
+
+.nc-moon-stars-alt::before {
+  content: $nc-moon-stars-alt;
+}
+
+.nc-phone-call-1::before {
+  content: $nc-phone-call-1;
+}
+
+.nc-map-pin::before {
+  content: $nc-map-pin;
+}
+
+.nc-shop-location::before {
+  content: $nc-shop-location;
+}
+
+.nc-delete::before {
+  content: $nc-delete;
+}
+
+.nc-chevron-down-sm::before {
+  content: $nc-chevron-down-sm;
+}
+
+.nc-chevron-left-sm::before {
+  content: $nc-chevron-left-sm;
+}
+
+.nc-remove-sm::before {
+  content: $nc-remove-sm;
+}
+
+.nc-chevron-right-sm::before {
+  content: $nc-chevron-right-sm;
+}
+
+.nc-chevron-up-sm::before {
+  content: $nc-chevron-up-sm;
+}
+
+.nc-arrow-down::before {
+  content: $nc-arrow-down;
+}
+
+.nc-arrow-left::before {
+  content: $nc-arrow-left;
+}
+
+.nc-arrow-right::before {
+  content: $nc-arrow-right;
+}
+
+.nc-arrow-up::before {
+  content: $nc-arrow-up;
+}
+
+.nc-time::before {
+  content: $nc-time;
+}
+
+.nc-shape-star-alt::before {
+  content: $nc-shape-star-alt;
+}
+
+.nc-shape-star::before {
+  content: $nc-shape-star;
+}
+
+.nc-infinite::before {
+  content: $nc-infinite;
+}
+
+.nc-organic::before {
+  content: $nc-organic;
+}
+
+.nc-sunglasses::before {
+  content: $nc-sunglasses;
+}
+
+.nc-animation::before {
+  content: $nc-animation;
+}
+
+.nc-cloud-moon::before {
+  content: $nc-cloud-moon;
+}
+
+.nc-cloud-sun::before {
+  content: $nc-cloud-sun;
+}
+
+.nc-wind::before {
+  content: $nc-wind;
+}
+
+.nc-zoom-split::before {
+  content: $nc-zoom-split;
+}
+
+.nc-cloud-sun-alt::before {
+  content: $nc-cloud-sun-alt;
+}
+
+.nc-zoom-split-alt::before {
+  content: $nc-zoom-split-alt;
+}
+
+.nc-chevron-up::before {
+  content: $nc-chevron-up;
+}
+
+.nc-chevron-right::before {
+  content: $nc-chevron-right;
+}
+
+.nc-chevron-left::before {
+  content: $nc-chevron-left;
+}
+
+.nc-chevron-down::before {
+  content: $nc-chevron-down;
+}
+
+.nc-scissors-dashed::before {
+  content: $nc-scissors-dashed;
+}
+
+.nc-settings-tool::before {
+  content: $nc-settings-tool;
+}
+
+.nc-drops::before {
+  content: $nc-drops;
+}
+
+.nc-balloon::before {
+  content: $nc-balloon;
+}
+
+.nc-sparkles::before {
+  content: $nc-sparkles;
+}
+
+.nc-shuffle::before {
+  content: $nc-shuffle;
+}
+
+.nc-curve-circuit::before {
+  content: $nc-curve-circuit;
+}
+
+.nc-swap-vertical::before {
+  content: $nc-swap-vertical;
+}
+
+.nc-coins::before {
+  content: $nc-coins;
+}
+
+.nc-handshake::before {
+  content: $nc-handshake;
+}
+
+.nc-cloud-light::before {
+  content: $nc-cloud-light;
+}
+
+.nc-flower::before {
+  content: $nc-flower;
+}
+
+.nc-tshirt::before {
+  content: $nc-tshirt;
+}
+
+.nc-wash::before {
+  content: $nc-wash;
+}
+
+.nc-bubble-chart::before {
+  content: $nc-bubble-chart;
+}
+
+.nc-artboard::before {
+  content: $nc-artboard;
+}
+
+.nc-meeting::before {
+  content: $nc-meeting;
+}
+
+.nc-home::before {
+  content: $nc-home;
+}
+
+.nc-euro::before {
+  content: $nc-euro;
+}
+
+.nc-add-24::before {
+  content: $nc-add-24;
+}
+
+.nc-remove::before {
+  content: $nc-remove;
+}
+
+.nc-certificate::before {
+  content: $nc-certificate;
+}
+
+.nc-bike-lg::before {
+  content: $nc-bike-lg;
+}
+
+.nc-cart-refresh-lg::before {
+  content: $nc-cart-refresh-lg;
+}
+
+.nc-moon-stars-lg::before {
+  content: $nc-moon-stars-lg;
+}
+
+.nc-award-lg::before {
+  content: $nc-award-lg;
+}
+
+.nc-sleep::before {
+  content: $nc-sleep;
+}
+
+.nc-stock::before {
+  content: $nc-stock;
+}
+
+.nc-b-love::before {
+  content: $nc-b-love;
+}
+
+.nc-flag-diagonal::before {
+  content: $nc-flag-diagonal;
+}
+
+.nc-bike::before {
+  content: $nc-bike;
+}
+
+.nc-preferences-circle::before {
+  content: $nc-preferences-circle;
+}
+
+.nc-wand-11::before {
+  content: $nc-wand-11;
+}
+
+.nc-crown::before {
+  content: $nc-crown;
+}
+
+.nc-d-check::before {
+  content: $nc-d-check;
+}
+
+.nc-calendar-date-2-1::before {
+  content: $nc-calendar-date-2-1;
+}
+
+.nc-c-warning-1::before {
+  content: $nc-c-warning-1;
+}
+
+.nc-c-warning-2::before {
+  content: $nc-c-warning-2;
+}
+
+.nc-c-question-1::before {
+  content: $nc-c-question-1;
+}
+
+.nc-credit-card::before {
+  content: $nc-credit-card;
+}
+
+.nc-logo-paypal::before {
+  content: $nc-logo-paypal;
+}
+
+.nc-button-circle-play-white-48::before {
+  content: $nc-button-circle-play-white-48;
+}
+
+.nc-credit-card-color::before {
+  content: $nc-credit-card-color;
+}
+
+.nc-de-flag::before {
+  content: $nc-de-flag;
+}
+
+.nc-logo-divido-color::before {
+  content: $nc-logo-divido-color;
+}
+
+.nc-button-circle-play-white-64::before {
+  content: $nc-button-circle-play-white-64;
+}
+
+.nc-logo-paypal-color::before {
+  content: $nc-logo-paypal-color;
+}
+
+.nc-button-circle-play-yellow-48::before {
+  content: $nc-button-circle-play-yellow-48;
+}
+
+.nc-pen-edit::before {
+  content: $nc-pen-edit;
+}
+
+.nc-swatch-24::before {
+  content: $nc-swatch-24;
+}
+
+.nc-swatch-32::before {
+  content: $nc-swatch-32;
+}
+
+.nc-union-jack::before {
+  content: $nc-union-jack;
+}
+
+.nc-wedge::before {
+  content: $nc-wedge;
+}
+
+.nc-button-circle-play-yellow-64::before {
+  content: $nc-button-circle-play-yellow-64;
+}
+
+.nc-non-slip::before {
+  content: $nc-non-slip;
+}
+
+.nc-logo-divido::before {
+  content: $nc-logo-divido;
+}
+
+.nc-mail::before {
+  content: $nc-mail;
+}
+
+.nc-tags-stack::before {
+  content: $nc-tags-stack;
+}
+
+.nc-multiple-19::before {
+  content: $nc-multiple-19;
+}
+
+.nc-pin-add-2::before {
+  content: $nc-pin-add-2;
+}
+
+.nc-p-add::before {
+  content: $nc-p-add;
+}
+
+.nc-printer::before {
+  content: $nc-printer;
+}
+
+.nc-square-download::before {
+  content: $nc-square-download;
+}
+
+.nc-chevron-up-sm-16::before {
+  content: $nc-chevron-up-sm-16;
+}
+
+.nc-card-security-code::before {
+  content: $nc-card-security-code;
+}
+
+.nc-chevron-down-sm-16::before {
+  content: $nc-chevron-down-sm-16;
+}
+
+.nc-chevron-left-sm-16::before {
+  content: $nc-chevron-left-sm-16;
+}
+
+.nc-chevron-right-sm-16::before {
+  content: $nc-chevron-right-sm-16;
+}
+
+.nc-amex-2::before {
+  content: $nc-amex-2;
+}
+
+.nc-visa-2::before {
+  content: $nc-visa-2;
+}
+
+.nc-discover-2::before {
+  content: $nc-discover-2;
+}
+
+.nc-mastercard-2::before {
+  content: $nc-mastercard-2;
+}
+
+.nc-diners-club-2::before {
+  content: $nc-diners-club-2;
+}
+
+.nc-bin::before {
+  content: $nc-bin;
+}
+
+.nc-remove-16::before {
+  content: $nc-remove-16;
+}
+
+.nc-paypal-2::before {
+  content: $nc-paypal-2;
+}
+
+.nc-card-security-code-amex::before {
+  content: $nc-card-security-code-amex;
+}
+
+.nc-no-motion-transfer::before {
+  content: $nc-no-motion-transfer;
+}
+
+.nc-pressure-relief::before {
+  content: $nc-pressure-relief;
+}
+
+.nc-fr-flag::before {
+  content: $nc-fr-flag;
+}
+
+.nc-design-2::before {
+  content: $nc-design-2;
+}
+
+.nc-maestro-2::before {
+  content: $nc-maestro-2;
+}
+
+.nc-ctrl-down::before {
+  content: $nc-ctrl-down;
+}
+
+.nc-ctrl-left::before {
+  content: $nc-ctrl-left;
+}
+
+.nc-ctrl-right::before {
+  content: $nc-ctrl-right;
+}
+
+.nc-ctrl-up::before {
+  content: $nc-ctrl-up;
+}
+
+.nc-lock-2::before {
+  content: $nc-lock-2;
+}
+
+.nc-palette::before {
+  content: $nc-palette;
+}
+
+.nc-hourglass::before {
+  content: $nc-hourglass;
+}
+
+.nc-cart-32::before {
+  content: $nc-cart-32;
+}
+
+.nc-add-16::before {
+  content: $nc-add-16;
+}
+
+.nc-delete-16::before {
+  content: $nc-delete-16;
+}
+
+.nc-zoom-split-24::before {
+  content: $nc-zoom-split-24;
+}
+
+.nc-percentage-38::before {
+  content: $nc-percentage-38;
+}
+
+.nc-medal::before {
+  content: $nc-medal;
+}
+
+.nc-measure-02::before {
+  content: $nc-measure-02;
+}
+
+.nc-edit-brightness-1::before {
+  content: $nc-edit-brightness-1;
+}
+
+.nc-alignement::before {
+  content: $nc-alignement;
+}
+
+.nc-medium-firm::before {
+  content: $nc-medium-firm;
+}
+
+.nc-zoned-support::before {
+  content: $nc-zoned-support;
+}
+
+.nc-no-sinking::before {
+  content: $nc-no-sinking;
+}
+
+.nc-pressure-relief-2::before {
+  content: $nc-pressure-relief-2;
+}
+
+.nc-hamburger-menu-24::before {
+  content: $nc-hamburger-menu-24;
+}
+
+.nc-hamburger-menu-32::before {
+  content: $nc-hamburger-menu-32;
+}
+
+.nc-logo-facebook-2::before {
+  content: $nc-logo-facebook-2;
+}
+
+.nc-logo-instagram-2::before {
+  content: $nc-logo-instagram-2;
+}
+
+.nc-logo-twitter-2::before {
+  content: $nc-logo-twitter-2;
+}
+
+.nc-logo-pinterest-2::before {
+  content: $nc-logo-pinterest-2;
+}
+
+.nc-phone-call-2::before {
+  content: $nc-phone-call-2;
+}
+
+.nc-light-hybrid-layers-number::before {
+  content: $nc-light-hybrid-layers-number;
+}
+
+.nc-original-layers-number::before {
+  content: $nc-original-layers-number;
+}
+
+.nc-premium-layers-number::before {
+  content: $nc-premium-layers-number;
+}
+
+.nc-temperature-2::before {
+  content: $nc-temperature-2;
+}
+
+.nc-cloud-alt-24::before {
+  content: $nc-cloud-alt-24;
+}
+
+.nc-lightly-cushioned::before {
+  content: $nc-lightly-cushioned;
+}
+
+.nc-deeply-cushioned::before {
+  content: $nc-deeply-cushioned;
+}
+
+.nc-light-layers-number::before {
+  content: $nc-light-layers-number;
+}
+
+.nc-original-hybrid-layers-number::before {
+  content: $nc-original-hybrid-layers-number;
+}
+
+.nc-rowing::before {
+  content: $nc-rowing;
+}
+
+.nc-ellipsis-horz-24::before {
+  content: $nc-ellipsis-horz-24;
+}
+
+.nc-ellipsis-vert-24::before {
+  content: $nc-ellipsis-vert-24;
+}
+
+.nc-tick-circle-24::before {
+  content: $nc-tick-circle-24;
+}
+
+.nc-setup-24::before {
+  content: $nc-setup-24;
+}
+
+.nc-play-24::before {
+  content: $nc-play-24;
+}
+
+.nc-page-24::before {
+  content: $nc-page-24;
+}
+
+.nc-megaphone-24::before {
+  content: $nc-megaphone-24;
+}
+
+.nc-box-24::before {
+  content: $nc-box-24;
+}
+
+.nc-upload-24::before {
+  content: $nc-upload-24;
+}
+
+.nc-share-24::before {
+  content: $nc-share-24;
+}
+
+.nc-coin-pound-16::before {
+  content: $nc-coin-pound-16;
+}
+
+.nc-van-16::before {
+  content: $nc-van-16;
+}
+
+.nc-zeds-16::before {
+  content: $nc-zeds-16;
+}
+
+.nc-coin-euro-16::before {
+  content: $nc-coin-euro-16;
+}
+
+.nc-premium-hybrid-layers-number::before {
+  content: $nc-premium-hybrid-layers-number;
+}
+
+.nc-zoom-split-32::before {
+  content: $nc-zoom-split-32;
+}
+
+.nc-sloth-16::before {
+  content: $nc-sloth-16;
+}

@@ -1,0 +1,179 @@
+{%- liquid
+  assign as = as | default: false
+  assign format = format | default: false
+  assign sizes = sizes | default: false
+  assign index = index | default: false
+-%}
+
+{% comment %}
+  Extract type tag value e.g. foo from twsc:type:foo
+{% endcomment %}
+
+{%- capture article_type -%}
+  {%- render 'article-tags',
+    tags: article.tags,
+    ns: 'twsc',
+    name: 'type',
+    as: 'raw',
+    limit: 1
+  -%}
+{%- endcapture -%}
+{%- assign article_type = article_type | strip -%}
+{%- assign type_class = 'card--' | append: article_type -%}
+
+{% comment %}
+  Create a badge from the pillar tag e.g. foo from twsc:pillar:foo
+{% endcomment %}
+
+{%- capture article_tags -%}
+  {%- render 'article-tags',
+    tags: article.tags,
+    ns: 'twsc',
+    name: 'pillar',
+    as: 'badge',
+    limit: 1
+  -%}
+{%- endcapture -%}
+{%- assign article_tags = article_tags | strip -%}
+
+{% comment %}
+  Define whether the card should be displayed in it's promo form
+{% endcomment %}
+
+{%- liquid
+  case as
+    when 'promo'
+      assign style_class = 'card--promo'
+    when 'feature'
+      assign style_class = 'card--feature'
+    else
+      assign style_class = ''
+  endcase
+-%}
+
+{% comment %}
+  Define the card image requirements. These must be accompanied by some CSS to
+  modify the style.
+
+  This is filthy but currently all that my brain can muster.
+  Forgive me, for I have sinned.
+{% endcomment %}
+
+{%- liquid
+  if as == 'feature'
+    assign card_img_size = '830:feed-full-height,default:feed-hero'
+  elsif as == 'promo' or article_type == 'tool'
+    assign card_img_size = 'default:feed-full-height'
+  else
+    assign card_img_size = 'default:article-hero-small'
+  endif
+
+  case sizes
+    when '2:2'
+      assign format_class = 'card--format-2-2'
+      assign card_img_size = '830:article-hero-small,1220:article-hero-large,default:article-hero-small'
+    when '2:2,3:1'
+      assign format_class = 'card--format-2-2 card--format-3-1'
+      assign card_img_size = '830:article-hero-small,1220:article-hero-large,default:article-hero-small'
+    when '2:2,3:2'
+      assign format_class = 'card--format-2-2 card--format-3-2'
+      assign card_img_size = '830:article-hero-small,1220:article-hero-large,default:article-hero-large'
+    when '3:2'
+      assign format_class = 'card--format-3-2'
+      assign card_img_size = '1220:article-hero-small,default:article-hero-large'
+    when '3:3'
+      assign format_class = 'card--format-3-3'
+      assign card_img_size = '1220:article-hero-small,default:feed-full-width'
+  endcase
+-%}
+
+<article
+  class="card {{ type_class }} {{ style_class }} {{ format_class }} js-feed-item"
+  data-tags="{{ article.tags | join: ' ' }}"
+  data-index="{{ index }}"
+  data-id="{{ article.id }}">
+  <div class="card__img">
+    {%- render 'article-img',
+      id: article.id,
+      sizes: card_img_size
+      alt: article.image.alt
+      loading: 'lazy'
+    -%}
+  </div>
+  <div class="card__body">
+    <div class="card__label">
+      <header class="card__header">
+        <span class="card__icon">
+          {%- case article_type -%}
+            {%- when 'video' -%}
+              <i class="nc-icon nc-play-24"></i>
+            {%- when 'resource' -%}
+              <i class="nc-icon nc-box-24"></i>
+            {%- when 'tool' -%}
+              <i class="nc-icon nc-tick-circle-24"></i>
+            {%- else -%}
+              <i class="nc-icon nc-page-24"></i>
+          {%- endcase -%}
+        </span>
+        <h2 class="card__title">
+          {{ article.title | replace: '*', '' }}
+        </h2>
+      </header>
+      <div class="card__meta">
+        <time
+          class="card__datetime"
+          datetime="{{ article.published_at }}"
+          pubdate>
+          {{ article.published_at | time_tag: format: 'month_day_year' }}
+        </time>
+        <address class="card__author">
+          by {{ article.author }}
+        </address>
+        <div class="card__tags">
+          {{ article_tags }}
+        </div>
+      </div>
+      {%- comment -%}
+        <div class="card__menu">
+          <span class="card__menu-toggle">
+            <button
+              type="button"
+              class="icon-btn icon-btn--medium">
+              <i class="nc-icon nc-ellipsis-vert-24"></i>
+              <span class="visually-hidden">toggle menu</span>
+            </button>
+          </span>
+          <div class="card__menu-items">
+            <ul>
+              <li>
+                <button
+                  type="button"
+                  class="card__menu-btn">
+                  <i class="nc-icon nc-"></i>
+                  share article
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      {%- endcomment -%}
+      {%- if as == 'feature' -%}
+        <div class="card__excerpt">
+          <p>{{ article.excerpt }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+    {%- if as == 'promo' -%}
+      <div class="card__footer">
+        <a
+          class="card__cta button button--primary button--full-width"
+          href="{{ article.url }}">
+          let's go
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+  {%- unless as == 'promo' -%}
+    <a class="card__target" href="{{ article.url }}">&nbsp;</a>
+  {%- endunless -%}
+</article>

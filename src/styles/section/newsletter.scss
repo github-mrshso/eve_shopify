@@ -1,0 +1,48 @@
+@use 'sass:math';
+
+@import '../partials/_variables';
+@import '../partials/_mixins';
+@import '../partials/_form';
+@import '../partials/_buttons';
+
+.newsletter-section {
+    &__inner {
+        @media screen and (min-width: 750px) {
+            display: flex;
+            gap: 2rem;
+        }
+
+        // newsletter section text content
+        >div:nth-of-type(1) {
+            flex: 1 1 auto;
+        }
+    
+        // newsletter section form
+        >div:nth-of-type(2) {
+            flex: 1 0 400px;
+            align-self: center;
+        }
+    }
+
+    &__heading {
+        margin-top: 0;
+    }
+
+    &__text {
+        &--mobile {
+            @media screen and (min-width: 750px) {
+                display: none;
+            }
+        }
+        
+        &--desktop {
+            @media screen and (max-width: 749px) {
+                display: none;
+            }
+        }
+    }
+    
+    div.has-success + .newsletter-section__text--mobile {
+        display: none;
+    }
+}

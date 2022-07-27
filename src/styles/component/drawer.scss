@@ -1,0 +1,202 @@
+@use 'sass:list';
+@use 'sass:math';
+
+@import '../partials/_variables';
+@import '../partials/_mixins';
+@import '../partials/_animations';
+
+// Drawer
+// Lifted and adapted from legacy theme
+
+// stylelint-disable max-line-length, scss/dollar-variable-colon-space-after
+$color-drawer-bg:            $colorBody;
+$drawer-header-padding:      $drawer-padding;
+$drawer-header-border-width: 1px;
+$drawer-header-line-height:  ($type-min-line-height-heading-02 * 1rem);
+$drawer-header-height:       calc(#{$drawer-header-padding * 2} + #{$drawer-header-line-height} + #{$drawer-header-border-width});
+$drawer-inner-zindex:        1;
+$drawer-header-zindex:       ($drawer-inner-zindex + 1);
+
+$grid-breakpoints: list.join($grid-breakpoints, (
+  'drawer-is-full-width' '(max-width: 420px)',
+  'drawer-is-partial-width' '(min-width: 421px)'
+));
+// stylelint-enable max-line-length, scss/dollar-variable-colon-space-after
+
+.drawer {
+  z-index: $z-index-drawer;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  display: none;
+  overflow: hidden;
+  -webkit-overflow-scrolling: touch;
+  max-width: $drawer-max-width;
+  color: $colorDrawerText;
+  background-color: $colorDrawers;
+  box-shadow: 0 0 150px rgb(0 0 0 / 10%);
+  transition: transform 0.25s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+  input,
+  textarea {
+    border-color: $colorDrawerBorder;
+  }
+}
+
+.drawer--left {
+  left: -#{$drawer-left-width};
+  width: $drawer-left-width;
+
+  &.is-open {
+    display: block;
+    transform: translateX($drawer-left-width);
+    transition-duration: 0.45s;
+  }
+}
+
+.drawer--right {
+  right: -#{$drawer-right-width};
+  width: $drawer-right-width;
+
+  @include media-query('drawer-is-partial-width') {
+    right: -#{$drawer-max-width};
+    width: $drawer-max-width;
+  }
+
+  &.is-open {
+    display: block;
+    transform: translateX(-#{$drawer-right-width});
+    transition-duration: 0.45s;
+
+    @include media-query('drawer-is-partial-width') {
+      transform: translateX(-#{$drawer-max-width});
+    }
+  }
+}
+
+// Wrap the contents of the draw in a flex container and ensure that it fills
+// the full height of the drawer. This cannot be setup on the container because
+// the dynamic show/hide adds display properties which would break the flex!
+.drawer__inner {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+// Handle any scrolling on the smallest devices but ensure that the scrolling
+// container expands to fill any remaining space.
+.drawer__content {
+  flex: 1 1 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+  overflow: {
+    y: auto;
+    x: hidden;
+  }
+
+  -webkit-overflow-scrolling: touch;
+}
+
+// Prevent any of the elements from resizing on the smallest devices. The
+// container will handle any scrolling
+.drawer__header,
+.drawer__body,
+.drawer__footer {
+  flex: 0 0 auto;
+}
+
+// Header
+
+.drawer__header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 0;
+  border-bottom: 1px solid $colorDrawerBorder;
+  min-height: $site-header-height;
+  padding: {
+    top: math.div($drawer-padding, 2);
+    bottom: math.div($drawer-padding, 2);
+    left: $drawer-padding;
+    right: $drawer-padding;
+  }
+}
+
+.drawer__title {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.drawer__close {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+// Body
+
+.drawer__body {
+  padding: $drawer-padding;
+}
+
+// Footer
+
+.drawer__footer {
+  border-top: $drawer-header-border-width solid $colorDrawerBorder;
+  margin: auto $drawer-padding 0;
+  padding: $drawer-padding 0;
+}
+
+// Cart
+
+// stylelint-disable-next-line no-duplicate-selectors
+.drawer__content {
+  &.is-loading {
+    .cart {
+      transition: opacity 0.3s ease 0.7s;
+      opacity: 0.4;
+    }
+  }
+}
+
+.drawer__slider {
+  margin: {
+    top: 2rem;
+    left: -#{$drawer-padding};
+    right: -#{$drawer-padding};
+  }
+}
+
+.mobile-nav__social {
+  margin: 0;
+}
+
+// From shopify-impulse-develop/src/styles/common/_impulse.scss
+
+.js-drawer-open {
+  overflow: hidden;
+}
+
+.js-drawer-open body:after,
+.js-drawer-closing body:after {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: $colorModalBg;
+  opacity: 0;
+  z-index: $z-index-drawer-overlay;
+}
+
+.js-drawer-open body:after {
+  animation: overlay-on 0.35s forwards;
+}
+
+.js-drawer-closing body:after {
+  animation: overlay-off 0.25s forwards;
+}

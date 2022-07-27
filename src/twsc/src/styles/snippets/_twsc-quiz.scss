@@ -1,0 +1,221 @@
+$quiz-header-margin-bottom: 2.5rem;
+$quiz-footer-margin: px(2.5rem);
+$quiz-footer-padding: $page-width-gutter-small;
+$quiz-img-margin-bottom: 3rem;
+$quiz-progress-indicator-height: 2rem;
+
+.quiz {
+  position: relative;
+  // padding-bottom: ($quiz-footer-margin - $quiz-footer-padding);
+  // Prevent the stepper margin from collapsing and forcing the bg of the page
+  // being shown above the quiz. This may cause problems in which case...you'll
+  // have to work something else out.
+  border-top: 1px solid $color-primary;
+  background: {
+    repeat: repeat;
+    position: 50% 0;
+  }
+
+  &.is-day {
+    @include theme-quiz(
+      #ffffff,
+      #333333,
+      #333333,
+      #f3f3f3,
+      #ececec,
+      $color-primary
+    );
+  }
+
+  &.is-evening {
+    @include theme-quiz(
+      #949494,
+      #333333,
+      #333333,
+      #ffffff,
+      #f3f3f3,
+      $color-primary
+    );
+  }
+
+  &.is-night {
+    @include theme-quiz(
+      #333333,
+      #ffffff,
+      $color-primary,
+      #ffffff,
+      #ececec,
+      $color-primary
+    );
+  }
+}
+
+.quiz__inner {
+  padding: $page-header-margin-bottom $page-gutter;
+  margin: 0 auto;
+  max-width: $page-max-width;
+}
+
+.quiz__header {
+  z-index: $z-index-quiz-header;
+  position: sticky;
+  top: 0;
+  border: 1px solid transparent;
+  border-bottom-color: $color-base-grey-02;
+  margin-bottom: 3rem;
+  transition: {
+    property: box-shadow, top;
+    timing-function: $transition-ease;
+    duration: 0s;
+  }
+
+  body.has-sticky-header & {
+    transition-duration: $transition-speed;
+    top: 49px;
+
+    @include media-query('header-cannot-stick') {
+      top: 0;
+    }
+  }
+
+  &.is-stuck {
+    @include elevation(drawers);
+  }
+}
+
+.quiz__controls {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+// .quiz__steps {
+// }
+
+.quiz__title {
+  @include visually-hidden;
+}
+
+%quiz-control-button {
+  flex: 0 0 auto;
+}
+
+.quiz__control--back {
+  @extend %quiz-control-button;
+
+  order: 1;
+}
+
+.quiz__control--progress {
+  order: 2;
+  flex: 1 1 100%;
+  margin: 0 1rem;
+}
+
+.quiz__control--exit {
+  @extend %quiz-control-button;
+
+  order: 3;
+}
+
+$step-subtitle-margin-top: 1.5rem;
+$step-option-padding-y: 2rem;
+$step-option-padding-x: 2rem;
+$step-option-min-height: (2 * 1.25rem + (2 * $step-option-padding-y));
+$step-option-margin-bottom: 1rem;
+$step-option-border-width: 3px;
+$step-option-border-color: $color-base-grey-02;
+$step-option-border-color-active: $color-primary;
+
+.step {
+  position: relative;
+}
+
+.step__header {
+  position: relative;
+}
+
+.step__img {
+  position: absolute;
+  z-index: 1;
+  height: 100%;
+
+  svg {
+    display: block;
+    height: 100%;
+  }
+}
+
+.step__question {
+  position: relative;
+  z-index: 2;
+  margin-bottom: $quiz-img-margin-bottom;
+
+  h1, p {
+    margin: 0;
+  }
+
+  h1 {
+    //font-size: 2.25rem;
+    line-height: 1.3;
+  }
+
+  p {
+    //font-size: 1.25rem;
+    margin-top: $step-subtitle-margin-top;
+  }
+
+  strong, em {
+    @extend %highlight;
+  }
+}
+
+.step__option {
+  border: $step-option-border-width solid $step-option-border-color;
+  border-radius: 0.75rem;
+  margin-bottom: $step-option-margin-bottom;
+
+  .form-field {
+    margin: 0;
+  }
+
+  .opt {
+    align-items: center;
+    min-height: $step-option-min-height;
+    padding: $step-option-padding-y $step-option-padding-x;
+    width: 100%;
+  }
+
+  .opt__proxy {
+    margin-right: 1.5rem;
+  }
+
+  &.is-active {
+    border-color: $step-option-border-color-active;
+  }
+}
+
+.step__footer {
+  position: sticky;
+  z-index: $z-index-quiz-footer;
+  bottom: -1px;
+  padding: $quiz-footer-padding 0;
+  margin-top: $quiz-footer-margin;
+  text-align: center;
+  transition: $transition-speed $transition-ease;
+  transition-property: box-shadow, background-color;
+
+  &:not(.is-stuck) {
+    background-color: transparent !important;
+  }
+
+  &.is-stuck {
+    @include elevation(drawers, $is-inverse: true);
+  }
+
+  .button--large {
+    width: 100%;
+  }
+}

@@ -1,0 +1,206 @@
+<link rel="stylesheet" href="{{ 'section-breadcrumb.css' | asset_url }}" media="print" onload="this.media='all'">
+
+{%- style -%}
+.section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+}
+@media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+}
+.breadcrumb__items {
+    display: block;
+    list-style:none;
+    list-style-position:inside
+}
+.breadcrumb__items li {
+    margin-right:.5rem;
+    font-size:1.4rem;
+    font-family:inherit;
+    display: inline;
+}
+.breadcrumb__items li:not(:last-child):after {
+    content: "/";
+    padding-left: 0.5rem;
+}
+.breadcrumb__items a {
+    color:inherit;
+    text-decoration:none;
+    display: inline;
+}
+{%- endstyle -%}
+
+{%- assign repeatable_templates = 'product,collection,article,blog,page' | split: ',' -%}
+{%- assign enable_breadcrumb = false -%}
+{%- assign syntax = 'breadcrumb_' | append: template.name -%}
+
+{% if repeatable_templates contains template.name %}
+    {%- comment -%} Check global settings {%- endcomment -%}
+    {% if section.settings[syntax] %}
+        {% assign enable_breadcrumb = true %}
+    {% endif %}
+
+    {%- comment -%} Check metafield {%- endcomment -%}
+    {% case [template.name].metafields.accentuate.breadcrumb_settings %}
+        {% when 'Enable' %}
+            {% assign enable_breadcrumb = true %}
+        {% when 'Disable' %}
+            {% assign enable_breadcrumb = false %}
+    {% endcase %}
+{% endif %}
+
+{%- comment -%} Item #1 {%- endcomment -%}
+{% capture items %}<li><a href="/">{{ 'general.navigation.home' | t }}</a></li>{% endcapture %}
+
+{%- comment -%} Item #2 – Displayed on Products and Articles {%- endcomment -%}
+{% case template.name %}
+    {% when 'product' %}
+        {%- liquid
+        assign matching_collection = false
+        assign whitelisted_collections = section.settings.whitelisted_collections | split: ','
+        for whitelisted_collection in whitelisted_collections
+            assign whitelisted_collection_s = whitelisted_collection | strip
+            for collection in product.collections
+                if collection.handle == whitelisted_collection_s
+                    assign matching_collection =  collections[collection.handle]
+                    break
+                endif
+            endfor
+        endfor
+        -%}
+        {% if matching_collection %}
+            {% capture items %}
+                {{ items }}
+                <li><a href="{{ matching_collection.url }}">{{ matching_collection.title }}</a></li>
+            {% endcapture %}
+        {% endif %}
+    {% when 'article' %}
+        {% capture items %}
+            {{ items }}
+            <li><a href="{{ blog.url }}">{{ blog.title }}</a></li>
+        {% endcapture %}
+{% endcase %}
+
+{%- comment -%} Item #3 {%- endcomment -%}
+{% capture items %}
+    {{ items }}
+    <li>{{ [template.name].title }}</li>
+{% endcapture %}
+
+{%- comment -%} Markup {%- endcomment -%}
+{% if enable_breadcrumb and repeatable_templates contains template.name %}
+    <section class="breadcrumb color-{{ section.settings.color_scheme }} section-{{ section.id }}-padding">
+        <ul class="breadcrumb__items page-width">
+            {{ items }}
+        </ul>
+    </section>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Breadcrumb",
+    "class": "section-breadcrumb",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "enable",
+            "default": true,
+            "label": "Enable Breadcrumb"
+        },
+        {
+          "type": "select",
+          "id": "color_scheme",
+          "options": [
+            {
+              "value": "accent-1",
+              "label": "t:sections.footer.settings.color_scheme.options__1.label"
+            },
+            {
+              "value": "accent-2",
+              "label": "t:sections.footer.settings.color_scheme.options__2.label"
+            },
+            {
+              "value": "background-1",
+              "label": "t:sections.footer.settings.color_scheme.options__3.label"
+            },
+            {
+              "value": "background-2",
+              "label": "t:sections.footer.settings.color_scheme.options__4.label"
+            },
+            {
+              "value": "inverse",
+              "label": "t:sections.footer.settings.color_scheme.options__5.label"
+            }
+          ],
+          "default": "background-1",
+          "label": "t:sections.footer.settings.color_scheme.label"
+        },
+        {
+          "type": "header",
+          "content": "t:sections.all.padding.section_padding_heading"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "t:sections.all.padding.padding_top",
+          "default": 36
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "t:sections.all.padding.padding_bottom",
+          "default": 36
+        },
+        {
+            "type": "text",
+            "id": "whitelisted_collections",
+            "label": "Whitelisted collections",
+            "info": "Breadcrumbs on Product Templates do not include Collections unless defined here. To define Collections to display, list the collection URL [handle(s)](https://shopify.dev/api/liquid/basics/handle) here in a CSV format."
+        },
+        {
+            "type": "header",
+            "content": "Display Breadcrumbs"
+        },
+        {
+        "type": "paragraph",
+        "content": "Enable breadcrumbs for various templates throughout your store. Products, Collections, Pages, Blogs and Articles will all have an additional setting per-object (in the Accentuate app) that will override any settings here."
+        },
+        {
+        "type": "checkbox",
+        "id": "breadcrumb_product",
+        "label": "Products"
+        },
+        {
+        "type": "checkbox",
+        "id": "breadcrumb_collection",
+        "label": "Collections"
+        },
+        {
+        "type": "checkbox",
+        "id": "breadcrumb_page",
+        "label": "Pages"
+        },
+        {
+        "type": "checkbox",
+        "id": "breadcrumb_blog",
+        "label": "Blogs"
+        },
+        {
+        "type": "checkbox",
+        "id": "breadcrumb_article",
+        "label": "Articles"
+        }
+    ] 
+}
+{% endschema %}

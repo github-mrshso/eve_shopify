@@ -1,0 +1,73 @@
+{%- liquid
+  assign id = id | default: false
+  assign sizes = sizes | split: ','
+  assign alt = alt | default: false
+  assign loading = loading | default: false
+
+  assign img_crop = 'center'
+  assign img_ext = '.jpg'
+  assign img_format = 'pjpeg'
+-%}
+
+<picture>
+  {%- for size in sizes -%}
+    {%- liquid
+      assign params = size | strip | split: ':'
+      assign media = params[0] | strip
+      assign name = params[1] | strip
+
+      case name
+        when 'article-hero-small'
+          assign width = 360
+          assign height = 320
+        when 'article-hero-large'
+          assign width = 750
+          assign height = 548
+        when 'feed-hero'
+          assign width = 1140
+          assign height = 548
+        when 'feed-full-width'
+          assign width = 1140
+          assign height = 275
+        when 'feed-full-height'
+          assign width = 360
+          assign height = 548
+        else
+          break
+      endcase
+
+      assign img_width_x1 = width
+      assign img_height_x1 = height
+      assign img_width_x2 = width | times: 2
+      assign img_height_x2 = height | times: 2
+      assign img_name = id | append: '_' | append: name | append: img_ext
+      assign img_dim_1x = img_width_x1 | append: 'x' | append: img_height_x1
+      assign img_dim_2x = img_width_x2 | append: 'x' | append: img_height_x2
+      assign img_url_1x = img_name | file_img_url: img_dim_1x, crop: img_crop, format: img_format
+      assign img_url_2x = img_name | file_img_url: img_dim_2x, crop: img_crop, format: img_format
+
+      assign default_img_url = img_url_1x
+      assign default_img_width = width
+      assign default_img_height = height
+    -%}
+
+    <source
+      srcset="{{ img_url_1x }} 1x, {{ img_url_2x }} 2x"
+      {% unless media == 'default' -%}
+        media="(max-width: {{ media }}px)"
+      {%- endunless %}
+      type="image/{{ img_format }}">
+  {%- endfor -%}
+
+  <img
+    src="{{ default_img_url }}"
+    width="{{ default_img_width }}"
+    height="{{ default_img_height }}"
+    {% if alt -%}
+      alt="{{ alt | escape }}"
+    {%- endif %}
+    {% if loading -%}
+      loading="{{ loading }}"
+    {%- endif %}
+  >
+</picture>

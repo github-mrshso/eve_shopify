@@ -1,0 +1,143 @@
+$loader-speed: 700ms;
+$loader-circle-max-width: 19px;
+$loader-ring-max-width: 20px;
+$loader-rising-circle-max-width: 6em;
+$loader-rising-ring-max-width: 7em;
+
+@keyframes spin {
+  from {
+      transform:rotate(0deg);
+  }
+  to {
+      transform:rotate(360deg);
+  }
+}
+
+@keyframes loading-circle {
+  0% {
+    width: 0;
+    height: 0;
+  }
+
+  100% {
+    width: $loader-circle-max-width;
+    height: $loader-circle-max-width;
+  }
+}
+
+@keyframes loading-ring {
+  0% {
+    width: 0;
+    height: 0;
+    border-width: 0;
+  }
+
+  100% {
+    width: $loader-ring-max-width;
+    height: $loader-ring-max-width;
+  }
+}
+
+@keyframes loading-rising-circle {
+  0% {
+    width: 0;
+    height: 0;
+  }
+
+  100% {
+    width: $loader-rising-circle-max-width;
+    height: $loader-rising-circle-max-width;
+  }
+}
+
+@keyframes loading-rising-ring {
+  0% {
+    width: 0;
+    height: 0;
+    border-width: 0;
+  }
+
+  100% {
+    width: $loader-rising-ring-max-width;
+    height: $loader-rising-ring-max-width;
+  }
+}
+
+.loader {
+  z-index: $z-index-loader;
+  position: relative;
+  display: block;
+  overflow: hidden;
+  width: $loader-width;
+  height: $loader-width;
+  margin: {
+    left: -#{calc($loader-width / 2)};
+    top: -#{calc($loader-width / 2)};
+  };
+}
+
+.loader__circle,
+.loader__ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  animation: {
+    iteration-count: infinite;
+    direction: alternate;
+    fill-mode: forwards;
+    duration: $loader-speed;
+  };
+}
+
+.loader__circle {
+  background-color: $color-loading-img;
+  animation-name: loading-circle;
+}
+
+.loader__ring {
+  border: 2px solid $color-loading-img;
+  animation: {
+    name: loading-ring;
+    delay: 0.3s;
+  };
+}
+
+.loader--rising {
+  border-bottom: 0.3125rem solid $color-loading-img;
+  width: $loader-rising-width;
+  height: $loader-rising-height;
+  margin: {
+    left: -#{calc($loader-rising-width / 2)};
+    top: -#{calc($loader-rising-height / 2)};
+  };
+
+  .loader__circle,
+  .loader__ring {
+    top: calc(100% + 0.5em);
+  }
+
+  .loader__circle {
+    animation-name: loading-rising-circle;
+  }
+
+  .loader__ring {
+    border-width: 0.5em;
+    animation-name: loading-rising-ring;
+  }
+}
+
+.loader--dark {
+  .loader {
+    border-bottom-color: $color-loader-dark-fill;
+  }
+
+  .loader__circle {
+    background-color: $color-loader-dark-fill;
+  }
+
+  .loader__ring {
+    border-color: $color-loader-dark-fill;
+  }
+}

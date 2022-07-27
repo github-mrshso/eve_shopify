@@ -1,0 +1,167 @@
+{{ 'section-usp-banner.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+.section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+}
+
+@media screen and (min-width: 750px) {
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+}
+
+.usp-banner__content {
+  display: flex;
+  column-gap: 1rem;
+}
+
+.usp-banner__item {
+  flex: 1;
+  text-align: center;
+}
+
+.usp-banner__heading {
+  margin: 0;
+  font-family: var(--font-body-family);
+}
+
+.usp-banner__icon .icon {
+  vertical-align: sub;
+  fill: currentColor;
+}
+{%- endstyle -%}
+
+{%- if section.settings.enable and section.blocks.size > 0 -%}
+  {%- unless section.settings.homepage_only and template.name != 'index' -%}
+    <section class="usp-banner color-{{ section.settings.color_scheme }} section-{{ section.id }}-padding">
+      <div class="usp-banner__content page-width">
+        {%- for block in section.blocks -%}
+          <div class="usp-banner__item">
+            {%- if block.settings.icon != blank -%}
+              <span class="usp-banner__icon nc-icon {{ block.settings.icon }}"></span>
+            {%- endif -%}
+            {%- if block.settings.heading != blank -%}
+              <h2 class="usp-banner__heading {{ section.settings.heading_size }}">{{- block.settings.heading | escape | newline_to_br -}}</h2>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    </section>
+  {%- endunless -%}
+{%- endif -%}
+
+{% schema %}
+{
+    "name": "USP banner",
+    "class": "section-usp-banner",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "enable",
+            "default": true,
+            "label": "Enable USP banner"
+        },
+        {
+          "type": "checkbox",
+          "id": "homepage_only",
+          "default": false,
+          "label": "Homepage only"
+      },
+        {
+          "type": "select",
+          "id": "color_scheme",
+          "options": [
+            {
+              "value": "accent-1",
+              "label": "t:sections.footer.settings.color_scheme.options__1.label"
+            },
+            {
+              "value": "accent-2",
+              "label": "t:sections.footer.settings.color_scheme.options__2.label"
+            },
+            {
+              "value": "background-1",
+              "label": "t:sections.footer.settings.color_scheme.options__3.label"
+            },
+            {
+              "value": "background-2",
+              "label": "t:sections.footer.settings.color_scheme.options__4.label"
+            },
+            {
+              "value": "inverse",
+              "label": "t:sections.footer.settings.color_scheme.options__5.label"
+            }
+          ],
+          "default": "background-1",
+          "label": "t:sections.footer.settings.color_scheme.label"
+        },
+        {
+            "type": "select",
+            "id": "heading_size",
+            "label": "Heading size",
+            "default": "h4",
+            "options": [
+              {
+                "value": "h5",
+                "label": "Small"
+              },
+              {
+                "value": "h4",
+                "label": "Medium"
+              },
+              {
+                "value": "h3",
+                "label": "Large"
+              }
+            ]
+        },
+        {
+          "type": "header",
+          "content": "t:sections.all.padding.section_padding_heading"
+        },
+        {
+          "type": "range",
+          "id": "padding_top",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "t:sections.all.padding.padding_top",
+          "default": 36
+        },
+        {
+          "type": "range",
+          "id": "padding_bottom",
+          "min": 0,
+          "max": 100,
+          "step": 4,
+          "unit": "px",
+          "label": "t:sections.all.padding.padding_bottom",
+          "default": 36
+        }
+    ],
+    "blocks": [
+        {
+            "type": "usp_block",
+            "name": "USP block",
+            "limit": 3,
+            "settings": [
+                {
+                    "type": "textarea",
+                    "id": "heading",
+                    "label": "Heading"
+                },
+               {
+                 "type": "text",
+                 "id": "icon",
+                 "label": "Icon",
+                 "info": "Icon names can be found in [Snooze](https://dev-snooze.evesleep.co.uk/docs/iconography.html)."
+               }
+            ]
+        }
+    ]   
+}
+{% endschema %}

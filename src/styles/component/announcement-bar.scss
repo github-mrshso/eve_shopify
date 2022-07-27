@@ -1,0 +1,76 @@
+@charset "UTF-8";
+
+@use 'sass:color';
+@use 'sass:math';
+
+@import '../partials/_variables';
+@import '../partials/_mixins';
+
+.announcement-bar {
+    font-size: $type_base_size * 0.75;
+    position: relative;
+    text-align: center;
+    background-color: $colorAnnouncement;
+    color: $colorAnnouncementText;
+    padding: 10px 0;
+    @include media-query($medium-up) {
+      font-size: $type_base_size * 0.85;
+    }
+  
+    @if ($colorAnnouncement == $colorBody) {
+      border-bottom: 1px solid $colorBorder;
+    }
+  }
+  
+  .announcement-slider__slide {
+    display: none;
+    position: relative;
+    overflow: hidden;
+    padding: 0 5px;
+  
+    &:first-child {
+      display: block;
+    }
+  }
+  
+  // Announcement text styles
+  
+  .announcement-link {
+    display: block;
+    color: $colorAnnouncementText;
+  
+    &:hover,
+    &:active {
+      color: $colorAnnouncementText;
+    }
+  }
+  
+  .announcement-text {
+    font-weight: bold;
+    display: block;
+  }
+  
+  .announcement-link-text {
+    display: block;
+  
+    .announcement-link & {
+      text-decoration: underline;
+    }
+  
+    a {
+      color: inherit;
+    }
+  }
+  
+  @include media-query($medium-up) {
+    .announcement-slider--compact {
+      .announcement-text,
+      .announcement-link-text {
+        display: inline;
+      }
+  
+      .announcement-text + .announcement-link-text {
+        padding-left: 5px;
+      }
+    }
+  }

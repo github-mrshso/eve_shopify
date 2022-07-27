@@ -1,0 +1,49 @@
+{% comment %}
+    Renders a modal instance
+
+    Accepts:
+    - id: {String} Populates class attribute and Aria Labels
+    - trigger: {String} Outputs the modal's trigger markup
+    - markup: {String} Outputs the modal's main markup
+    - delay: {Number} Delay 
+
+    Usage:
+    {% render 'details-modal', id: 'my-modal', trigger: '<span>Click me</span>', markup: '<h1>Hello!</h1>' %}
+{% endcomment %}
+
+{{ 'section-details-modal.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign id = id | default: 'default-modal'
+  assign trigger = trigger | default: false
+  assign delay = delay | default: false
+-%}
+
+<details-modal
+  class="details-modal modal {{ id }}"
+  {% if delay %}data-delay="{{ delay }}"{% endif %}
+>
+    <details>
+      <summary
+        class="link focus-inset modal__toggle{% unless trigger %} visually-hidden details-modal__trigger-hidden{% endunless %}"
+        aria-haspopup="dialog"
+        aria-label="{{ id }}"
+        {% unless trigger %}tabindex="-1"{% endunless %}
+      >
+        {%- if trigger -%}{{ trigger }}{%- endif -%}
+      </summary>
+      <div class="modal-overlay"></div>
+      <div class="modal__content" role="dialog" aria-modal="true" aria-label="{{ id }}">
+        <div tabindex="-1">
+          <button type="button" class="modal__close-button link link--text focus-inset" aria-label="{{ 'accessibility.close' | t }}">
+            <svg class="icon icon-close" aria-hidden="true" focusable="false" role="presentation">
+              <use href="#icon-close">
+            </svg>
+          </button>
+          <div class="modal__markup rte">
+            {{ markup }}
+          </div>
+        </div>
+      </div>
+    </details>
+  </details-modal>

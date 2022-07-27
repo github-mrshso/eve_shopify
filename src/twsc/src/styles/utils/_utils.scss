@@ -1,0 +1,35 @@
+.u-nowrap {
+  white-space: nowrap;
+}
+
+.u-full-bleed {
+  @include make-full-bleed;
+}
+
+.u-text-center {
+  text-align: center;
+}
+
+.u-img-wrap {
+  position: relative;
+
+  svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+}
+
+[hidden] {
+  display: none !important;
+}
+
+img {
+  @include lazyload;
+}
+
+.lazyautosizes {
+  height: auto;
+}

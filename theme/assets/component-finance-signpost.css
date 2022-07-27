@@ -1,0 +1,7 @@
+/**
+ * This is a compiled CSS file.
+ * Changes here could be overwritten. 
+ * Contact your Shopify developers if changes need to be made.
+ */
+
+.finance-signpost{background:#f3f3f3;padding:2rem}.finance-signpost__content{flex:1 1 auto}.finance-signpost__content .h1{margin:0}.finance-signpost__copy p{margin:0 0 .25rem}.finance-signpost__smallprint{font-family:'ITCAvantGardeStd', "Helvetica Neue", "Verdana", "Arial", sans-serif;font-size:.75rem;font-weight:normal;line-height:1rem;letter-spacing:.4pt;color:#767676;max-width:500px}.finance-signpost__img{position:relative;flex:1 0 20%;display:none}@media only screen and (min-width: 936px){.finance-signpost__img{display:block}}.finance-signpost__img svg{position:absolute;top:0;left:50%;height:100%;width:100%;display:block;transform:translateX(-50%)}.finance-signpost__logo{flex:0 0 auto;align-self:flex-end;margin-right:0}.finance-signpost__logo svg{width:7rem;display:block}.finance-signpost__logo--svg-alma-logo svg{height:3.8030560272rem}.finance-signpost__logo--svg-divido-logo svg{height:2.1556291391rem}.finance-signpost__logo--svg-klarna-logo svg{height:3.8888888889rem}@media only screen and (min-width: 711.01px){.finance-signpost{display:flex;flex-flow:row nowrap;align-items:stretch}.finance-signpost__content,.finance-signpost__img,.finance-signpost__logo{margin:0 .5rem}.finance-signpost__content{margin-left:0}.finance-signpost__smallprint{margin-bottom:0}.finance-signpost__logo{margin-right:0}}

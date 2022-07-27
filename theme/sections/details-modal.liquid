@@ -1,0 +1,33 @@
+{% if section.settings.enable %}
+  {% assign delay = section.settings.delay | times: 1000 %}
+  {% render 'details-modal', id: 'index-modal', markup: section.settings.markup, delay: delay %}
+{% endif %}
+
+{% schema %}
+{
+  "name": "Modal",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable",
+      "default": false,
+      "label": "Enable modal"
+    },
+    {
+      "type": "html",
+      "id": "markup",
+      "label": "Modal content"
+    },
+    {
+      "type": "range",
+      "id": "delay",
+      "min": 0,
+      "max": 20,
+      "step": 1,
+      "unit": "s",
+      "label": "Modal delay (seconds)",
+      "default": 3
+    }
+  ]
+}
+{% endschema %}

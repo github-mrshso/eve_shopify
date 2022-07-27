@@ -1,0 +1,417 @@
+@use 'sass:math';
+
+@import '../partials/_variables';
+@import '../partials/_mixins';
+@import '../partials/_form';
+@import '../partials/_buttons';
+@import '../partials/_loader';
+
+// Form
+// Lifted and adapted from legacy theme
+
+.form {
+  // No styles
+}
+
+.form--horz {
+  display: flex;
+  flex-flow: row nowrap;
+
+  .form-field {
+    margin: {
+      right: $form-horz-form-field-spacing;
+      bottom: 0;
+    }
+  }
+}
+
+.form--condensed {
+  // This is referenced but has no styles of its own yet.
+}
+
+.form--ometria {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  &.has-success {
+    justify-content: center;
+  }
+
+  @include media-query('promo-modal-is-stacked') {
+    // Disable any height 'caching'. The JS adds a height to this element on
+    // desktop to prevent the content from resizing when switching form content.
+    // stylelint-disable-next-line declaration-no-important
+    height: auto !important;
+  }
+}
+
+.form--twsc {
+  .form-field__input {
+    border-radius: 12px;
+  }
+}
+
+// Captions
+
+.form__caption {
+  // @include font('caption-01');
+
+  margin-bottom: $form-validation-padding-bottom;
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+
+  .form--condensed & {
+    margin-bottom: $form-field-padding-bottom-condensed;
+  }
+}
+
+.form__caption--error {
+  color: $color-danger;
+}
+
+// Label
+
+label,
+.label {
+  //@include font(label-01);
+}
+
+label {
+  display: block;
+  margin-bottom: $label-margin-bottom;
+}
+
+.label-info {
+  display: block;
+  margin-bottom: $label-margin-bottom;
+}
+
+// Form field
+
+.form-field {
+  position: relative;
+  margin: 0 0 $form-field-padding-bottom;
+  height: auto;
+  border: 0;
+
+  .form--condensed & {
+    margin-bottom: $form-field-padding-bottom-condensed;
+  }
+
+  @include form-field-input-state(hover) {
+    border-color: $color-input-hover-border;
+  }
+
+  @include form-field-input-state(active) {
+    border-color: $color-input-active-border;
+  }
+
+  @include form-field-input-state(focus) {
+    border-color: $color-input-active-border;
+  }
+
+  html.tab-outline & {
+    @include form-field-input-state(focus) {
+      box-shadow: inset 0 0 0 1px $color-input-active-border;
+    }
+  }
+
+  // stylelint-disable declaration-no-important
+  @include form-field-input-state(disabled) {
+    color: $color-disabled !important;
+    cursor: no-drop !important;
+    border-color: $color-disabled !important;
+    background-color: $color-input-disabled-bg !important;
+    box-shadow: none !important;
+  }
+  // stylelint-enable declaration-no-important
+
+  // stylelint-disable declaration-no-important
+  @include form-field-input-state(readonly) {
+    border: none !important;
+    box-shadow: none !important;
+    height: auto;
+    padding: {
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+    };
+  }
+  // stylelint-enable declaration-no-important
+
+  @include form-field-input-state(untouched) {
+    border-color: $color-input-border;
+  }
+
+  @include form-field-input-state(touched) {
+    border-color: $color-input-border;
+  }
+}
+
+.form-field__label {
+  // @include font('label-01');
+
+  display: block;
+  margin-bottom: $label-margin-bottom;
+  transition: color $transition-speed $transition-ease;
+
+  strong {
+    // @include font('caption-01');
+  }
+
+  .form-field.is-disabled & {
+    // @include font('label-01');
+
+    cursor: no-drop;
+  }
+}
+
+.form-field__field {
+  position: relative;
+  outline: none;
+
+  iframe {
+    max-height: $type-line-height-input-01;
+  }
+
+  &::after {
+    @include font('eve-icon');
+  }
+}
+
+.form-field__input {
+  font-family: $type_base_stack;
+  @include make-input;
+}
+
+select.form-field__input {
+  padding: {
+    top: 0;
+    right: ($icon-width + $link-gap);
+    bottom: 0;
+  }
+}
+
+.form-field__caption {
+  // @include font('caption-01');
+
+  padding: $form-field-caption-padding-top 0 0;
+  margin: 0;
+}
+
+// stylelint-disable-next-line max-line-length
+@mixin theme-form-field-validation($color, $hover-color, $icon, $colorise-caption: false) {
+  .form-field__field::after {
+    content: $icon;
+    color: $color;
+  }
+
+  .form-field__input:not(:disabled) {
+    border-color: $color;
+
+    &:hover {
+      border-color: $hover-color;
+    }
+
+    &:focus {
+      box-shadow: inset 0 0 0 1px $color;
+    }
+  }
+
+  .form-field__icon {
+    color: $color;
+  }
+
+  @if $colorise-caption {
+    .form-field__caption {
+      color: $color;
+    }
+  }
+
+  &.form-field--option {
+    .form-field__caption {
+      border-top-color: $color;
+    }
+  }
+}
+
+.form-field__icon {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+
+  .nc-icon {
+    display: block;
+  }
+}
+
+.form-field--icon {
+  .form-field__input {
+    padding-left: $input-padding-icon-x;
+  }
+
+  .form-field__icon {
+    left: $input-padding-x;
+    width: $form-field-icon-width;
+    height: $form-field-icon-width;
+    color: $color-icon-button;
+    font-size: $form-field-icon-width;
+  }
+
+  &.form-field--disabled {
+    .form-field__icon {
+      color: $color-icon-button-disabled;
+    }
+  }
+}
+
+.form-field--icon-button {
+  &.has-error {
+    @include form-field-icon-button-state(error);
+    @include form-field-icon-button-state(errorandhoverbutton);
+    @include form-field-icon-button-state(errorandfocusbutton);
+
+    html.tab-outline & {
+      @include form-field-icon-button-state(errorandtab);
+    }
+  }
+
+  .form-field__input {
+    width: calc(100% - #{$icon-button-width} + 1px);
+
+    &:focus {
+      @include form-field-icon-button-state(focus);
+
+      html.tab-outline & {
+        @include form-field-icon-button-state(tab);
+      }
+    }
+
+    &:focus + .form-field__icon {
+      @include form-field-icon-button-state(focus);
+    }
+
+    &:focus + .form-field__icon:hover {
+      @include form-field-icon-button-state(hover);
+    }
+  }
+
+  .form-field__icon {
+    @include reset-button;
+
+    right: 0;
+    display: block;
+    width: $input-icon-btn-width;
+    height: $input-icon-btn-width;
+    color: $color-icon-button;
+    transition: color $transition-speed $transition-ease;
+    border: 1px solid $color-input-border;
+    background-color: $color-icon-button-light;
+
+    &:hover {
+      @include form-field-icon-button-state(hover);
+    }
+
+    &:focus {
+      @include form-field-icon-button-state(focus);
+
+      html.tab-outline & {
+        @include form-field-icon-button-state(tab);
+        @include form-field-icon-button-state(tabandhover);
+      }
+    }
+
+    &:active {
+      @include form-field-icon-button-state(active);
+    }
+
+    &:disabled {
+      @include form-field-icon-button-state(disabled);
+    }
+
+    .nc-icon {
+      font-size: $form-field-icon-width;
+    }
+  }
+}
+
+// Validation
+
+// stylelint-disable no-duplicate-selectors
+.form-field {
+  .form-field__input {
+    // https://developer.mozilla.org/en-US/docs/Web/CSS/:-moz-ui-invalid
+    &:not(output):-moz-ui-invalid {
+      box-shadow: none
+    }
+  }
+
+  &.has-error,
+  &.has-success {
+    $width: $form-field-icon-width;
+    $pos: math.div(calc($icon-button-width - $width), 2);
+
+    .form-field__field::after {
+      // @include font('eve-icon');
+
+      position: absolute;
+      top: $pos;
+      right: $pos;
+      display: block;
+      width: $width;
+      height: $width;
+      font-size: $width;
+    }
+  }
+
+  &.has-success {
+    // stylelint-disable-next-line max-line-length
+    @include theme-form-field-validation($color-success, $color-success-hover, $nc-check-sm);
+  }
+
+  &.has-error{
+    // stylelint-disable-next-line max-line-length
+    @include theme-form-field-validation($color-danger, $color-danger-hover, $nc-c-warning-2, true);
+  }
+}
+
+.form-field--icon-button {
+  &.has-error,
+  &.has-success {
+    .form-field__field::after {
+      display: none;
+    }
+  }
+}
+
+.form-field--option {
+  &.has-error,
+  &.has-success {
+    .form-field__field {
+      padding: {
+        top: padding(caption-y);
+        bottom: padding(caption-y);
+        right: (1.5rem + $form-field-icon-width + $input-padding-x);
+      }
+    }
+
+    .form-field__caption {
+      border-top: 1px solid;
+    }
+  }
+}
+
+.form-field--dropdown {
+  .form-field__field::after {
+    content: $nc-chevron-down-sm-16;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(-50%, -50%);
+  }
+}
+
+// stylelint-enable no-duplicate-selectors

@@ -1,0 +1,246 @@
+@use 'sass:list';
+@use 'sass:math';
+
+// stylelint-disable scss/partial-no-import
+@import './typography';
+@import './form';
+@import './buttons';
+// @import './mixins/links';
+// @import './mixins/badge';
+// @import './mixins/page';
+// @import './mixins/twsc';
+// stylelint-enable scss/partial-no-import
+
+/**
+ * Wraps given properties in a media query rule defined in $grid-breakpoints
+ *
+ * @param      {String}  $media-query  [<default>] - The name of the media query
+ */
+@mixin media-query($media-query) {
+  @each $breakpoint in $grid-breakpoints {
+    $name: list.nth($breakpoint, 1);
+    $declaration: list.nth($breakpoint, 2);
+    @if $media-query == $name and $declaration {
+      @media only screen and #{$declaration} {
+        @content;
+      }
+    }
+  }
+}
+
+@mixin custom-list-style(
+  $item-class: '> li',
+  $after: '',
+  $list: list-alpha,
+  $format: decimal-leading-zero,
+) {
+  counter-reset: $list;
+  list-style: none;
+
+  #{$item-class} {
+    &::before {
+      content: counter($list, $format) '#{$after}';
+      counter-increment: $list;
+    }
+  }
+}
+
+@mixin elevation(
+  $preset,
+  $is-inverse: false,
+  $is-exaggerated: false,
+) {
+  $base-color: $color-base-pitch;
+
+  $light: fade-out($base-color, 0.85);
+  $dark: fade-out($base-color, 0.7);
+
+  @if $is-exaggerated {
+    $light: fade-out($base-color, 0.15);
+    $dark: fade-out($base-color, 0);
+  }
+
+  // stylelint-disable indentation
+  @if $preset == 'flat' {
+    box-shadow: none;
+
+  } @else if $preset == 'raised' {
+    box-shadow: 0 2px 4px 0 $light,
+                0 12px 24px -16px $dark;
+
+  } @else if $preset == 'raised-hover' {
+    box-shadow: 0 4px 8px 0 $light,
+                0 16px 32px -16px $dark;
+
+  } @else if $preset == 'drawers' {
+    $v-offset: 6px;
+
+    @if $is-inverse {
+      $v-offset: ($v-offset * -1);
+    }
+
+    box-shadow: 0 $v-offset 12px 0 $light;
+
+  } @else if $preset == 'menu' {
+    box-shadow: 0 8px 16px 0 $light;
+
+  } @else if $preset == 'modal' {
+    $v-offset: 12px;
+
+    @if $is-inverse {
+      $v-offset: ($v-offset * -1);
+    }
+
+    box-shadow: 0 $v-offset 24px 0 $dark;
+
+  } @else {
+    @error '"#{$preset}" is not a valid elevation';
+  }
+  // stylelint-enable indentation
+}
+
+@mixin clearfix() {
+  &::after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  width: 1px;
+  height: 1px;
+  clip: rect(0 0 0 0);
+  clip: rect(0, 0, 0, 0);
+}
+
+@mixin linear-gradient(
+  $start-color,
+  $end-color,
+  $to: bottom,
+  $start-pos: 0%,
+  $end-pos: 100%,
+) {
+  background: linear-gradient(
+    to $to,
+    $start-color $start-pos,
+    $end-color $end-pos,
+  );
+}
+
+@mixin lazyload {
+  &.lazyload,
+  &.lazyloading {
+    opacity: 0;
+    transition: opacity $transition-speed $transition-ease;
+
+    .no-js & {
+      display: none;
+    }
+  }
+
+  &.lazyloaded {
+    opacity: 1;
+    transition: opacity $transition-speed $transition-ease;
+  }
+}
+
+@mixin set-js-flag($flag, $media-query-name) {
+  @include media-query($media-query-name) {
+    &::before {
+      content: $flag;
+      @include visually-hidden;
+    }
+  }
+}
+
+@mixin fade-slides($slide-count: 2, $transition: 1, $pause: 5) {
+  $cycle-duration: (($transition + $pause) * $slide-count);
+  $unit: math.percentage((100 / $cycle-duration) / 100);
+  $keyframe-1: 0%;
+  $keyframe-2: ($unit * $transition);
+  $keyframe-3: ($unit * ($transition + $pause));
+  $keyframe-4: ($unit * ($transition + $pause + $transition));
+  $keyframe-5: 100%;
+
+  @keyframes fade-slides {
+    #{$keyframe-1} {
+      opacity: 0;
+    }
+    #{$keyframe-2} {
+      opacity: 1;
+    }
+    #{$keyframe-3} {
+      opacity: 1;
+    }
+    #{$keyframe-4} {
+      opacity: 0;
+    }
+    #{$keyframe-5} {
+      opacity: 0;
+    }
+  }
+
+  animation: {
+    name: fade-slides;
+    duration: ($cycle-duration * 1s);
+    iteration-count: infinite;
+  }
+
+  @for $i from 1 through $slide-count {
+    &:nth-child(#{$i}) {
+      animation-delay: #{($transition + $pause) * ($i - 1) * 1s};
+    }
+  }
+}
+
+@mixin highlight() {
+  $top: 10%;
+  $bottom: 88%;
+
+  background: linear-gradient(
+    to bottom,
+    transparent $top,
+    $color-primary $top,
+    $color-primary $bottom,
+    transparent $bottom,
+  );
+
+  @content;
+}
+
+// stylelint-disable value-no-vendor-prefix
+// stylelint-disable property-no-vendor-prefix
+// stylelint-disable comment-empty-line-before
+@mixin clamp($line-count, $font-size, $line-height) {
+  display: -webkit-box;
+  -webkit-line-clamp: $line-count;
+  /*! autoprefixer: ignore next */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  height: ($line-count * $font-size * $line-height);
+  font-size: $font-size;
+  line-height: $line-height;
+}
+
+@mixin unclamp {
+  display: block;
+  -webkit-line-clamp: unset;
+  /*! autoprefixer: ignore next */
+  -webkit-box-orient: unset;
+  overflow: unset;
+  height: auto;
+}
+// stylelint-enable value-no-vendor-prefix
+// stylelint-enable property-no-vendor-prefix
+// stylelint-enable comment-empty-line-before
+
+@mixin make-badge-inverse {
+  $color-badge-inverse-text: $color-base-white;
+  $color-badge-inverse-bg: fade-out($color-body, 0.1);
+
+  color: $color-badge-inverse-text;
+  background-color: $color-badge-inverse-bg;
+}

@@ -1,0 +1,265 @@
+{%- comment -%}
+  The code in this section is taken from Dawn 4.0's `collapsible-content.liquid` section.
+  Here, the code has been duplicated and updated to work with eve's accordion requirements.
+  ~
+  This updated accordion section is powered by Product metafields via the Accentuate app.
+{%- endcomment -%}
+
+<link rel="stylesheet" href="{{ 'section-accordions.css' | asset_url }}" media="print" onload="this.media='all'">
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+          padding-top: {{ section.settings.padding_top }}px;
+          padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  comment
+    Retrive the namespaces and titles from the Section blocks
+  endcomment
+  assign namespace_list = ''
+  assign title_list = ''
+  for block in section.blocks
+    comment
+      A block must have both a namespace and title to be considered valid
+    endcomment
+    if block.settings.accordion_title and block.settings.accordion_namespace
+      assign namespace_list = namespace_list | append: ', ' | append: block.settings.accordion_namespace
+      assign title_list = title_list | append: ', ' | append: block.settings.accordion_title
+    endif
+  endfor
+  comment
+    Split the values into arrays
+  endcomment
+  assign namespace_list = namespace_list | remove_first: ',' | strip | split: ","
+  assign title_list = title_list | remove_first: ',' | strip | split: ","
+
+  comment
+    Now we check whether the namespaces have content assigned in Accentuate
+  endcomment
+  assign namespaces_with_values = ''
+  assign titles_with_values = ''
+  for namespace in namespace_list
+    assign parent_forloop_index = forloop.index0
+    assign namespace_strip = namespace | strip
+    comment
+     The below logic loops through each instance of an Accordion label in Accentuate, checking to see if
+     both the Label and Content metafields have values. If they do, `namespace_strip` is added to the
+     `namespaces_with_values` variable and the associated title (`title_list[parent_forloop_index]`)
+     is added to `titles_with_values`. These values are then looped through when creating the accordions.
+
+     This is done to ensure that each Accordion namespace has at least one complete set
+     of acccordion data before being output.
+    endcomment
+    for item in product.metafields[namespace_strip].label
+      if product.metafields[namespace_strip].label[forloop.index0] != blank and product.metafields[namespace_strip].content[forloop.index0].html != blank
+        assign namespaces_with_values = namespaces_with_values | append: ', ' | append: namespace_strip
+        assign titles_with_values = titles_with_values | append: ', ' | append: title_list[parent_forloop_index]
+        break
+      endif
+    endfor
+  endfor
+  comment
+    The final two arrays. These two variables hold all the valid namespaces and titles.
+    When looking through one, we can access the other's matching value by using the 
+    forloop object.
+    Search for '{{ titles_with_values[forloop.index0] }}' to see an example.
+  endcomment
+  assign namespaces_with_values = namespaces_with_values | remove_first: ',' | strip | split: ","
+  assign titles_with_values = titles_with_values | remove_first: ',' | strip | split: ","
+-%}
+
+{% if namespaces_with_values.size > 0 %}
+  <div class="color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+    <div class="accordions isolate content-container content-container--full-width">
+      <div class="accordions__wrapper section-{{ section.id }}-padding">
+        <div class="page-width page-width--narrow">
+          {% for namespace in namespaces_with_values %}
+            <div class="accordions__group">
+              <div class="accordions__header" style="text-align: {{ section.settings.heading_alignment }};">
+                <h2 class="accordions__heading {{ section.settings.heading_size }}">{{ titles_with_values[forloop.index0] }}</h2>
+              </div>
+              <div class="grid grid--1-col grid--2-col-tablet accordions__grid">
+                <div class="grid__item">
+                  {%- assign namespace_strip = namespace | strip -%}
+                  {%- for item in product.metafields[namespace_strip].label -%}
+                    {%- if product.metafields[namespace_strip].label[forloop.index0] != blank and product.metafields[namespace_strip].content[forloop.index0].html != blank -%}
+                      <div class="accordion">
+                        <details id="Details-{{ namespace_strip | handle }}-{{ section.id }}"{% if section.settings.open_first_collapsible_row and forloop.first %} open{% endif %}>
+                          <summary id="Summary-{{ namespace_strip | handle }}-{{ section.id }}">
+                            <h3 class="accordions__title h2">{{ product.metafields[namespace_strip].label[forloop.index0] }}</h3>
+                            {% render 'icon-caret' %}
+                          </summary>
+                          <div class="accordions__content rte" id="CollapsibleAccordion-{{ namespace_strip | handle }}-{{ section.id }}" role="region" aria-labelledby="Summary-{{ namespace_strip | handle }}-{{ section.id }}">
+                            {{ product.metafields[namespace_strip].content[forloop.index0].html }}
+                          </div>
+                        </details>
+                      </div>
+                    {%- endif -%}
+                  {%- endfor -%}
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Accordions section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        {
+          "value": "h2",
+          "label": "t:sections.all.heading_size.options__1.label"
+        },
+        {
+          "value": "h1",
+          "label": "t:sections.all.heading_size.options__2.label"
+        },
+        {
+          "value": "h0",
+          "label": "t:sections.all.heading_size.options__3.label"
+        }
+      ],
+      "default": "h1",
+      "label": "t:sections.all.heading_size.label"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "t:sections.collapsible_content.settings.heading_alignment.label",
+      "options": [
+        {
+          "value": "left",
+          "label": "t:sections.collapsible_content.settings.heading_alignment.options__1.label"
+        },
+        {
+          "value": "center",
+          "label": "t:sections.collapsible_content.settings.heading_alignment.options__2.label"
+        },
+        {
+          "value": "right",
+          "label": "t:sections.collapsible_content.settings.heading_alignment.options__3.label"
+        }
+      ],
+      "default": "center"
+    },
+    {
+      "type": "checkbox",
+      "id": "open_first_collapsible_row",
+      "default": false,
+      "label": "t:sections.collapsible_content.settings.open_first_collapsible_row.label"
+    },
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "t:sections.footer.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "accent-2",
+          "label": "t:sections.footer.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "background-1",
+          "label": "t:sections.footer.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "background-2",
+          "label": "t:sections.footer.settings.color_scheme.options__4.label"
+        },
+        {
+          "value": "inverse",
+          "label": "t:sections.footer.settings.color_scheme.options__5.label"
+        }
+      ],
+      "default": "background-1",
+      "label": "t:sections.footer.settings.color_scheme.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "accordion",
+      "name": "Accordion",
+      "settings": [
+        {
+          "type": "text",
+          "id": "accordion_title",
+          "label": "Accordion title"
+        },
+        {
+          "type": "text",
+          "id": "accordion_namespace",
+          "label": "Accordion namespace",
+          "info": "Input the namespace of the Accordion section setup in the [Accentuate app](/admin/apps/accentuate). Listing a namespace will output the associated Accordion on every instance of the current Product template. Must use CSV format. If unsure, contact your Shopify developers."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Accordions",
+      "blocks": [
+        {
+          "type": "accordion",
+          "settings": {
+            "accordion_title": "full specifications",
+            "accordion_namespace": "full_specifications"
+          }
+        },
+        {
+          "type": "accordion",
+          "settings": {
+            "accordion_title": "our service",
+            "accordion_namespace": "our_service"
+          }
+        }
+      ]
+    }
+  ],
+  "templates": [
+    "product"
+  ]
+}
+{% endschema %}

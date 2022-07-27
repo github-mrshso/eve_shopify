@@ -1,0 +1,50 @@
+@use 'sass:list';
+@use 'sass:math';
+
+
+/**
+ * URL encodes a SVG string for sue as a data URI
+ *
+ * @param      {string}  $svg    The SVG in string form
+ *
+ * @return     {string}  The SVG in string form with non-URL chars replaced
+ */
+@function encode-svg($svg) {
+  // #([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})
+  $icon-encoded: $svg;
+  $replaces: (
+    '%':  '%25',
+    '<':  '%3C',
+    '>':  '%3E',
+    ' ':  '%20',
+    '!':  '%21',
+    '*':  '%2A',
+    '(':  '%28',
+    ')':  '%29',
+    ';':  '%3B',
+    ':':  '%3A',
+    '@':  '%40',
+    '&':  '%26',
+    '=':  '%3D',
+    '+':  '%2B',
+    '$':  '%24',
+    ',':  '%2C',
+    '/':  '%2F',
+    '?':  '%3F',
+    '#': '%23',
+    '[': '%5B',
+    ']': '%5D',
+    "'": '%27'
+  );
+
+  @each $needle, $replace in $replaces {
+    // stylelint-disable-next-line scss/no-duplicate-dollar-variables
+    $icon-encoded: str-replace($icon-encoded, $needle, $replace);
+  }
+
+  @return 'data:image/svg+xml;utf8,#{$icon-encoded}';
+}
+
+@function unicode($str) {
+  @return unquote("\"\\#{$str}\"");
+}

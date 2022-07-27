@@ -1,0 +1,35 @@
+{%- if cart == empty -%}
+  <div class="cart-drawer__section">
+    <p>{{ 'sections.cart.empty' | t }}</p>
+  </div>
+{%- else -%}
+  <div class="cart-drawer__products">
+    <div class="cart-drawer__products-inner" id="cart-drawer-items" data-cart-drawer-items>
+      {% render 'cart-drawer-items' %}
+    </div>
+  </div>
+  <div class="cart-drawer__footer">
+    <div class="cart-drawer__total">
+      {% render 'cart-totals' %}
+    </div>
+    {%- comment -%} Cart Drawer Special Instrutions{%- endcomment -%}
+    {%- comment -%}
+    <div class="cart-drawer__note">
+      <label class="cart-drawer__note-label" for="cart-drawer-note">{{ 'sections.cart.note' | t }}</label>
+      <textarea 
+        data-cart-drawer-note
+        class="cart-drawer__note-input" 
+        id="cart-drawer-note" 
+        name="cart-drawer-note" 
+        rows="4"
+      >{{ cart.note }}</textarea>
+    </div>
+    {%- endcomment -%}
+    <div class="cart-drawer__links">
+      <a href="{{ routes.cart_url }}" id="cart-drawer-button" class="button button--secondary button--full-width"></a>
+      <form action="{{ routes.cart_url }}" method="post" id="cart-drawer-form">
+        <button class="button button--primary button--full-width" name="checkout">{{ 'sections.cart.checkout' | t }}</button>
+      </form>
+    </div>
+  </div>
+{%- endif -%}

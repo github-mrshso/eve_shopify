@@ -1,0 +1,57 @@
+.details-modal {    
+    &__trigger-hidden { 
+        position: fixed;
+        top: 0;
+        left: 0;
+        // The trapFocus() function moves the browser's focus to the modal's elements. 
+        // If an element with no trigger is tucked away at the bottom of the page, these
+        // styles ensure the page focus doesn't shift (as the trigger will be position: fixed).
+    }
+
+    details[open] .modal-overlay:after {
+        position: fixed;
+        content: '';
+        background-color: rgb(var(--color-foreground), 0.5);
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100vh;
+        width: 100vw;
+        z-index: 5;
+    }
+
+    .modal__close-button.link {
+        margin-left: auto;
+    }
+    
+    .modal__content {
+        display: block;
+        position: fixed;
+        height: auto;
+        max-height: 90vh;
+        width: 90vw;
+        max-width: none;
+        top: 50%;
+        left: 50%;
+        bottom: auto;
+        right: auto;
+        transform: translate(-50%, -50%);
+        overflow: auto;
+        background: rgb(var(--color-background));
+        border-style: solid;
+        border-radius: var(--popup-corner-radius);
+        border-color: rgba(var(--color-foreground), var(--popup-border-opacity));
+        border-width: var(--popup-border-width);
+        box-shadow: var(--popup-shadow-horizontal-offset) var(--popup-shadow-vertical-offset) var(--popup-shadow-blur-radius) rgba(var(--color-shadow), var(--popup-shadow-opacity));
+        z-index: 6;
+
+        @media screen and (min-width: 700px) {
+            max-width: 700px;
+        }
+    }
+
+    .modal__markup {
+        padding: 0 20px 40px;
+    }
+}

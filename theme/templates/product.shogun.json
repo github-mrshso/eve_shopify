@@ -1,0 +1,237 @@
+{
+  "sections": {
+    "shogun-helper": {
+      "type": "shogun-helper",
+      "settings": {
+      }
+    },
+    "shogun-above": {
+      "type": "shogun-above",
+      "settings": {
+      }
+    },
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {
+          }
+        },
+        "29d6d879-c2a3-4d64-9afc-60864067d2b1": {
+          "type": "reviews",
+          "settings": {
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {
+            "display_tax_details": false
+          }
+        },
+        "06535ac7-552e-4184-91d7-d13cc75b8ab1": {
+          "type": "finance",
+          "settings": {
+            "margin_top": true,
+            "margin_bottom": true
+          }
+        },
+        "eddb38f3-f117-4f16-ad96-bc03bd60504e": {
+          "type": "shopify:\/\/apps\/klarna-on-site-messaging\/blocks\/app-block\/b95936a9-74b6-4a95-8103-6a1b6459c25e",
+          "settings": {
+            "data_key": "credit-promotion-badge",
+            "locale_option": "geolocation",
+            "locale_fallback": "",
+            "theme": "light",
+            "topPadding": "0",
+            "bottomPadding": "0"
+          }
+        },
+        "1077d004-aa80-4676-bf13-6dfab96ab1f4": {
+          "type": "payment_icons",
+          "settings": {
+            "payment_enable": false
+          }
+        },
+        "6b586c76-eccd-48ab-85a2-0ddc42c5ff5f": {
+          "type": "mattress_comparison_link",
+          "settings": {
+            "comparison_link_enable": true,
+            "comparison_link_tag": "eve:section-usp-mattresses",
+            "comparison_link_image": "https:\/\/cdn.shopify.com\/s\/files\/1\/0187\/4296\/8371\/files\/pdp_mattress-compare-link.svg?v=1651580135",
+            "comparison_link_text": "Compare our mattresses here",
+            "comparison_link": "shopify:\/\/pages\/eve-mattress-comparison"
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "colour_swatches": true
+          }
+        },
+        "quantity_selector": {
+          "type": "quantity_selector",
+          "settings": {
+          }
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "sticky_atc_enable": true
+          }
+        },
+        "283efb97-b606-4cd9-93b5-bb509339b40d": {
+          "type": "secondary_title",
+          "disabled": true,
+          "settings": {
+            "text_style": "body"
+          }
+        },
+        "description": {
+          "type": "description",
+          "settings": {
+          }
+        },
+        "ad46e54d-696e-4278-ab3b-4becdeacd933": {
+          "type": "delivery_estimate",
+          "disabled": true,
+          "settings": {
+            "delivery_estimate_default_html": "<strong>Free delivery<\/strong> within <strong>[5 working days]<\/strong>",
+            "only_overrides": false
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "29d6d879-c2a3-4d64-9afc-60864067d2b1",
+        "price",
+        "06535ac7-552e-4184-91d7-d13cc75b8ab1",
+        "eddb38f3-f117-4f16-ad96-bc03bd60504e",
+        "1077d004-aa80-4676-bf13-6dfab96ab1f4",
+        "6b586c76-eccd-48ab-85a2-0ddc42c5ff5f",
+        "variant_picker",
+        "quantity_selector",
+        "buy_buttons",
+        "283efb97-b606-4cd9-93b5-bb509339b40d",
+        "description",
+        "ad46e54d-696e-4278-ab3b-4becdeacd933"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "gallery_layout": "stacked",
+        "media_size": "medium",
+        "mobile_thumbnails": "hide",
+        "hide_variants": true,
+        "variant_specific_images": true,
+        "enable_video_looping": false,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "165176412882b52323": {
+      "type": "usp-icons-pdp",
+      "blocks": {
+        "3d34a031-e460-4d8c-a7d0-d5f6dcd53ab5": {
+          "type": "section",
+          "settings": {
+            "title": "eve:section-usp-mattresses",
+            "image_1": "https:\/\/cdn.shopify.com\/s\/files\/1\/0187\/4296\/8371\/files\/new_van.svg?v=1649861467",
+            "title_1": "free delivery",
+            "copy_1": "We deliver your mattress for free and in a jiffy",
+            "image_2": "https:\/\/cdn.shopify.com\/s\/files\/1\/0187\/4296\/8371\/files\/Calendarv2.svg?v=1648646111",
+            "title_2": "1 year trial",
+            "copy_2": "All our mattresses come with a 1 year risk-free trial",
+            "image_3": "https:\/\/cdn.shopify.com\/s\/files\/1\/0187\/4296\/8371\/files\/poud_coin.svg?v=1638887892",
+            "title_3": "finance options",
+            "copy_3": "0% finance available so you can spread the cost",
+            "image_4": "https:\/\/cdn.shopify.com\/s\/files\/1\/0187\/4296\/8371\/files\/remove_recycle_new.svg?v=1652871918",
+            "title_4": "remove & recycle",
+            "copy_4": "For a small fee, we'll take care of your old mattress"
+          }
+        }
+      },
+      "block_order": [
+        "3d34a031-e460-4d8c-a7d0-d5f6dcd53ab5"
+      ],
+      "settings": {
+        "color_scheme": "background-1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "16540069925506ea01": {
+      "type": "finance-signpost",
+      "settings": {
+        "title": "fancy spreading your payments?",
+        "subtitle": "<p><strong>Pay in 30 days, or in 3 instalments with Klarna<\/strong><\/p>",
+        "smallprint": "With our partner Klarna, you can pay in 30 days or spread the cost equally over 3 months, and not pay a penny more than the price shown. Those wake-up-happy mornings just got easier. Simply choose ‘Klarna’ at the checkout.",
+        "logo": "svg-klarna-logo",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "1656933112b57e16db": {
+      "type": "rich-text",
+      "blocks": {
+        "165693311259d558fd-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "{{ product.metafields.custom.eve_mattress_layer_title.value }}",
+            "heading_size": "h2"
+          }
+        },
+        "165693311259d558fd-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>{{ product.metafields.custom.eve_mattress_layer_description | metafield_tag }}<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "165693311259d558fd-0",
+        "165693311259d558fd-1"
+      ],
+      "settings": {
+        "color_scheme": "background-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 16
+      }
+    },
+    "1654007000c4cdfd8e": {
+      "type": "mattress-layers",
+      "settings": {
+        "color_scheme": "background-1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "shogun-below": {
+      "type": "shogun-below",
+      "settings": {
+      }
+    },
+    "1657289060bdc51bae": {
+      "type": "reviews",
+      "settings": {
+        "layout": "block",
+        "color_scheme": "background-1",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "shogun-helper",
+    "shogun-above",
+    "main",
+    "165176412882b52323",
+    "16540069925506ea01",
+    "1656933112b57e16db",
+    "1654007000c4cdfd8e",
+    "shogun-below",
+    "1657289060bdc51bae"
+  ]
+}

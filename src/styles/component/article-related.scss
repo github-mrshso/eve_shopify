@@ -1,0 +1,133 @@
+@import '../partials/_variables';
+@import '../partials/_mixins';
+
+$related-gutter: 30px;
+$related-col-width: calc($related-gutter / 2);
+
+// .article-related {}
+
+.article-related__item {
+  margin-bottom:2.4rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  > a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.article-related--cards,
+.article-related--slider {
+  margin: 0 auto;
+
+  .article-related__item {
+    margin-bottom: 0;
+  }
+}
+
+.article-related--cards {
+  .article-related__item {
+    &:not(:first-child) {
+      display: none;
+    }
+  }
+}
+
+@include media-query('feed-2-cols') {
+  .article-related {
+    display: flex;
+    flex-flow: row nowrap;
+  }
+
+  .article-related__item {
+    flex: 1 1 100%;
+    margin: 0 $related-gutter 0 0;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+// Article list items
+
+$related-item-gutter: 2rem;
+$related-item-spacing: 1.5rem;
+$related-item-col-width: calc(50% - #{calc($related-gutter / 2)});
+$related-item-tag-spacing: 1rem;
+
+.article-related-item {
+  position: relative;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.article-related-item__header,
+.article-related-item__img {
+  flex: 0 0 $related-item-col-width;
+}
+
+.article-related-item__img {
+  order: 1;
+
+  img {
+    width: 100%;
+    display: block;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.article-related-item__header {
+  display: flex;
+  flex-direction: column;
+  order: 2;
+}
+
+.article-related-item__tags {
+  order: 1;
+  display: flex;
+  flex-flow: row nowrap;
+  margin-top: $related-item-tag-spacing;
+}
+
+.article-related-item__title {
+  // @include font('body-short-02');
+
+  order: 2;
+  margin: {
+    top: $related-item-spacing;
+    bottom: 0;
+  }
+}
+
+.article-related-item__excerpt {
+  @include visually-hidden;
+}
+
+@include media-query('feed-2-cols') {
+  .article-related-item {
+    flex-direction: column;
+    align-items: initial;
+  }
+
+  .article-related-item__img,
+  .article-related-item__header {
+    flex: 0 0 auto;
+  }
+
+  .article-related-item__img {
+    margin-bottom: $related-item-gutter;
+  }
+
+  .article-related-item__header,
+  .article-related-item__tags {
+    margin: 0;
+  }
+}

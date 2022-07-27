@@ -1,0 +1,279 @@
+// stylelint-disable-next-line max-line-length
+// stylelint-disable property-no-vendor-prefix, no-unknown-animations, declaration-property-value-blacklist
+
+// Overlay animations (modals, panels)
+
+@keyframes overlay-on {
+  from { opacity: 0; }
+  to { opacity: 0.6; }
+}
+
+@keyframes overlay-off {
+  from { opacity: 0.6; }
+  to { opacity: 0; }
+}
+
+@keyframes full-overlay-on {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes full-overlay-off {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes modal-open {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modal-closing {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
+
+// Text animations
+
+@keyframes rise-up {
+  from {
+    opacity: 1;
+    transform: translateY(120%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
+
+@keyframes rise-up-out {
+  from {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-120%);
+  }
+}
+
+@keyframes paint-across {
+  from {
+    opacity: 1;
+    -webkit-clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
+    clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+}
+
+@keyframes paint-across-small {
+  from {
+    opacity: 1;
+    -webkit-clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
+    clip-path: polygon(0% 0%, 0% 0%, 0% 100%, 0% 100%);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+}
+
+@keyframes paint-across-out {
+  from {
+    opacity: 1;
+    -webkit-clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-clip-path: polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%);
+    clip-path: polygon(100% 0%, 100% 0%, 100% 100%, 100% 100%);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-small {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+// Utility
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+// Background image animations
+
+@keyframes zoom-fade {
+  from {
+    opacity: 0;
+    transform: scale(1.3,1.3);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1,1);
+  }
+}
+
+@keyframes zoom-fade-password {
+  0% {
+    opacity: 0;
+    transform: scale(1.4,1.4);
+  }
+
+  5% {
+    opacity: 1;
+    transform: scale(1,1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1.2,1.2);
+  }
+}
+
+@keyframes zoom-fade-small {
+  0% {
+    opacity: 0;
+    transform: scale(1.1,1.1);
+  }
+
+  10% {
+    opacity: 1;
+    transform: scale(1,1);
+  }
+
+  12% {
+    opacity: 1;
+    transform: scale(1,1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1.03,1.03);
+  }
+}
+
+@keyframes kenburns {
+  0% {
+    opacity: 0;
+    transform: scale(1.8);
+    animation-timing-function: cubic-bezier(0.12, 0.63, 0.6, 0.74);
+  }
+
+  10% {
+    opacity: 1;
+    transform: scale(1.6);
+    animation-timing-function: linear;
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes kenburns-out {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+    animation-timing-function: ease-out;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+
+// Loading animations
+
+@keyframes loading {
+  0% {
+    width: 0;
+  }
+
+  60% {
+    width: 100px;
+    margin-left: -50px;
+  }
+
+  100% {
+    margin-left: 50px;
+    width: 0;
+  }
+}
+
+@keyframes breathing {
+  0% {
+    transform: scale(1);
+  }
+
+  25% {
+    transform: scale(1.1);
+  }
+
+  60% {
+    transform: scale(1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

@@ -1,0 +1,36 @@
+@mixin make-page {
+  padding: {
+    left: $page-width-gutter-small;
+    right: $page-width-gutter-small;
+  }
+
+  @include media-query($medium-up) {
+    max-width: $page-width;
+    padding: {
+      left: $page-width-gutter-large;
+      right: $page-width-gutter-large;
+    }
+  }
+}
+
+@mixin make-full-bleed {
+  margin: {
+    left: -#{$page-width-gutter-small};
+    right: -#{$page-width-gutter-small};
+  }
+  padding: {
+    left: $page-width-gutter-small;
+    right: $page-width-gutter-small;
+  }
+
+  @include media-query($medium-up) {
+    margin: {
+      left: -#{$page-width-gutter-large};
+      right: -#{$page-width-gutter-large};
+    }
+    padding: {
+      left: $page-width-gutter-large;
+      right: $page-width-gutter-large;
+    }
+  }
+}

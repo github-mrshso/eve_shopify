@@ -1,0 +1,21 @@
+@import '../partials/_variables';
+@import '../partials/_mixins';
+
+.page-banner {
+  position: relative;
+  background-color: $color-grey-bg;
+  padding: $page-width-gutter-small 0;
+}
+
+.page-banner__img {
+  position: relative;
+  max-width: 340px;
+
+  svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+  }
+}

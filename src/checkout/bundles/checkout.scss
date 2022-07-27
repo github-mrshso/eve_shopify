@@ -1,0 +1,709 @@
+@use 'sass:list';
+@use 'sass:math';
+
+// Checkout
+// Lifted and adapted from legacy theme
+
+@import '../../styles/partials/functions';
+@import '../../styles/partials/variables';
+@import '../../styles/partials/mixins';
+@import '../../styles/component/mention-me';
+@import '../../styles/component/form';
+@import '../styles/slider.scss';
+
+// stylelint-disable max-line-length, scss/dollar-variable-colon-space-after
+$content-box-padding: $padding-m;
+$mention-me-link-spacing: $paragraph-margin-bottom;
+$radio-input-width: 18px;
+$radio-input-padding: 0.75rem;
+
+$grid-breakpoints: list.join($grid-breakpoints, (
+  'dynamic-checkout-mobile-breakpoint' '(min-width: 750px)',
+  'banner-flip-min' '(max-width: 999px)',
+  'banner-flip-max' '(min-width: 1000px)'
+));
+// stylelint-enable max-line-length, scss/dollar-variable-colon-space-after
+
+// Header
+
+.logo__image {
+  // stylelint-disable-next-line declaration-no-important
+  width: $site-header-logo-width !important;
+  max-height: 100%;
+  display: block;
+}
+
+.banner {
+  padding: 0 $banner-padding;
+  border-bottom: 1px solid $color-header-border;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-body-family);
+}
+
+.banner__security-img {
+  color: $color-text-muted;
+  line-height: 1rem;
+
+  .nc-icon {
+    vertical-align: middle;
+  }
+}
+
+.banner__security-copy {
+  // @include font('helper-01');
+}
+
+@include media-query(banner-flip-min) {
+  .banner__security-img {
+    display: none;
+  }
+}
+
+@include media-query(banner-flip-max) {
+  .banner__summary-toggle {
+    display: none;
+  }
+}
+
+.banner__logo {
+  margin-top: $banner-padding;
+  align-self: flex-end;
+  flex: 0 0 $site-header-logo-width;
+}
+
+.banner__summary-toggle {
+  .wrap {
+    padding-right: 0;
+  }
+}
+
+// Content-box
+
+.content-box {
+  border-radius: 0;
+  color: $color-body;
+}
+
+.content-box__row {
+  padding: $content-box-padding;
+}
+
+.content-box__row--secondary {
+  background: $color-body-bg;
+}
+
+.content-box__emphasis {
+  font-weight: bold;
+  color: inherit;
+}
+
+.content-box__calendar {
+  margin: $content-box-padding -#{$content-box-padding} 0;
+}
+
+.content-box__details {
+  margin: $content-box-padding 0 0;
+  padding-left: calc(#{$radio-input-width} + #{$radio-input-padding});
+
+  p, ul {
+    margin-bottom: $paragraph-margin-bottom;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  ul {
+    list-style: disc;
+
+    li:not(:last-child) {
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.content-box__calendar,
+.content-box__details {
+  display: none;
+
+  .is-active & {
+    display: block;
+  }
+}
+
+.content-box__caption {
+  // @include font('caption-01');
+
+  margin: {
+    top: $content-box-padding;
+    bottom: 0;
+  };
+}
+
+.content-box__caption--above {
+  margin: {
+    top: 0;
+    bottom: $content-box-padding;
+  };
+}
+
+// Notices
+
+.notice {
+  border-radius: 0;
+}
+
+// Mobile summary toggle
+
+// Taken from the rendered DOM
+$order-summary-toggle-padding: $padding-xs;
+$order-summary-toggle-icon-width: 11px;
+$order-summary-toggle-icon-height: 6px;
+
+.order-summary-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  padding: 0;
+  padding: $order-summary-toggle-padding;
+  margin-right: -#{$order-summary-toggle-padding};
+  width: auto;
+  color: $color-link-color;
+  transition: color $transition-speed $transition-ease;
+
+  &:hover,
+  &:active,
+  &:focus {
+    color: $color-link-color;
+
+    .order-summary-toggle__text {
+      color: $color-link-color;
+
+      svg {
+        fill: $color-link-color;
+      }
+    }
+  }
+
+  .order-summary-toggle__text {
+    color: $color-link-color;
+
+    svg {
+      fill: $color-link-color;
+    }
+
+    &:hover,
+    &:active,
+    &:focus {
+      color: $color-link-color;
+
+      svg {
+        fill: $color-link-color;
+      }
+    }
+  }
+
+  .total-recap__final-price {
+    font: {
+      size: inherit;
+      weight: bold;
+    }
+  }
+}
+
+.order-summary-toggle__text {
+  @include font('caption-01');
+
+  position: relative;
+  // stylelint-disable-next-line max-line-length
+  padding-right: calc(#{$order-summary-toggle-icon-width} + #{$link-icon-margin});
+  text: {
+    transform: lowercase;
+    align: right;
+  }
+}
+
+.order-summary-toggle__icon-wrapper {
+  // stylelint-disable-next-line declaration-no-important
+  display: none !important;
+}
+
+.order-summary-toggle__dropdown {
+  position: absolute;
+  fill: currentColor;
+  right: 0;
+  top: 50%;
+  margin-top: -(math.div($order-summary-toggle-icon-height, 2));
+  width: $order-summary-toggle-icon-width;
+  height: $order-summary-toggle-icon-height;
+}
+
+.order-summary-toggle__total-recap {
+  padding-left: $link-gap;
+}
+
+.product-table tr.product:not(:last-child) {
+  th, td {
+    @include media-query(banner-flip-max) {
+      padding-bottom: 2rem;
+    }
+  }
+}
+
+// DPT-424 : Hide dont T.V.A lines on FR site
+.region--fr {
+  .payment-due-label__taxes[data-checkout-taxes] {
+    @include visually-hidden;
+  }
+}
+// END DPT-424
+
+// Mention me link styling
+
+.checkout-mm--link  {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  text-transform: lowercase;
+  // ensures that there is spacing if there is a code above
+  margin: $mention-me-link-spacing 0 0;
+
+  &::before {
+    // @include font('eve-icon');
+
+    content: $icon-mention-me;
+    text-transform: none;
+    display: block;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: color $transition-speed $transition-ease;
+    padding-right: $link-icon-margin;
+  }
+
+  &:hover,
+  &:hover:focus {
+    &::before {
+      color: $color-link-hover-color;
+    };
+  };
+
+  a {
+    @include make-link;
+
+    text-decoration: none;
+  }
+}
+
+// Dynamic checkout (PayPal/Google Pay buttons)
+
+.dynamic-checkout__title {
+  // @include font('heading-04');
+
+  text-transform: lowercase;
+
+  &::before,
+  &::after {
+    border-radius: 0;
+  }
+}
+
+.dynamic-checkout__content {
+  border-radius: 0;
+
+  @include media-query(dynamic-checkout-mobile-breakpoint) {
+    div[data-testid="grid-cell"] {
+      // stylelint-disable-next-line declaration-no-important
+      max-width: 100% !important;
+    }
+  }
+}
+
+// Fields
+
+label[for="checkout_vault_phone"] {
+  padding-left: 0;
+}
+
+// stylelint-disable-next-line selector-id-pattern, selector-max-id
+#checkout_vault_phone {
+  padding-left: 2.8571rem;
+}
+
+.field {
+  flex-direction: column;
+
+  .step & {
+    padding: {
+      top: 0;
+      bottom: $form-field-padding-bottom;
+    }
+  }
+}
+
+.field__label {
+  display: block;
+  margin-bottom: $label-margin-bottom;
+}
+
+.field__input-wrapper {
+  width: 100%;
+}
+
+.field__input-btn-wrapper {
+  align-items: flex-end;
+}
+
+.field.field--optional {
+  // This is dynamically added with JS
+  .form__caption {
+    margin: {
+      top: $form-field-caption-padding-top;
+      bottom: 0;
+    }
+  }
+}
+
+.field__input {
+  // @extend .form-field__input;
+  border: {
+    radius: 0;
+    width: 1px;
+    style: solid;
+  }
+
+  width: 100%;
+  outline: none;
+  display: block;
+  font-family: var(--font-body-family);
+
+  .main & {
+    $color-input-placeholder: transparent;
+
+    background-color: $colorInputBg;
+    border-color: $color-input-border;
+    color: $colorTextBody;
+
+    // stylelint-disable selector-no-vendor-prefix
+    &::-webkit-input-placeholder {
+      color: $color-input-placeholder;
+      opacity: 0;
+    }
+
+    &:-moz-placeholder {
+      color: $color-input-placeholder;
+      opacity: 0;
+    }
+
+    &::-moz-placeholder {
+      color: $color-input-placeholder;
+      opacity: 0;
+    }
+
+    &:-ms-input-placeholder {
+      color: $color-input-placeholder;
+      opacity: 0;
+    }
+    // stylelint-enable selector-no-vendor-prefix
+  }
+}
+
+.field__input:not(.field__input--iframe-container) {
+  padding: $input-padding-y $input-padding-x;
+  transition: $transition-speed $transition-ease;
+  transition-property: border-color, box-shadow;
+}
+
+.field__input:focus,
+.field__input-wrapper--flag-focus .field__input {
+  outline: none;
+  border-color: $color-input-active-border;
+  box-shadow: inset 0 0 0 1px $color-input-active-border;
+}
+
+.field__input:focus {
+  .main & {
+    + .field__caret {
+      border-left-color: $color-input-active-border;
+
+      // stylelint-disable-next-line max-line-length
+      // stylelint-disable-next-line selector-max-class, selector-max-compound-selectors
+      .icon-svg--color-adaptive-lighter {
+        color: $color-input-active-border;
+        fill: currentColor;
+      }
+    }
+  }
+}
+
+.field__input-wrapper--icon-left {
+  .field__icon {
+    top: (math.div($input-height, 2));
+    height: calc(#{$input-height} - 2px);
+  }
+}
+
+.field__icon {
+  top: calc(#{$input-label-space} + #{$input-border-width} +  #{$label-margin-bottom});
+  width: $input-inner-height;
+  height: $input-inner-height;
+}
+
+.field__icon-svg {
+  width: $icon-width;
+  height: $icon-width;
+
+  .icon-svg {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+.field__caret {
+  $label-and-half-input-height: $input-label-space + (math.div($input-height, 2)) + $label-margin-bottom;
+
+  top: calc(#{$label-and-half-input-height} + #{$input-border-width});
+  transition: border-color $transition-speed $transition-ease;
+
+  .icon-svg--color-adaptive-lighter {
+    transition: color $transition-speed $transition-ease;
+  }
+}
+
+.field--error {
+  .main & {
+    .field__input {
+      border-color: $color-danger;
+      box-shadow: none;
+
+      &:focus {
+        box-shadow: inset 0 0 0 1px $color-danger;
+      }
+    }
+
+    .field__message--error {
+      // @include font(caption-01);
+    }
+  }
+}
+
+.floating-labels {
+  .field__label {
+    // @include font(label-01);
+
+    position: static;
+    left: 0;
+    opacity: 1;
+    pointer-events: unset;
+    padding: 0;
+    margin-top: 0;
+    transform: translateY(0);
+  }
+
+  .field--show-floating-label {
+    .field__input:not(.field__input--iframe-container) {
+      padding: {
+        // Pulled in from Shopify styles.
+        top: 0.3571rem;
+        bottom: 0.3571rem;
+      }
+    }
+  }
+}
+
+.card-fields-container {
+  &.content-box__row--secondary {
+    background-color: $color-grey-bg;
+  }
+
+  .card-fields-iframe {
+    height: $input-inner-height;
+    margin-top: 1px;
+  }
+
+  .field {
+    padding-bottom: $content-box-padding;
+  }
+
+  .field__label {
+    font: {
+      // stylelint-disable-next-line max-line-length
+      family: -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+      weight: normal;
+    }
+
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    padding: 0 0.8rem;
+    margin-top: 0.4286rem;
+    transform: translateY(3px);
+
+    .floating-labels & {
+      color: $color-label-credit-card-form;
+    }
+  }
+
+  .field__icon {
+    top: 1px;
+  }
+}
+
+.radio__label,
+.checkbox__label {
+  // @include font('body-short-01');
+
+  color: inherit;
+
+  .small-text {
+    display: block;
+    margin-top: 0.25rem;
+  }
+}
+
+.radio__label__primary {
+  font-weight: bold;
+  vertical-align: middle;
+
+  .small-text {
+    font-weight: normal;
+    margin-top: $padding-xs;
+
+    // This was strongly advised against but like the minnow in the raging
+    // torrent my screams were silenced by the deafening roar of a higher power!
+    // It hides the '1 to n business days' line from the delivery row.
+    // stylelint-disable-next-line declaration-no-important
+    display: none !important;
+
+    &:last-child {
+      // stylelint-disable-next-line declaration-no-important
+      display: block !important;
+    }
+
+    + br {
+      display: none;
+    }
+  }
+}
+
+.review-block__label {
+  flex-basis: 8rem;
+  word-break: keep-all;
+}
+
+.flag-selector {
+  top: (math.div($input-height, 2));
+  transform: translateY(0);
+  height: $input-inner-height;
+}
+
+.terms {
+  text-align: center;
+  margin-top: $padding-s;
+  display: none;
+
+  a {
+    @include make-link;
+    @include make-link-join-in;
+  }
+
+  .step[data-step="review"] ~ & {
+    display: block;
+  }
+}
+
+.content-box--gfs-shipments {
+  .content-box__row {
+    display: block;
+    margin: -1px;
+    border: 1px solid transparent;
+    width: auto;
+
+    &:first-child,
+    &:last-child {
+      border-radius: 0;
+    }
+
+    &.is-active {
+      border-color: $color-body;
+
+      // stylelint-disable-next-line selector-max-class
+      .small-text--delivery {
+        font-weight: bold;
+        color: $color-notify;
+      }
+    }
+  }
+
+  .radio-wrapper--gfs {
+    margin-bottom: 0;
+
+    .input-radio {
+      vertical-align: 0;
+      border-color: #333;
+    }
+  }
+}
+
+// Verbose checkout styling
+// to combat checkout_stylesheet/v2-ltr
+
+:root {
+  .checkout {
+    *[class*="__label"],
+    &, button, a {
+      font-family: var(--font-body-family);
+      color: $color-body;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-family: var(--font-heading-family);
+    }
+  }
+
+  .fieldset--inline {
+    align-items: center;
+  }
+
+  .fieldset--inline .btn,
+  .btn {
+    background-color: $color-primary;
+    color: $color-button;
+    padding: 1.4rem 1.7rem;
+    border-radius: 0;
+  }
+
+  .step__footer__previous-link {
+    color: $color-button;
+
+    &:hover {
+      color: $color-button;
+    }
+
+    .icon-svg--color-accent,
+    .icon-svg--color-accent:hover {
+      color: inherit;
+    }
+  }
+
+  div.field__input {
+    padding: 0;
+  }
+
+  .os-header__hanging-icon {
+    color: $color-button;
+    stroke: $color-button;
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
+}
+
+.checkout input[type='checkbox']:checked {
+  border-color: #333;
+}

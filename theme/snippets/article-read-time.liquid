@@ -1,0 +1,33 @@
+{%- assign wpm = 200 -%}
+{%- assign word_count = content | strip_html | split: ' ' | size -%}
+{%- assign word_time_mins = word_count | times: 1.0 | divided_by: wpm -%}
+{%- assign word_time_secs = word_time_mins | times: 60 -%}
+
+{%- assign j = '|*|' -%}
+{%- assign img_dur = 12 -%}
+{%- assign img_dur_decay = 1 -%}
+{%- assign img_count = content | split: '<img' | join: j | split: '<picture' | join: j | split: j | size | minus: 1 -%}
+
+{%- assign img_time_secs = 0 -%}
+{%- for img in (1..img_count) -%}
+  {%- assign i_decay = img_dur_decay | times: forloop.index0 -%}
+  {%- assign i_dur = img_dur | minus: i_decay -%}
+  {%- assign img_time_secs = img_time_secs | plus: i_dur -%}
+{%- endfor -%}
+
+{%- assign read_time_secs = word_time_secs | plus: img_time_secs -%}
+{%- assign read_time_mins = read_time_secs | divided_by: 60 -%}
+{%- assign read_time_mins_rounded = read_time_mins | times: 2 | ceil | times: 1.0 | divided_by: 2 -%}
+{%- assign read_time_secs_rounded = read_time_mins_rounded | modulo: 1 -%}
+{%- assign read_time_secs_rounded_pretty = '' -%}
+
+{%- if read_time_secs_rounded > 0 -%}
+  {%- assign read_time_mins_rounded = read_time_mins_rounded | floor -%}
+  {%- assign read_time_secs_rounded_pretty = '½' -%}
+{%- else -%}
+  {%- assign read_time_secs_rounded_pretty = '' -%}
+{% endif %}
+
+{%- assign read_time = read_time_mins_rounded | round | append: read_time_secs_rounded_pretty -%} 
+
+{{ 'blogs.article.read_time' | t: mins: read_time }}

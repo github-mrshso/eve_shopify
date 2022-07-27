@@ -1,0 +1,71 @@
+$page-max-width: 632px;
+$page-header-max-width: 1050px;
+$page-header-margin-bottom: 3rem;
+
+html,
+body,
+.page-container,
+.transition-body {
+  height: 100%;
+}
+
+#shopify-section-footer {
+  margin-top: auto;
+}
+
+.twsc__landing,
+.twsc__loading,
+.twsc__error {
+  min-height: $body-min-height-sm;
+
+  @include media-query($medium-up) {
+    min-height: $body-min-height-lg;
+  }
+}
+
+.twsc__landing {
+  padding: 2rem 0;
+  background: {
+    position: 50% 0;
+    repeat: repeat;
+  }
+
+  @media screen and (min-width: 990px) {
+    .page-width--narrowest {
+      max-width: $page-width-narrowest;
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
+  }
+}
+
+.twsc__loading,
+.twsc__error {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
+
+.twsc__loading--initialising {
+  margin: {
+    top: 30px;
+    bottom: 30px;
+  }
+}
+
+.twsc__quiz {
+  // Nothing yet
+}
+
+.twsc__feed {
+  // Nothing yet
+}
+
+#shopify-section-twsc {
+  @media screen and (min-width: 750px) {
+    .page-width--full-bleed {
+      padding: 0;
+    }
+  }
+}
+

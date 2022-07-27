@@ -1,0 +1,30 @@
+.breadcrumb {
+    &__items {
+        list-style: none;
+        list-style-position: inside;
+        display: block;
+
+        li {
+            margin-right: 0.5rem;
+            font-size: 1.4rem; 
+            font-family: inherit;
+            display: inline;
+        }
+
+        li:not(:last-child):after {
+            content: "/";
+            padding-left: 0.5rem;
+        }
+
+        a {
+            color: inherit;
+            text-underline-offset: 0.3rem;
+            text-decoration: none;
+            display: inline;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+    }
+}

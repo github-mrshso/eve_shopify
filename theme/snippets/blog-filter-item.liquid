@@ -1,0 +1,88 @@
+{%- liquid
+  assign by = by | default: false
+  assign as = as | default: 'select'
+  assign is_active = false
+-%}
+
+{%- capture options -%}
+  {% for tag in blog.all_tags %}
+    {%- liquid
+      assign is_selected = false
+      assign tag_whitelist = by | split: '|'
+
+      if tag contains 'twsc:'
+        assign parts = tag | split: ':'
+        assign tag_ns = parts[0]
+        assign tag_name = parts[1]
+        assign tag_value = parts[2]
+        assign tag_value_pretty = tag_value | replace: '-', ' '
+
+        unless tag_whitelist contains tag_name
+          continue
+        endunless
+
+        if current_tags contains tag
+          assign is_selected = true
+          assign is_active = true
+        endif
+      endif
+    -%}
+    {%- case as -%}
+      {%- when 'select' -%}
+        {%- comment -%}
+          TODO: fix blog filter when there is no value i.e. ""
+        {%- endcomment -%}
+        <option
+          value="/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}"
+          {% if is_selected %}selected{% endif %}>
+          {{ tag_value_pretty }}
+        </option>
+      {%- when 'list' -%}
+        <li class="feed-filter__item">
+          <a
+            class="feed-filter__btn js-btn {% if is_selected %}is-active{% endif %}"
+            href="/blogs/{{ blog.handle }}/tagged/{{ tag | handleize }}">
+            <span class="opt opt--radio{% if is_selected %} is-checked{% endif %}">
+              <span class="opt__proxy">&nbsp;</span>
+              <span class="opt__label">
+                {{ tag_value_pretty }}
+              </span>
+            </span>
+          </a>
+        </li>
+    {%- endcase -%}
+  {% endfor %}
+{%- endcapture -%}
+
+{%- case as -%}
+  {%- when 'select' -%}
+    <select class="form-field__input js-select">
+      <option value=" "
+        disabled
+        {% unless is_active %}selected{% endunless %}>
+        {{ 'blogs.filter.' | append: by | t }}
+      </option>
+      <option value="/blogs/{{ blog.handle }}">
+        all
+      </option>
+      {{ options }}
+    </select>
+  {%- when 'list' -%}
+    <ul>
+      <li class="feed-filter__item">
+        <a
+          class="feed-filter__btn js-btn {% unless is_active %}is-active{% endunless %}"
+          href="/blogs/{{ blog.handle }}">
+          <span class="opt opt--radio{% unless is_active %} is-checked{% endunless %}">
+            <span class="opt__proxy">&nbsp;</span>
+            <span class="opt__label">
+              all
+            </span>
+          </span>
+        </a>
+      </li>
+      {{ options }}
+    </ul>
+  {%- else -%}
+    <!-- blog filter select type not set -->
+{%- endcase -%}

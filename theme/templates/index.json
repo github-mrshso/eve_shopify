@@ -1,0 +1,530 @@
+{
+  "sections": {
+    "image_banner": {
+      "type": "image-banner",
+      "blocks": {
+        "heading": {
+          "type": "heading",
+          "settings": {
+            "heading": "up to 50% off in our summer sale",
+            "heading_size": "h0"
+          }
+        },
+        "text": {
+          "type": "text",
+          "settings": {
+            "text": "Forget the weather. Our summer sale will bring plenty of sunshine to your mornings with up to a whopping 50% off mattresses and 25% off toppers.",
+            "text_style": "body"
+          }
+        },
+        "button": {
+          "type": "buttons",
+          "settings": {
+            "button_label_1": "SHOP MATTRESSES",
+            "button_link_1": "shopify:\/\/collections\/mattresses",
+            "button_style_1_primary": true,
+            "button_label_2": "SHOP ALL",
+            "button_link_2": "shopify:\/\/collections\/sale",
+            "button_style_2_primary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading",
+        "text",
+        "button"
+      ],
+      "settings": {
+        "image": "shopify:\/\/shop_images\/Hero_Summer_Sale_2022_1.jpg",
+        "mobile_image": "shopify:\/\/shop_images\/Mobile_Summer_Sale_2022_1.jpg",
+        "image_height": "medium",
+        "adapt_height_first_image": false,
+        "desktop_content_position": "middle-left",
+        "font_colour": "font-black",
+        "mobile_font_colour": "font-black",
+        "desktop_content_alignment": "left",
+        "show_gradient_backdrop": false,
+        "backdrop_colour": "white",
+        "backdrop_opacity": 100,
+        "backdrop_width": false,
+        "gradient_position": "left",
+        "mobile_content_alignment": "center",
+        "mobile_content_position": "position-top"
+      }
+    },
+    "16503639867ec9a51d": {
+      "type": "usp-icons",
+      "blocks": {
+        "1650363986ea5f63e7-0": {
+          "type": "block",
+          "settings": {
+            "image": "https:\/\/cdn.shopify.com\/s\/files\/1\/0187\/4296\/8371\/files\/new_van.svg?v=1649861467",
+            "title": "free delivery",
+            "copy": "We deliver your mattress for free and in a jiffy"
+          }
+        },
+        "1650363986ea5f63e7-1": {
+          "type": "block",
+          "settings": {
+            "image": "https:\/\/cdn.shopify.com\/s\/files\/1\/0187\/4296\/8371\/files\/Calendarv2.svg?v=1648646111",
+            "title": "1 year trial",
+            "copy": "All our mattresses come with a 1 year risk-free trial"
+          }
+        },
+        "1650363986ea5f63e7-2": {
+          "type": "block",
+          "settings": {
+            "image": "https:\/\/cdn.shopify.com\/s\/files\/1\/0187\/4296\/8371\/files\/poud_coin.svg?v=1638887892",
+            "title": "finance options",
+            "copy": "0% finance available so you can spread the cost"
+          }
+        },
+        "1650363986ea5f63e7-3": {
+          "type": "block",
+          "settings": {
+            "image": "https:\/\/cdn.shopify.com\/s\/files\/1\/0187\/4296\/8371\/files\/remove_recycle_new.svg?v=1652871918",
+            "title": "remove & recycle",
+            "copy": "For a small fee, we'll take care of your old mattress"
+          }
+        }
+      },
+      "block_order": [
+        "1650363986ea5f63e7-0",
+        "1650363986ea5f63e7-1",
+        "1650363986ea5f63e7-2",
+        "1650363986ea5f63e7-3"
+      ],
+      "settings": {
+        "title": "",
+        "color_scheme": "background-1",
+        "padding_top": 52,
+        "padding_bottom": 52
+      }
+    },
+    "1653569400656cc828": {
+      "type": "image-with-text",
+      "blocks": {
+        "16535694006fd8cafb-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "60% off our snuggalicious bed linen",
+            "heading_size": "h1"
+          }
+        },
+        "16535694006fd8cafb-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Doth your eyes deceive you? No, they doth not. This absolute banger of an offer is the biggest one we've ever done, like, ever. Don't miss out.<\/p>",
+            "text_style": "body"
+          }
+        },
+        "16535694006fd8cafb-2": {
+          "type": "button",
+          "settings": {
+            "button_label": "SHOP BED LINEN",
+            "button_link": "shopify:\/\/collections\/bed-linen"
+          }
+        }
+      },
+      "block_order": [
+        "16535694006fd8cafb-0",
+        "16535694006fd8cafb-1",
+        "16535694006fd8cafb-2"
+      ],
+      "settings": {
+        "image": "shopify:\/\/shop_images\/2-eve_sleep_60_off_bedding_salev3.png",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "overlap",
+        "color_scheme": "background-1",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "16539902192fa43fd6": {
+      "type": "rich-text",
+      "blocks": {
+        "56dff4db-acd4-4580-baa3-2464b56ef5b4": {
+          "type": "heading",
+          "settings": {
+            "heading": "for the sleep you need to *rise and shine*",
+            "heading_size": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "56dff4db-acd4-4580-baa3-2464b56ef5b4"
+      ],
+      "settings": {
+        "color_scheme": "background-2",
+        "full_width": false,
+        "padding_top": 24,
+        "padding_bottom": 24
+      }
+    },
+    "1653570882f42300cd": {
+      "type": "rich-text",
+      "blocks": {
+        "1653570882defe0e52-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "what our customers think of us",
+            "heading_size": "h1"
+          }
+        },
+        "1653570882defe0e52-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Hundreds of thousands of people sleep with eve every night. Your turn?<\/strong><\/p>"
+          }
+        },
+        "c4f28fd2-5a5f-4c6b-8e09-cac2cbd47a26": {
+          "type": "custom_html",
+          "settings": {
+            "html": "<!-- TrustBox widget - Mini -->\n<div class=\"trustpilot-widget\" data-locale=\"en-US\" data-template-id=\"53aa8807dec7e10d38f59f32\" data-businessunit-id=\"54f46d0b0000ff00057dc5eb\" data-style-height=\"150px\" data-style-width=\"100%\" data-theme=\"light\">\n  <a href=\"https:\/\/www.trustpilot.com\/review\/www.evesleep.co.uk\" target=\"_blank\" rel=\"noopener\">Trustpilot<\/a>\n<\/div>\n<!-- End TrustBox widget -->\n\n<style>\n#trustpilot-widget-trustbox-0-wrapper {\n\tdisplay: none !important;\n\tvisibility: hidden;\n\topacity: 0;\n}\n<\/style>"
+          }
+        }
+      },
+      "block_order": [
+        "1653570882defe0e52-0",
+        "1653570882defe0e52-1",
+        "c4f28fd2-5a5f-4c6b-8e09-cac2cbd47a26"
+      ],
+      "settings": {
+        "color_scheme": "background-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "1653570978119e3b1e": {
+      "type": "collection-list",
+      "blocks": {
+        "1653570978e954cbb5-0": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "mattresses"
+          }
+        },
+        "1653570978e954cbb5-1": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "bed-frames"
+          }
+        },
+        "1653570978e954cbb5-2": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "pillows"
+          }
+        },
+        "8e5fb307-3736-4b24-8377-4a736280b713": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "bed-linen"
+          }
+        }
+      },
+      "block_order": [
+        "1653570978e954cbb5-0",
+        "1653570978e954cbb5-1",
+        "1653570978e954cbb5-2",
+        "8e5fb307-3736-4b24-8377-4a736280b713"
+      ],
+      "settings": {
+        "title": "our favourites",
+        "heading_size": "h1",
+        "image_ratio": "square",
+        "columns_desktop": 4,
+        "color_scheme": "background-1",
+        "show_view_all": false,
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "165330281866ecead8": {
+      "type": "image-with-text",
+      "blocks": {
+        "16533028182f4693af-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "best mattress according to Which? testing",
+            "heading_size": "h1"
+          }
+        },
+        "16533028182f4693af-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>3 out of the top 5 top mattresses according to Which? The premium hybrid, the original hybrid, and the original foam. Dreamy.<\/p>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "16533028182f4693af-0",
+        "16533028182f4693af-1"
+      ],
+      "settings": {
+        "image": "shopify:\/\/shop_images\/eve-sleep-which-badge-star-animation-dawn.gif",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "color_scheme": "background-1",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "16551374817842a1ca": {
+      "type": "multicolumn",
+      "blocks": {
+        "165513748179eea5d8-0": {
+          "type": "column",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/ideal_home.png",
+            "title": "",
+            "text": "<p>'more than worth the money'<\/p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "165513748179eea5d8-1": {
+          "type": "column",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/evening_standard_78c97399-af8f-4300-9e79-f90fab5bd665.png",
+            "title": "",
+            "text": "<p>'it'll give you your dreamiest sleep yet'<\/p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "165513748179eea5d8-2": {
+          "type": "column",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/2TT-T3-300x300.png",
+            "title": "",
+            "text": "<p>'exceptionally supportive and comfortable'<\/p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "a1a24a88-e173-4506-a4d7-db9c6b6de238": {
+          "type": "column",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/the_independent.png",
+            "title": "",
+            "text": "<p>'next level, in our opinion'<\/p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "165513748179eea5d8-0",
+        "165513748179eea5d8-1",
+        "165513748179eea5d8-2",
+        "a1a24a88-e173-4506-a4d7-db9c6b6de238"
+      ],
+      "settings": {
+        "title": "",
+        "heading_size": "h2",
+        "image_width": "half",
+        "image_ratio": "square",
+        "columns_desktop": 4,
+        "column_alignment": "center",
+        "background_style": "none",
+        "button_label": "",
+        "button_link": "",
+        "color_scheme": "background-2",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "16535720391baa8faa": {
+      "type": "image-with-text",
+      "blocks": {
+        "165357203949fa88b6-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "1 year trial",
+            "heading_size": "h1"
+          }
+        },
+        "165357203949fa88b6-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>We want to make sure you always wake up bright-eyed and bushy-tailed. That's why our mattresses now come with a 1 year at home trial. That’s a fair few nights, a tonne of hours and bajillions and gazillions of minutes of glorious snoozing.<\/p>",
+            "text_style": "body"
+          }
+        },
+        "9c840747-ab40-405e-aa89-ace781e8424e": {
+          "type": "button",
+          "settings": {
+            "button_label": "TELL ME MORE",
+            "button_link": "shopify:\/\/pages\/1-year-trial"
+          }
+        }
+      },
+      "block_order": [
+        "165357203949fa88b6-0",
+        "165357203949fa88b6-1",
+        "9c840747-ab40-405e-aa89-ace781e8424e"
+      ],
+      "settings": {
+        "image": "shopify:\/\/shop_images\/1-year-calendar-tick-animation.gif",
+        "height": "adapt",
+        "desktop_image_width": "small",
+        "layout": "image_first",
+        "desktop_content_position": "middle",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "color_scheme": "background-1",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "16535721863c9f567d": {
+      "type": "video",
+      "settings": {
+        "heading": "the proof is in the sleeping",
+        "heading_size": "h1",
+        "cover_image": "shopify:\/\/shop_images\/557062324398_feed-hero.jpg",
+        "video_url": "https:\/\/www.youtube.com\/watch?v=HSZcNX42MJM",
+        "description": "",
+        "full_width": false,
+        "color_scheme": "background-1",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "1651763908637d2074": {
+      "type": "twsc-signpost",
+      "settings": {
+        "copy": "Just answer 5 quick questions to get your very own sleep advice and tips. Job’s a good’un.",
+        "btn_copy": "LET'S GO",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "1653392229cce625b7": {
+      "type": "rich-text",
+      "disabled": true,
+      "blocks": {
+        "1653392229a63a55e3-0": {
+          "type": "heading",
+          "settings": {
+            "heading": "\"This is an exceptional mattress\"",
+            "heading_size": "h1"
+          }
+        },
+        "55d8b49b-b8a8-46b0-b940-eadc9fbbd937": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/eve-sleep-which-badge-star-animation_ee07c4e2-58a7-41df-8f82-9f4c88c91d38.gif"
+          }
+        },
+        "1653392229a63a55e3-1": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Nulla vitae elit libero, a pharetra augue. Nullam quis risus eget urna mollis ornare vel eu leo. Donec sed odio dui. Maecenas sed diam eget risus varius blandit sit amet non magna.<\/p>"
+          }
+        },
+        "1653392229a63a55e3-2": {
+          "type": "button",
+          "settings": {
+            "button_label": "show me more!",
+            "button_link": "\/",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "1653392229a63a55e3-0",
+        "55d8b49b-b8a8-46b0-b940-eadc9fbbd937",
+        "1653392229a63a55e3-1",
+        "1653392229a63a55e3-2"
+      ],
+      "settings": {
+        "color_scheme": "background-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "1653572334c0575be2": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "top rated",
+        "heading_size": "h1",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "frontpage",
+        "products_to_show": 3,
+        "columns_desktop": 3,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "enable_desktop_slider": false,
+        "color_scheme": "background-1",
+        "image_ratio": "adapt",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "165357227950bad67d": {
+      "type": "finance-signpost",
+      "settings": {
+        "title": "fancy spreading your payments?",
+        "subtitle": "<p><strong>Pay in 30 days, or in 3 instalments with Klarna<\/strong><\/p>",
+        "smallprint": "With our partner Klarna, you can pay in 30 days or spread the cost equally over 3 months, and not pay a penny more than the price shown. Those wake-up-happy mornings just got easier. Simply choose ‘Klarna’ at the checkout.",
+        "logo": "svg-klarna-logo",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "165513675172579ac8": {
+      "type": "rich-text",
+      "settings": {
+        "color_scheme": "background-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "image_banner",
+    "16503639867ec9a51d",
+    "1653569400656cc828",
+    "16539902192fa43fd6",
+    "1653570882f42300cd",
+    "1653570978119e3b1e",
+    "165330281866ecead8",
+    "16551374817842a1ca",
+    "16535720391baa8faa",
+    "16535721863c9f567d",
+    "1651763908637d2074",
+    "1653392229cce625b7",
+    "1653572334c0575be2",
+    "165357227950bad67d",
+    "165513675172579ac8"
+  ]
+}

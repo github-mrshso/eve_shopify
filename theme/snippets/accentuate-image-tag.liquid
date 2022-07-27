@@ -1,0 +1,66 @@
+{% comment %}theme-check-disable RemoteAsset, ImgLazyLoading{% endcomment %}
+{% comment %}
+    Renders an HTML image tag using the passed in Accentuate Media v2 image. 
+
+    Accentuate image objects are, by default, arrays. In order for this snippet to work, a the image metafield must be passed in before any item within the array is selected. The snippet will then output index value 0 by default. 
+    For example:
+    {{ product.metafields.accentuate.image }}
+    {{ product.metafields.accentuate.image }}
+
+    Accepts:
+    - image: {String}           Accentuate image object, as seen above
+    - sizes: {String}           Content to fill the Sizes attribute of the HTML image tag
+    - lazy: {Boolean}           Pass in `false` to prevent lazyload. 
+    - index: {Number}           The index whose image will be output.
+    - section_index: {Number}   If an image field in Accentuate is set within a repeatable section,
+                                the image data will be stored in a nested array. Use
+                                section_index to define which of the repeated blocks to
+                                access. By default, it is assumed that the image input is not 
+                                repeatable.
+    - max_width: {Number}       The largest possible width (in pixels) the image should be rendered at.
+                                The default value of 5760 is in line with Shopifiy's max width
+                                and height values used in their image_url tag.
+                                Resource: https://shopify.dev/api/liquid/filters/url-filters#parameters
+
+    Usage:
+
+    {% render 'accenetuate-image-tag',
+        image: product.metafields.accentuate.image,
+        sizes: '(min-width: 750px) calc(100vw / 2), 100vw',
+        lazy: false,
+        index: image_no,
+        section_index: section_no,
+        max_width: '1600px'
+    %}
+{% endcomment %}
+
+
+{%- liquid
+    assign index = index | default: 0
+    assign repeatable_index = repeatable_index | default: false
+    assign sizes = sizes | default: "{{ settings.page_width }}"
+    assign max_width = max_width | default: 5760
+    assign lazy = lazy | default: true
+
+    assign image = image[index]
+    if repeatable_index
+        assign image = image[repeatable_index][index]
+    endif
+-%}
+
+<img
+    srcset="{%- if image.width >= 550 and max_width >= 550 -%}{{ image.cloudinary_src | append: 'w550' }} 550w,{%- endif -%}
+        {%- if image.width >= 720 and max_width >= 720 -%}{{ image.cloudinary_src | append: 'w720' }} 720w,{%- endif -%}
+        {%- if image.width >= 990 and max_width >= 990 -%}{{ image.cloudinary_src | append: 'w990' }} 990w,{%- endif -%}
+        {%- if image.width >= 1100 and max_width >= 1100 -%}{{ image.cloudinary_src | append: 'w1100' }} 1100w,{%- endif -%}
+        {%- if image.width >= 1500 and max_width >= 1500 -%}{{ image.cloudinary_src | append: 'w1500' }} 1500w,{%- endif -%}
+        {%- if image.width >= 2200 and max_width >= 2200 -%}{{ image.cloudinary_src | append: 'w2200' }} 2200w,{%- endif -%}
+        {%- if image.width >= 3000 and max_width >= 3000 -%}{{ image.cloudinary_src | append: 'w3000' }} 3000w,{%- endif -%}
+        {{ image.cloudinary_src | append: 'w' | append: max_width }} {{ max_width }}w"
+    src="{{ image.cloudinary_src | append: 'w' | append: max_width }}"
+    sizes="{{ sizes }}"
+    {% if image.alt %}alt="{{ image.alt | escape }}"{% endif %}
+    {% if lazy %}loading="lazy"{% endif %}
+    width="{{ image.width }}"
+    height="{{ image.height }}"
+>

@@ -1,0 +1,26 @@
+{
+  "sections": {
+    "page-header": {
+      "type": "page-header",
+      "settings": {
+        "color_scheme": "background-1",
+        "default_image": "shopify:\/\/shop_images\/eve-default-page.png",
+        "use_overrides": true
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "narrow_width": false,
+        "center_header": false,
+        "hide_header": true,
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    }
+  },
+  "order": [
+    "page-header",
+    "main"
+  ]
+}

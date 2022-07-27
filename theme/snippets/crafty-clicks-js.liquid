@@ -1,0 +1,31 @@
+<script type="text/javascript">
+  var c2a_config = {
+    active: true,
+    showLogo: false,
+    access_token: 'b5b8d-fd019-4d5ac-03a7c',
+    position: 0, // 0 - new input field for search, 1 - uses address line 1 for search
+    hideFields: 0, // 0 - do not hide address fields, 1 - hide address fields
+    countrySelector: false,
+    defaultCountry: 'ie',
+    enabledCountries: ['{{ global_region | upcase }}'],
+    design: {
+      mode: 1,
+      ambient: 'light',
+      accent: 'default'
+    },
+    domMode: 'id',
+    dom: {
+      county: '#checkout_shipping_address_province',
+    },
+    texts: {
+      country_button: {{ 'general.checkout.address.country_button' | t | json }},
+      country_placeholder: {{ 'general.checkout.address.country_placeholder' | t | json }},
+      default_placeholder: {{ 'general.checkout.address.default_placeholder' | t | json }},
+      generic_error: {{ 'general.checkout.address.generic_error' | t | json }},
+      no_results: {{ 'general.checkout.address.no_results' | t | json }},
+      search_label: {{ 'general.checkout.address.search_label' | t | json }},
+    }
+  };
+</script>
+<script src="https://cc-cdn.com/generic/scripts/v1/cc_c2a.min.js"></script>
+<script src="https://cc-cdn.com/shopify/scripts/v1/cc_c2a_shopify.js"></script>

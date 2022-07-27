@@ -1,0 +1,31 @@
+<a href="{{ article.url }}">
+  <article class="article-related-item">
+    <header class="article-related-item__header">
+      <h4 class="article-related-item__title">
+        {{ article.title | replace: '*', '' }}
+      </h4>
+      <div class="article-related-item__tags">
+        {%- render 'article-tags',
+          tags: article.tags,
+          ns: 'twsc',
+          name: 'pillar',
+          as: 'badge',
+          limit: 1
+        -%}
+      </div>
+    </header>
+    {%- if article.excerpt.size > 0 -%}
+      <div class="article-related-item__excerpt">
+        <p>{{ article.excerpt | strip_html }}</p>
+      </div>
+    {%- endif -%}
+    <div class="article-related-item__img">
+      {%- render 'article-img',
+        id: article.id,
+        sizes: 'default:article-hero-large'
+        alt: article.image.alt
+        loading: 'lazy'
+      -%}
+    </div>
+  </article>
+</a>

@@ -1,0 +1,62 @@
+{% comment %}
+    Renders the tag of an article given a namespace and a name
+
+    Accepts:
+    - tags:  {String} A comma separated list of tags
+    - ns:    {String} The namespace of the tag to be extracted
+    - name:  {String} The name of the tag to be extracted
+    - as:    {String} The style of the output e.g. 'badge' or 'raw'
+    - limit: {Number} The max number of items to output
+
+    Usage:
+    <!--
+      Assuming that what is required is a badge containing the value of the
+      'pillar' tag in the 'twsc' namespace
+      e.g. 'rest better' for the tag 'twsc:pillar:rest-better'
+    -->
+    {% render 'article-tags',
+      tags: article.tag,
+      ns: 'twsc',
+      name: 'pillar',
+      as: 'badge',
+      limit: 4
+    %}
+{% endcomment %}
+
+{%- liquid
+  assign tags = tags | default: ''
+  assign ns = ns | default: ''
+  assign name = name | default: ''
+  assign as = as | default: 'raw'
+  assign limit = limit | default: 10
+
+  assign base = ns | append: ':' | append: name
+  assign selected = ''
+
+  for tag in tags
+    if tag contains base
+      assign parts = tag | split: ':'
+      assign tag_ns = parts[0]
+      assign tag_name = parts[1]
+      assign tag_value = parts[2]
+      assign tag_pretty = tag_value | replace: '-', ' '
+      assign selected = selected | append: tag_value
+      unless forloop.last
+        assign selected = selected | append: '|'
+      endunless
+    endif
+  endfor
+
+  assign selected = selected | split: '|'
+
+  for tag in selected limit: limit
+    case as
+      when 'badge'
+        render 'badge', text: tag_pretty
+      when 'pretty'
+        echo tag_pretty
+      when 'raw'
+        echo tag
+    endcase
+  endfor
+-%}

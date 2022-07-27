@@ -1,0 +1,106 @@
+@mixin theme-quiz(
+  $bg,
+  $text,
+  $opt-radio,
+  $opt-border,
+  $progress-upcoming,
+  $progress-active,
+) {
+  background-color: $bg;
+  color: $text;
+
+  .quiz__header {
+    background-color: $bg;
+
+    @if $bg == #333333 {
+      &.is-stuck {
+        @include elevation(drawers);
+      }
+    }
+  }
+
+  .step__option {
+    background: $bg;
+  }
+
+  .step__option:not(.is-active) {
+    border-color: $opt-border;
+  }
+
+  @if $bg == #333333 {
+    .step__question {
+      strong, em {
+        background: transparent;
+      }
+    }
+  }
+
+  .step__footer {
+    background-color: $bg;
+
+    @if $bg == #333333 {
+      &.is-stuck {
+        @include elevation(drawers, $is-inverse: true);
+      }
+    }
+  }
+
+  .progress-indicator {
+    @include theme-progress-indicator(
+      $bg,
+      $progress-upcoming,
+      $progress-active,
+    );
+  }
+
+  .opt {
+    @include theme-opt($bg, $text, $opt-radio);
+  }
+
+  @if $bg == #333333 {
+    .ln {
+      @include make-link-inverse;
+    }
+
+    .ln--icon{
+      .nc-icon {
+        color: $color-primary;
+      }
+    }
+  }
+}
+
+@mixin theme-opt($bg, $text, $primary) {
+  .opt__proxy {
+    border-color: $primary;
+    background-color: $bg;
+
+    &::after {
+      background-color: $primary;
+    }
+  }
+
+  .opt__label {
+    color: $text;
+  }
+}
+
+@mixin theme-progress-indicator($page-bg, $upcoming-bg, $active-border) {
+  // stylelint-disable selector-max-type
+  ol li {
+    &::before {
+      box-shadow: 0 0 0 7px $page-bg;
+      background-color: $upcoming-bg;
+      border-color: $upcoming-bg;
+    }
+
+    &.is-active,
+    &.is-complete {
+      &::before {
+        background-color: $color-body-bg;
+        border-color: $active-border;
+      }
+    }
+  }
+  // stylelint-enable selector-max-type
+}

@@ -1,0 +1,155 @@
+@import '../partials/_variables';
+@import '../partials/_mixins';
+
+// Blog (feed) filter
+// Lifted and adapted from legacy theme
+
+$blog-filter-drawer-bg: $color-grey-bg;
+$blog-filter-group-border-radius: $form-field-input-border-radius;
+
+.feed-filter {
+  margin: 5rem 0 3rem;
+
+  @include media-query('feed-2-cols') {
+    margin: 5rem 0 1rem;
+  }
+
+  @include media-query('feed-3-cols') {
+    margin: 5rem 0 1rem;
+  }
+
+  .form {
+    @include media-query('feed-2-cols') {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 30px;
+    }
+  
+    @include media-query('feed-3-cols') {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .drawer {
+    $transition-function: cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    display: block;
+    visibility: hidden;
+    transition: transform $transition-speed $transition-function,
+      visibility 1ms linear $transition-speed;
+    background: $blog-filter-drawer-bg;
+
+
+    &.is-open {
+      visibility: visible;
+      transition: transform $transition-speed $transition-function,
+        visibility 1ms linear 0s;
+    }
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin: 0;
+  }
+
+  .is-loading {
+    .feed-filter__btn {
+      pointer-events: none;
+      cursor: wait;
+    }
+  }
+}
+
+.feed-filter__drawer {
+  @include media-query('feed-2-cols') {
+    display: none;
+  }
+}
+
+.feed-filter__dropdowns {
+  display: none;
+
+  @include media-query('feed-2-cols') {
+    display: block;
+  }
+}
+
+.feed-filter__group {
+  border: 1px solid $color-border;
+  border-radius: 12px;
+  padding: 0;
+  margin: 0 0 30px;
+  background-color: $color-body-bg;
+}
+
+.feed-filter__items {
+  clear: both;
+}
+
+%feed-filter-item {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  height: 5rem;
+  padding: {
+    left: 1.2rem;
+    right: 1.2rem;
+  }
+  color: inherit;
+  text-decoration: none;
+
+  border-bottom: 1px solid $color-border;
+}
+
+.feed-filter__title {
+  float: left;
+  width: 100%;
+
+  .icon {
+    margin-right: 12px;
+  }
+}
+
+.feed-filter__title-inner {
+  @extend %feed-filter-item;
+}
+
+.feed-filter__btn {
+  @extend %feed-filter-item;
+
+  transition: $transition-speed $transition-ease;
+  transition-property: background-color, box-shadow, border-color;
+
+  &:hover {
+    background-color: $color-button-bg;
+  }
+
+  &:focus {
+    html.tab-outline & {
+      box-shadow: inset 0 0 0 1px $color-button-outline-focus-border;
+    }
+  }
+
+  &:active,
+  &.is-active {
+    background-color: $color-button-bg;
+  }
+
+  .opt {
+    pointer-events: none;
+  }
+
+  .feed-filter__item:last-child & {
+    $radius: $blog-filter-group-border-radius;
+    border: {
+      bottom: none;
+      radius: 0 0 $radius $radius;
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{%- liquid
+  assign img = product.featured_image
+  assign price = product.price | money_without_trailing_zeros
+-%}
+
+{%- capture pillar -%}
+  {%- render 'article-tags',
+    tags: product.tags,
+    ns: 'twsc',
+    name: 'pillar',
+    as: 'pretty',
+    limit: 1
+  -%}
+{%- endcapture -%}
+{%- assign pillar = pillar | strip -%}
+
+{%- if as == 'ctx' -%}
+  {%- capture srcset -%}
+    {{ img | img_url: '360x270', crop: 'center', format: 'pjpeg' }} 1x,
+    {{ img | img_url: '720x540', crop: 'center', format: 'pjpeg', scale: 2 }} 2x
+  {%- endcapture -%}
+
+  {
+    tagline: {{ tagline | json }},
+    smallprint: {{ smallprint | json }},
+    featuredImage: {{ img | img_url: '360x270', crop: 'center', format: 'pjpeg' | json }},
+    srcset: {{ srcset | json }},
+    id: {{ product.id | json }},
+    name: {{ product.title | json }},
+    pillar: {{ pillar | json }},
+    price: {{ price | json }},
+    handle: {{ product.handle | json }},
+    url: {{ product.url | json }},
+  }
+{%- else -%}
+  {%- liquid
+    case sizes
+      when '2:2'
+        assign format_class = 'card--format-2-2'
+        assign card_img_size = '830:article-hero-small,1220:article-hero-large,default:article-hero-small'
+      when '2:2,3:1'
+        assign format_class = 'card--format-2-2 card--format-3-1'
+        assign card_img_size = '830:article-hero-small,1220:article-hero-large,default:article-hero-small'
+      when '2:2,3:2'
+        assign format_class = 'card--format-2-2 card--format-3-2'
+        assign card_img_size = '830:article-hero-small,1220:article-hero-large,default:feed-full-width'
+      when '3:2'
+        assign format_class = 'card--format-3-2'
+        assign card_img_size = '1220:article-hero-small,default:article-hero-large'
+      when '3:3'
+        assign format_class = 'card--format-3-3'
+        assign card_img_size = '1220:article-hero-small,default:feed-full-width'
+    endcase
+  -%}
+  {%- capture badge -%}
+    {%- render 'article-tags',
+      tags: product.tags,
+      ns: 'twsc',
+      name: 'pillar',
+      as: 'badge',
+      limit: 1
+    -%}
+  {%- endcapture -%}
+  {%- assign badge = badge | strip -%}
+  <div class="card card--product {{ format_class }}">
+    <div class="card__img">
+      {% render 'picture',
+        object: product.featured_image,
+        dimensions: '360x270',
+        loading: 'lazy',
+        format: 'pjpeg'
+      %}
+    </div>
+    <div class="card__body">
+      <div class="card__label">
+        <header class="card__header">
+          {%- comment -%}
+            <span class="card__icon">
+              <i class="nc-icon nc-megaphone-24"></i>
+            </span>
+          {%- endcomment -%}
+          <h1 class="card__title">
+            {{ tagline }}
+          </h1>
+        </header>
+        <div class="card__meta">
+          <div class="card__tags">
+            {{ badge }}
+          </div>
+        </div>
+        <div class="card__excerpt">
+          <p>{{ smallprint }}</p>
+          <p class="card__price">
+            {{ price }}
+          </p>
+        </div>
+        <a
+          class="card__cta button button--primary button--full-width"
+          href="{{ product.url }}">
+          shop now
+        </a>
+      </div>
+    </div>
+  </div>
+{%- endif -%}

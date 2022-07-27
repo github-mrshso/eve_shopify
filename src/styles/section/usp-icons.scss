@@ -1,0 +1,59 @@
+/**
+* Component: USP Icons Section
+* -----------------------------------------------------------------------------
+*/
+
+@import '../partials/_variables';
+
+.usp-icons {
+    text-align: center;
+}
+
+.usp-icons__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 1rem;
+    row-gap: 1rem;
+}
+
+.usp-icons__block {
+    margin-bottom: $padding-m;
+    flex-basis: calc(50% - 0.5rem);
+    @media screen and (min-width: 750px) {
+        flex-basis: calc(25% - 0.75rem);
+    }
+}
+
+
+.usp-icons__image {
+    margin: 0 auto $padding-s;
+
+    img {
+        display: block;
+        margin: 0 auto;
+        max-height: 70px;
+        max-width: 70px;
+    }
+}
+
+.usp-icons__title {
+    max-width: 170px;
+    margin: 0 auto;
+}
+
+.usp-icons__copy {
+    max-width: 150px;
+    margin: 0 auto;
+}
+
+@media screen and (min-width: 750px) {
+    .usp-icons__block {
+        margin-bottom: 0;
+    }
+
+    .usp-icons__copy {
+        max-width: 170px;
+        margin: 0 auto $padding-s;
+    }
+}

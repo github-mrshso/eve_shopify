@@ -1,0 +1,60 @@
+<div class="page-width">
+    {%- render 'twsc-signpost',
+      copy: section.settings.copy,
+      btn_copy: section.settings.btn_copy
+    -%}
+  </div>
+  
+{% schema %}
+    {
+        "name": "TWSC signpost",
+        "class": "index-section",
+        "settings": [
+        {
+            "type": "textarea",
+            "id": "copy",
+            "label": "Copy"
+        },
+        {
+            "type": "text",
+            "id": "btn_copy",
+            "label": "Button copy"
+        },
+        {
+            "type": "header",
+            "content": "t:sections.all.padding.section_padding_heading"
+        },
+        {
+            "type": "range",
+            "id": "padding_top",
+            "min": 0,
+            "max": 100,
+            "step": 4,
+            "unit": "px",
+            "label": "t:sections.all.padding.padding_top",
+            "default": 40
+        },
+        {
+            "type": "range",
+            "id": "padding_bottom",
+            "min": 0,
+            "max": 100,
+            "step": 4,
+            "unit": "px",
+            "label": "t:sections.all.padding.padding_bottom",
+            "default": 52
+        }
+    ],
+    "presets": [
+        {
+            "name": "TWSC signpost",
+            "settings": {
+                "copy": "Answer 5 quizzical questions, and we'll help you get the sleep you need to rise and shine.",
+                "btn_copy": "let's go"
+            }
+        }   
+    ],
+    "templates": ["index"]
+}
+  {% endschema %}
+  

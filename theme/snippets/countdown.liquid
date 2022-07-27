@@ -1,0 +1,21 @@
+{{ 'component-countdown.css' | asset_url | stylesheet_tag }}
+
+<div class="countdown {% if is_small %}countdown--small{% endif %}">
+    <p class="countdown__label">
+        {{ 'general.promotions.ends_in' | t}}
+    </p>
+    <div class="countdown__segments {{ js_class }}">
+        <div class="countdown__seg">
+        <var class= "js-timer-days"></var>{{ 'general.promotions.days_abbr' | t}}
+        </div>
+        <div class="countdown__seg">
+        <var class= "js-timer-hours"></var>{{ 'general.promotions.hours_abbr' | t}}
+        </div>
+        <div class="countdown__seg">
+        <var class= "js-timer-minutes"></var>{{ 'general.promotions.minutes_abbr' | t}}
+        </div>
+        <div class="countdown__seg">
+        <var class= "js-timer-seconds"></var>{{ 'general.promotions.seconds_abbr' | t}}
+        </div>
+    </div>
+</div>

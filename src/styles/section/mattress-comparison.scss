@@ -1,0 +1,410 @@
+@charset "UTF-8";
+
+@use 'sass:list';
+
+@import '../partials/functions';
+@import '../partials/variables';
+@import '../partials/mixins';
+@import '../partials/loader';
+@import '../partials/typography';
+
+// stylelint-disable max-line-length, scss/dollar-variable-colon-space-after
+$switch-from-2-cols-to-3:           600px;
+$switch-from-compressed-to-relaxed: $grid-large;
+$img-max-width:                     408px;
+$row-gutter:                        $padding-l;
+$header-row-gutter:                 $padding-m;
+$sticky-padding:                    $padding-xs;
+$loader-clearance:                  6rem;
+
+// Column gaps
+$col-gutter-sm:                     $padding-s;
+$col-gutter-md:                     $padding-xxl;
+$col-gutter-lg:                     (2 * $col-gutter-md);
+
+$grid-breakpoints: list.join($grid-breakpoints, (
+  'until-comparison-page-can-fit-3-cols' '(max-width: #{$switch-from-2-cols-to-3 - 1})',
+  'comparison-page-can-fit-3-cols' '(min-width: #{$switch-from-2-cols-to-3})',
+  'comparison-page-can-expand' '(min-width: #{$switch-from-compressed-to-relaxed})'
+));
+// stylelint-enable max-line-length, scss/dollar-variable-colon-space-after
+
+.product-comparison {
+  position: relative;
+
+  // This is filth and should be removed if possible. The buttons do not fit on
+  // very small screens and so perhaps the current buttons could be adjusted to
+  // be more flexible or another 'condensed' style could be created.
+  .btn {
+    min-width: 0;
+    padding: {
+      left: calc($button-padding-x / 2);
+      right: calc($button-padding-x / 2);
+    }
+  }
+
+  // Bug fix
+  .button--secondary {
+    border: 1px solid $color-base-grey-03;
+    white-space: nowrap;
+  }
+
+  // This is used to allow for js to work out what the current breakpoint is
+  &::before {
+    content: 'can-fit-2-cols';
+    display: none;
+  }
+
+  @include media-query(comparison-page-can-fit-3-cols) {
+    &::before {
+      content: 'can-fit-3-cols';
+    }
+  }
+}
+
+// Columns
+
+// stylelint-disable scss/dollar-variable-colon-space-after
+$two-cols-width:         calc((100% - #{$col-gutter-sm}) / 2);
+$two-cols-large-width:   calc((100% - #{$col-gutter-md}) / 2);
+$three-cols-large-width: calc((100% - #{2 * $col-gutter-md}) / 3);
+$two-cols-wide-width:    calc((100% - #{$col-gutter-lg}) / 2);
+$three-cols-wide-width:  calc((100% - #{2 * $col-gutter-lg}) / 3);
+// stylelint-enable scss/dollar-variable-colon-space-after
+
+.product-comparison__cols {
+  margin: {
+    left: auto;
+    right: auto;
+  };
+
+  // When there are only two products the container shrinks and becomes
+  // centre-aligned.
+  .has-2-cols & {
+    max-width: calc((2 * #{$img-max-width}) + #{$col-gutter-md});
+  }
+
+  .has-3-cols & {
+    max-width: none;
+  }
+
+  @include media-query(comparison-page-can-fit-3-cols) {
+    .has-2-cols & {
+      max-width: calc((2 * #{$img-max-width}) + #{$col-gutter-lg});
+    }
+  }
+}
+
+.product-comparison__col {
+  flex: 0 1 $two-cols-width;
+
+  @include media-query(comparison-page-can-fit-3-cols) {
+    flex-basis: $two-cols-large-width;
+
+    .has-3-cols & {
+      flex-basis: $three-cols-large-width;
+    }
+  }
+
+  @include media-query(comparison-page-can-expand) {
+    flex-basis: $two-cols-wide-width;
+
+    .has-3-cols & {
+      flex-basis: $three-cols-wide-width;
+    }
+  }
+}
+
+@include media-query(until-comparison-page-can-fit-3-cols) {
+  // Spacing gets a little tight for buttons on small screens
+  .btn__caption {
+    white-space: nowrap;
+  }
+
+  .product-comparison .button {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    min-width: 100%;
+    white-space: nowrap;
+  }
+
+  .product-comparison__col {
+    &:nth-child(n + 3) {
+      display: none;
+    }
+  }
+
+  .product-comparison__table {
+    th, td {
+      &:nth-child(n + 3) {
+        display: none;
+      }
+    }
+  }
+
+  .btn {
+    width: 100%;
+    display: block;
+  }
+}
+
+// Elements
+
+.product-comparison__header {
+  // stylelint-disable-next-line value-no-vendor-prefix
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 2;
+  transition: box-shadow $transition-speed linear;
+  @include elevation(flat);
+
+  &.is-stuck {
+    @include elevation(drawers);
+  }
+}
+
+.product-comparison__header-inner {
+  background: $color-body-bg;
+  padding: $sticky-padding;
+  margin: {
+    top: -#{$sticky-padding};
+    right: -#{$sticky-padding};
+    left: -#{$sticky-padding};
+  }
+}
+
+.product-comparison__body {
+  position: relative;
+}
+
+.product-comparison__headings,
+.product-comparison__footer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.product-comparison__headings {
+  h1, h2, h3 {
+    margin: 0;
+  }
+
+  .form-field {
+    margin-bottom: 0;
+  }
+}
+
+.product-comparison__table {
+  margin: 0 -#{$col-gutter-sm};
+
+  table, caption, tbody, tfoot, thead, tr, th, td {
+    @include font(body-short-01);
+
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: baseline;
+    text-align: left;
+    min-width: 100%;
+  }
+
+  table {
+    background: none;
+    width: 100%;
+    box-shadow: none;
+    border: {
+
+      collapse: separate;
+      spacing: $col-gutter-sm 0;
+    };
+
+    table-layout: fixed;
+
+    td, th {
+      border: none;
+    }
+
+    @include media-query(comparison-page-can-fit-3-cols) {
+      border-spacing: $col-gutter-md 0;
+    }
+
+    @include media-query(comparison-page-can-expand) {
+      border-spacing: $col-gutter-lg 0;
+    }
+  }
+
+  th {
+    display: table-cell;
+    padding: $header-row-gutter 0 0;
+    font-family: $type_header_stack;
+    font-size: 2rem;
+  }
+
+  thead {
+    // stylelint-disable-next-line selector-max-type
+    td {
+      // Put the heading's bottom padding here because the <th> is only visible
+      // if there are more products than columns.
+      padding: {
+        top: $header-row-gutter;
+        bottom: $row-gutter;
+      }
+    }
+  }
+
+  tbody {
+    // stylelint-disable-next-line selector-max-type
+    td {
+      padding: {
+        bottom: #{calc($row-gutter / 2)};
+      };
+    }
+  }
+
+  @include media-query(comparison-page-can-fit-3-cols) {
+    margin: {
+      right: -#{$col-gutter-md};
+      left: -#{$col-gutter-md};
+    };
+  }
+
+  @include media-query(comparison-page-can-expand) {
+    margin: {
+      right: -#{$col-gutter-lg};
+      left: -#{$col-gutter-lg};
+    };
+  }
+}
+
+.product-comparison__img {
+  // max-width: $img-max-width;
+  display: block;
+  margin-bottom: $header-row-gutter;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.product-comparison__spec {
+  .nc-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: $color-icon;
+  }
+
+  @include media-query(comparison-page-can-fit-3-cols) {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    .nc-icon {
+      margin: {
+        right: 2rem;
+        bottom: 0;
+      }
+    }
+  }
+}
+
+.product-comparison__features {
+  margin: 3rem 0;
+  padding: 3rem 0;
+  border: {
+    width: 1px 0;
+    style: solid;
+    color: $color-border;
+  }
+
+  header {
+    margin-bottom: 3rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    margin: 1.5rem 0;
+  }
+
+  @include media-query(comparison-page-can-fit-3-cols) {
+    ul {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: flex-start;
+      justify-content: center;
+      margin: -1rem;
+    }
+
+    li {
+      flex: 0 0 25%;
+      padding: {
+        left: 1rem;
+        right: 1rem;
+      };
+    }
+  }
+}
+
+.product-comparison__footer {
+  img {
+    margin-bottom: 1rem;
+  }
+}
+
+.product-comparison__loader {
+  z-index: $z-index-loader;
+  position: absolute;
+  top: $loader-clearance;
+  left: 50%;
+}
+
+// States
+
+// stylelint-disable no-duplicate-selectors
+// TODO Add error states
+.product-comparison__headings,
+.product-comparison__table,
+.product-comparison__features,
+.product-comparison__footer,
+.product-comparison__loader {
+  opacity: 1;
+  transition: opacity $transition-speed $transition-ease;
+}
+
+.product-comparison__loader {
+  display: none;
+  opacity: 0;
+}
+
+.product-comparison {
+  &.is-loading,
+  &.is-switching {
+    .product-comparison__loader {
+      display: block;
+      opacity: 1;
+    }
+  }
+
+  &.is-loading {
+    .product-comparison__headings,
+    .product-comparison__table,
+    .product-comparison__features,
+    .product-comparison__footer {
+      opacity: 0;
+    }
+  }
+
+  &.is-switching {
+    .product-comparison__table,
+    .product-comparison__footer {
+      opacity: 0;
+    }
+  }
+}
+// stylelint-enable no-duplicate-selectors

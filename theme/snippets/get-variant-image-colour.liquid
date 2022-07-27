@@ -1,0 +1,18 @@
+{% comment %}
+    This snippet renders a data attriute that declares the parent HTML element a 'data-variant-image', meaning that it's children will contain variant-specific images.
+
+    Accepts:
+    - image: {Object} Image object whose alt text is searched
+
+    Usage:
+    {% render 'get-variant-image-colour', image: media %}
+{% endcomment %}
+
+{%- liquid
+assign image_variant_colour = false
+if image.src contains '__'
+    assign split_src = image.src | split: '__'
+    assign image_variant_colour = split_src[1]
+endif
+-%}
+data-variant-image{% if image_variant_colour %} data-variant-image-colour="{{ image_variant_colour }}"{% endif %}

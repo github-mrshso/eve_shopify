@@ -1,0 +1,84 @@
+{%- comment -%}
+    Renders a reviews block based on passed in values
+    
+    Accepts:
+    - layout: {String} Accepts `mini`, `block`, `seo`, or `page`
+    - product: {Object} Accepts a product object, usually only available on product pages
+
+    Layout availability
+    Depending on the value assigned to settings.reviews_provider, some layouts
+    may or may not be available to use:
+    If settings.reviews_provider is `TrustPilot`, all layouts other than `block` are available
+    If settings.reviews_provider is `Avis`, only `mini` and `block` are available
+
+    {%- render 'reviews-snippets', layout: 'mini', product: product_object  -%}
+{%- endcomment -%}
+
+{%- liquid
+    assign layout = layout | default: false
+    assign product = product | default: false
+    assign provider = settings.reviews_provider
+    assign token = settings.reviews_provider_token
+-%}
+
+{%- capture sku_list -%}
+    {%- for variant in product.variants -%}
+        {{ variant.sku }}{%- unless forloop.last -%},{%- endunless -%}
+    {%- endfor -%}
+{%- endcapture -%}
+
+{%- case provider -%}
+    {%- when 'trustpilot' -%}
+        {% case layout %}
+            {% when 'stars' %} {%- comment -%} TrustPilot – Stars {%- endcomment -%}
+            <div
+                class="trustpilot-widget trustpilot-mini-widget"
+                data-locale="en-GB"
+                data-theme="light"
+                data-businessunit-id="{{ token }}"
+                data-review-languages="en"
+                data-template-id="577258fb31f02306e4e3aaf9"
+                data-sku="{{ sku_list }}"
+                data-style-width="100%"
+                data-style-height="32px"
+                style="position: relative;"
+            ></div>
+            {% when 'block' %} {%- comment -%} TrustPilot – Block {%- endcomment -%}
+            <div
+                class="trustpilot-widget"
+                data-locale="en-GB"
+                data-theme="light"
+                data-businessunit-id="{{ token }}"
+                data-review-languages="en"
+                data-template-id="5763bccae0a06d08e809ecbb"
+                data-sku="{{ sku_list }}"
+                data-style-width="100%"
+                data-style-height="700px"
+                data-reviewnumber="5"
+                style="position: relative;">
+            </div>
+            {% when 'page' %} {%- comment -%} TrustPilot – Page {%- endcomment -%}
+            <div
+                class="trustpilot-widget trustpilot-grid-widget"
+                data-locale="en-GB"
+                data-theme="light"
+                data-businessunit-id="{{ token }}"
+                data-review-languages="en"
+                data-template-id="539adbd6dec7e10e686debee"
+                data-style-width="100%"
+                data-style-height="1500px"
+                data-stars="1,2,3,4,5"
+                style="position: relative;">
+            </div>
+        {% endcase %}
+    {%- when 'avis' -%}
+        {% comment %}theme-check-disable RemoteAsset{% endcomment %}
+        <script async charset="utf-8" src="https://cl.avis-verifies.com/fr/cache/a/9/2/{{ token }}/AWS/PRODUCT_API/tag.min.js"></script>
+        {% comment %}theme-check-enable RemoteAsset{% endcomment %}
+        {% case layout %}
+            {% when 'stars' %} {%- comment -%} Avis – Stars {%- endcomment -%}
+            <div class="NETREVIEWS_PRODUCT_STARS" data-product-id="{{ product.id }}"></div>
+            {% when 'block' %} {%- comment -%} Avis – Block {%- endcomment -%}
+            <div class="NETREVIEWS_PRODUCT_REVIEWS" data-product-id="{{ product.id }}"></div>
+        {% endcase %}
+{% endcase %}

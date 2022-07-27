@@ -1,0 +1,12 @@
+<script>
+  (function () {
+    var dcode = document.createElement('script');
+    var s = document.getElementsByTagName('script')[0];
+  
+    dcode.type = 'text/javascript';
+    dcode.src = 'https://shopify-integration.api.divido.net/js/{{ shop.permanent_domain }}/checkout-integration.js';
+  
+    s.parentNode.insertBefore(dcode, s);
+  })();
+  </script>
+  

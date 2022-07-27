@@ -1,0 +1,57 @@
+{% liquid
+  assign avant_garde_normal_woff = 'avant-garde-normal.woff' | asset_url
+  assign avant_garde_normal_woff2 = 'avant-garde-normal.woff2' | asset_url
+  assign avant_garde_bold_woff = 'avant-garde-bold.woff' | asset_url
+  assign avant_garde_bold_woff2 = 'avant-garde-bold.woff2' | asset_url
+  assign publico_woff = 'PublicoText-Semibold.woff' | asset_url
+  assign publico_woff2 = 'PublicoText-Semibold.woff2' | asset_url
+  assign eve_icons_woff2 = 'eveIcons.woff2' | asset_url
+  assign eve_icons_woff = 'eveIcons.woff' | asset_url 
+%}
+
+<link rel="preload" href="{{ avant_garde_bold_woff2 }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ avant_garde_bold_woff }}" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="{{ avant_garde_normal_woff2 }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ avant_garde_normal_woff }}" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="{{ publico_woff2 }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ publico_woff }}" as="font" type="font/woff" crossorigin>
+<link rel="preload" href="{{ eve_icons_woff2 }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ eve_icons_woff }}" as="font" type="font/woff" crossorigin>
+
+<style>
+@font-face {
+  font-family: 'ITCAvantGardeStd';
+  src: url('{{ avant_garde_bold_woff2 }}') format('woff2'),
+       url('{{ avant_garde_bold_woff }}') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ITCAvantGardeStd';
+  src: url('{{ avant_garde_normal_woff2 }}') format('woff2'),
+       url('{{ avant_garde_normal_woff }}') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Publico';
+  src: url('{{ publico_woff2 }}') format('woff2'),
+       url('{{ publico_woff }}') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'eveIcons';
+  src: url('{{ eve_icons_woff2 }}') format('woff2'),
+       url('{{ eve_icons_woff }}') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+</style>

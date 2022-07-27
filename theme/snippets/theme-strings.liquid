@@ -1,0 +1,57 @@
+<script>
+window.shopUrl = '{{ request.origin }}';
+window.routes = {
+    cart_url: '{{ routes.cart_url }}',
+    cart_add_url: '{{ routes.cart_add_url }}',
+    cart_change_url: '{{ routes.cart_change_url }}',
+    cart_update_url: '{{ routes.cart_update_url }}',
+    predictive_search_url: '{{ routes.predictive_search_url }}'
+};
+
+window.pageType = {{ request.page_type | json }};
+
+window.cartStrings = {
+    error: `{{ 'sections.cart.cart_error' | t }}`,
+    quantityError: `{{ 'sections.cart.cart_quantity_error_html' | t: quantity: '[quantity]' }}`
+}
+
+window.variantStrings = {
+    addToCart: `{{ 'products.product.add_to_cart' | t }}`,
+    soldOut: `{{ 'products.product.sold_out' | t }}`,
+    unavailable: `{{ 'products.product.unavailable' | t }}`,
+    includeEcoTax: `{{ 'products.product.include_eco_tax' | t }}`,
+}
+
+window.accessibilityStrings = {
+    imageAvailable: `{{ 'products.product.media.image_available' | t: index: '[index]' }}`,
+    shareSuccess: `{{ 'general.share.success_message' | t }}`,
+    pauseSlideshow: `{{ 'sections.slideshow.pause_slideshow' | t }}`,
+    playSlideshow: `{{ 'sections.slideshow.play_slideshow' | t }}`,
+}
+
+window.theme = {
+    settings: {
+        moneyFormat: {{ shop.money_format | json }},
+        region: {{ global_region | json }},
+    },
+    strings: {
+        handle_phone_invalid: {{ 'general.checkout.field_errors.handle_phone_invalid' | t | json }},
+        eco_tax_product_label: {{ 'general.checkout.eco_tax.product_label' | t | json }},
+        order_summary_total: {{ 'general.checkout.eco_tax.order_summary_total' | t | json }},
+        newsletter_confirmation_html: {{ 'newsletter_form.newsletter_confirmation_html' | t | json }},
+        newsletter_confirmation_mobile_heading_html: {{ 'newsletter_form.newsletter_confirmation_mobile_heading_html' | t | json }},
+        newsletter_confirmation_mobile_copy_html: {{ 'newsletter_form.newsletter_confirmation_mobile_copy_html' | t | json }},
+        newsletter_error_html: {{ 'newsletter_form.newsletter_error_html' | t: email: shop.email | json }},
+        newsletter_invalid_html: {{ 'newsletter_form.newsletter_invalid_html' | t: email: shop.email | json }},
+        newsletter_required_html: {{ 'newsletter_form.newsletter_required_html' | t | json }},
+        newsletter_submit_html: {{ 'newsletter_form.newsletter_submit_html' | t | json }},
+        from_text_html: {{ 'products.product.price.from_price_html' | t | json }},
+        free_gift_added: {{ 'general.cart.free_gift_added' | t | json }},
+        free_gift_removed: {{ 'general.cart.free_gift_removed' | t | json }},
+        on_sale_percentage: {{ 'products.product.on_sale_percentage' | t | json }},
+        choose_delivery_slot_html: {{ 'general.checkout.delivery.choose_delivery_slot_html' | t | json }},
+        tracking_notice_html: {{ 'general.checkout.delivery.tracking_notice_html' | t | json }},
+        inventoryLimit: `{{ 'products.product.inventory_limit' | t }}`,
+    }
+}
+</script>

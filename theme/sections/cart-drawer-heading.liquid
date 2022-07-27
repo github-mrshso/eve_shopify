@@ -1,0 +1,10 @@
+<h2 class="cart-drawer__heading">
+    {{ 'sections.cart.title' | t }}
+    {% unless cart.item_count == 0 %}
+        {% if cart.item_count == 1 %}
+            ({{ 'sections.header.cart_count.one' | t: count: cart.item_count }} - {{ cart.total_price | money }})
+        {% else %}
+            ({{ 'sections.header.cart_count.other' | t: count: cart.item_count }} - {{ cart.total_price | money }})
+        {% endif %}
+    {% endunless %}
+</h2>

@@ -1,0 +1,88 @@
+<div class="page-width">
+    {%- render 'finance-signpost',
+        title: section.settings.title,
+        subtitle: section.settings.subtitle,
+        smallprint: section.settings.smallprint,
+        logo: section.settings.logo
+    -%}
+</div>
+
+
+{% schema %}
+{
+  "name": "Finance signpost",
+  "class": "index-section--finance-signpost",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "textarea",
+      "id": "smallprint",
+      "label": "Smallprint"
+    },
+    {
+      "type": "select",
+      "id": "logo",
+      "label": "Logo",
+      "options": [
+        {
+          "value": "svg-alma-logo",
+          "label": "Alma"
+        },
+        {
+          "value": "svg-divido-logo",
+          "label": "Divido"
+        },
+        {
+          "value": "svg-klarna-logo",
+          "label": "Klarna"
+        }
+      ]
+    },
+    {
+        "type": "header",
+        "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+        "type": "range",
+        "id": "padding_top",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_top",
+        "default": 40
+    },
+    {
+        "type": "range",
+        "id": "padding_bottom",
+        "min": 0,
+        "max": 100,
+        "step": 4,
+        "unit": "px",
+        "label": "t:sections.all.padding.padding_bottom",
+        "default": 52
+    }
+  ],
+  "presets": [
+    {
+      "name": "Finance signpost",
+      "settings": {
+        "title": "Spread your payments",
+        "subtitle": "<p><strong>0% interest free</strong> finance available with <strong>Alma</strong></p>",
+        "smallprint": "Cupidatat labore laborum incididunt consectetur consequat irure esse qui et sit culpa eu et nisi. Mollit aliqua do et laborum qui. Laborum cupidatat ipsum ex exercitation dolore occaecat.",
+        "logo": "svg-divido-logo"
+      }
+    }
+  ],
+  "templates": ["index", "product"]
+}
+{% endschema %}

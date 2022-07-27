@@ -1,0 +1,109 @@
+// stylelint-disable selector-max-compound-selectors, selector-max-type
+
+body,
+input,
+textarea,
+button,
+select {
+  @include font('body-short-01');
+
+  line-height: $type_base_line_height;
+
+  @include media-query($small) {
+    @include font('body-short-01');
+  }
+}
+
+body {
+  font-weight: $type_base_weight;
+}
+
+p {
+  margin: 0 0 $paragraph-margin-bottom 0;
+
+  img {
+    margin: 0;
+  }
+}
+
+em {
+  font: {
+    style: normal;
+    weight: bold;
+  }
+}
+
+b, strong {
+  font-weight: bold;
+}
+
+small {
+  font-size: 0.85em;
+}
+
+sup, sub {
+  position: relative;
+  font-size: 60%;
+  vertical-align: baseline;
+}
+
+sup {
+  top: -0.5em;
+}
+
+sub {
+  bottom: -0.5em;
+}
+
+%blockquote {
+  margin: 0;
+  padding: ($gutter / 2) $gutter 40px;
+
+  cite {
+    display: block;
+
+    &::before {
+      content: "\2014 \0020";
+    }
+  }
+
+  p {
+    margin-bottom: 0;
+
+    + cite {
+      margin-top: $gutter / 2;
+    }
+  }
+}
+
+blockquote {
+  &, .rte & {
+    @extend %blockquote;
+  }
+}
+
+h1, .h1, .heading-1 {
+  @include font('heading-01');
+}
+
+h2, .h2, .heading-2 {
+  @include font('heading-02');
+}
+
+h3, .h3, .heading-3 {
+  @include font('heading-03');
+}
+
+h4, .h4, .heading-1,
+h5, .h5, .heading-2,
+h6, .h6, .heading-3 {
+  @include font('heading-04');
+
+  text-transform: none;
+}
+
+ul.disc,
+.rte ul {
+  list-style: disc outside;
+  margin-left: $list-bullet-padding-left;
+}

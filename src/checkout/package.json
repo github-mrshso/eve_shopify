@@ -1,0 +1,28 @@
+{
+  "name": "eve-checkout",
+  "version": "1.0.0",
+  "description": "Scripts for custom checkout",
+  "main": "bundles/checkout.js",
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@bugsnag/js": "^6.5.0",
+    "flickity": "^2.2.2",
+    "handlebars": "^4.7.7",
+    "jquery": "^3.6.0",
+    "mutation-observer": "^1.0.3"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.8",
+    "babel-loader": "^8.2.2",
+    "mini-css-extract-plugin": "^2.4.6",
+    "postcss-loader": "^7.0.0",
+    "sass": "1.52.0",
+    "sass-loader": "12.4.0",
+    "webpack": "^5.35.1"
+  }
+}

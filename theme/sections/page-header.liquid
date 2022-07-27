@@ -1,0 +1,96 @@
+<link rel="stylesheet" href="{{ 'section-page-header.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<noscript>{{ 'section-page-header.css' | asset_url | stylesheet_tag }}</noscript>
+
+{% assign use_overrides = section.settings.use_overrides %}
+{% assign metafield_content = page.metafields.page_header %}
+
+<div class="page-header color-{{ section.settings.color_scheme }} gradient">
+    <div class="page-header__item page-header__text-content">
+        <h1 class="page-header__title h0">
+            {%- if use_overrides and metafield_content.title -%}
+                {{ metafield_content.title }}
+            {%- else -%}
+                {{ page.title }}
+            {%- endif -%}
+        </h1>
+        {%- if use_overrides and metafield_content.text -%}
+            <p class="page-header__text">
+                {{ metafield_content.text }}
+            </p>
+        {%- endif -%}
+    </div>
+    <div class="page-header__item page-header__image">
+        {%- if use_overrides and metafield_content.image -%}
+            {% render 'accentuate-image-tag', image: metafield_content.image, sizes: '(min-width: 750px) calc(100vw / 2), 100vw', lazy: false %}
+        {%- elsif section.settings.default_image -%}
+            {{ section.settings.default_image | image_url: width: section.settings.default_image.width | image_tag: sizes: '(min-width: 750px) calc(100vw / 2), 100vw' }}
+        {%- else -%}
+            {{ 'image' | placeholder_svg_tag: 'page-header__image-placeholder' }}
+        {%- endif -%}
+    </div>
+</div>
+
+{% schema %}
+{
+  "name": "Page header",
+  "settings": [
+    {
+        "type": "select",
+        "id": "color_scheme",
+        "options": [
+            {
+            "value": "accent-1",
+            "label": "t:sections.all.colors.accent_1.label"
+            },
+            {
+            "value": "accent-2",
+            "label": "t:sections.all.colors.accent_2.label"
+            },
+            {
+            "value": "background-1",
+            "label": "t:sections.all.colors.background_1.label"
+            },
+            {
+            "value": "background-2",
+            "label": "t:sections.all.colors.background_2.label"
+            },
+            {
+            "value": "inverse",
+            "label": "t:sections.all.colors.inverse.label"
+            }
+        ],
+        "default": "background-1",
+        "label": "t:sections.all.colors.label"
+    },
+    {
+        "type": "header",
+        "content": "Default content"
+    },
+    {
+        "type": "image_picker",
+        "id": "default_image",
+        "label": "Image"
+    },
+    {
+        "type": "header",
+        "content": "Override content"
+    },
+    {
+        "type": "checkbox",
+        "id": "use_overrides",
+        "label": "Use overrides",
+        "info": "The page header image can be overridden on a per-page basis via metafields, managed in the [Accentuate app](/admin/apps/accentuate). Additional header text may also be assigned.",
+        "default": true
+    }
+  ],
+  "presets": [
+    {
+      "name": "Page header"
+    }
+  ],
+  "templates": [
+    "page"
+  ]
+}
+{% endschema %}

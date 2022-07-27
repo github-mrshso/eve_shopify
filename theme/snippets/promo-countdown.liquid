@@ -1,0 +1,23 @@
+<script id="countdown-tpl" type="text/template">
+    {% raw %}
+      {{#if days}}
+      <div class="countdown__seg">
+        <var>{{days}}</var><!--
+     -->{% endraw %}{{ 'general.promotions.days_abbr' | t }}{% raw %}
+      </div>
+      {{/if}}
+      <div class="countdown__seg">
+        <var>{{hours}}</var><!--
+     -->{% endraw %}{{ 'general.promotions.hours_abbr' | t }}{% raw %}
+      </div>
+      <div class="countdown__seg">
+        <var>{{minutes}}</var><!--
+     -->{% endraw %}{{ 'general.promotions.minutes_abbr' | t }}{% raw %}
+      </div>
+      <div class="countdown__seg">
+        <var>{{seconds}}</var><!--
+     -->{% endraw %}{{ 'general.promotions.seconds_abbr' | t }}{% raw %}
+      </div>
+    {% endraw %}
+</script>
+    

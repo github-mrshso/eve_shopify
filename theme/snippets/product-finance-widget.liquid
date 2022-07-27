@@ -1,0 +1,8 @@
+{%- if settings.finance_enabled -%}
+  {%- case settings.finance_provider -%}
+    {%- when 'divido' -%}
+      {%- render 'product-finance-widget-divido', product: product -%}
+    {%- when 'alma' -%}
+      {%- render 'product-finance-widget-alma', product: product -%}
+  {%- endcase -%}
+{%- endif -%}

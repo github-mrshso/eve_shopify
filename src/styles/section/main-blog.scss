@@ -1,0 +1,82 @@
+@import '../partials/_variables';
+@import '../partials/_mixins';
+
+// Main blog
+// Lifted from legacy theme
+
+.main-blog__content {
+  max-width: 392px; 
+  margin: 0 auto;
+
+  @media screen and (min-width: 750px) {
+    max-width: 750px;
+  }
+
+  @media screen and (min-width: 1220px) {
+    max-width: 1140px;
+  }
+}
+
+// Known as .feed__list in the legacy theme
+.blog-articles {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  justify-content: center;
+  row-gap: 30px;
+
+  @include media-query('feed-2-cols') {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 30px;
+  }
+
+  @include media-query('feed-3-cols') {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.blog-articles .card-wrapper {
+  width: 100%;
+}
+
+@media screen and (min-width: 750px) {
+  .blog-articles--collage > *:nth-child(3n + 1) .card,
+  .blog-articles--collage > *:nth-child(3n + 2):last-child .card {
+    text-align: center;
+  }
+
+  .blog-articles--collage > *:nth-child(3n + 1) .card--article .card__image--small .ratio::before,
+  .blog-articles--collage > *:nth-child(3n + 2):last-child .card--article .card__image--small .ratio::before {
+    padding-bottom: 22rem;
+  }
+
+  .blog-articles--collage > *:nth-child(3n + 1) .card--article .card__image--medium .ratio::before,
+  .blog-articles--collage > *:nth-child(3n + 2):last-child .card--article .card__image--medium .ratio::before {
+    padding-bottom: 44rem;
+  }
+
+  .blog-articles--collage > *:nth-child(3n + 1) .card--article .card__image--large .ratio::before,
+  .blog-articles--collage > *:nth-child(3n + 2):last-child .card--article .card__image--large .ratio::before {
+    padding-bottom: 66rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .blog-articles--collage > *:nth-child(3n + 1) .card--article .card__image--small .ratio .ratio::before,
+  .blog-articles--collage > *:nth-child(3n + 2):last-child .card--article .card__image--small .ratio .ratio::before {
+    padding-bottom: 27.5rem;
+  }
+
+  .blog-articles--collage > *:nth-child(3n + 1) .card--article .card__image--medium .ratio::before,
+  .blog-articles--collage > *:nth-child(3n + 2):last-child .card--article .card__image--medium .ratio::before {
+    padding-bottom: 55rem;
+  }
+
+  .blog-articles--collage > *:nth-child(3n + 1) .card--article .card__image--large .ratio::before,
+  .blog-articles--collage > *:nth-child(3n + 2):last-child .card--article .card__image--large .ratio::before {
+    padding-bottom: 82.5rem;
+  }
+}

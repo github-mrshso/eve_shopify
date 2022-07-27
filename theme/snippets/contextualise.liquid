@@ -1,0 +1,31 @@
+{% comment %}
+    Adds a method for liquid templates to write context to the window for
+    consumption by JS after page load. Contextualise has to go before all site
+    scripts as they are deferred and this needs to be present before the page
+    has finished parsing. THIS MUST NOT BE USED FOR SENSITIVE DATA!
+
+    @param      {<type>}  scope   The scope of the context i.e. the id, key or location.
+    @param      {<type>}  data    The data.
+    @return     {<type>}  The data stored in the scope's location will always be
+                        returned. In the case where a data object has been
+                        provided then the return value can be used to verify
+                        success   
+
+    Please note: Contextualise cannot be deferred as the Window Method is required before the DOMContentLoaded event fires
+{% endcomment %}
+
+<script>
+    (function () {
+      const root = '__EVE__';
+      window[root] = window[root] || {};
+    
+      window.contextualise = function (scope, data) {
+        if (data) {
+          window[root][scope] = data;
+        }
+    
+        return window[root][scope];
+      };
+    })();
+</script>
+    

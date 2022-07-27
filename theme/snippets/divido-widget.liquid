@@ -1,0 +1,39 @@
+<!-- BEGIN: Divido-Widget -->
+{% assign dividoShop = shop.metafields.divido %}
+{% assign dividoProduct = product.metafields.divido %}
+{% assign dividoShowWidget = false %}
+{% assign dividoPrice = product.price  | remove: "," | divided_by: 100 %}
+{% assign threshold = dividoShop.priceThreshold | plus: 0 | divided_by: 1 %}
+
+{% if dividoShop.active == '1' %}
+
+  {% if dividoProduct.available == 'selected_finances' and dividoProduct.selected_finances != 'none' %}
+    {% assign dividoPlans = dividoProduct.selected_finances %}
+  {% elsif dividoShop.showDefaultPlan  == 'all' %}
+    {% assign dividoPlans = '' %}
+  {% elsif dividoShop.showDefaultPlan  == 'selected_finances' %}
+    {% assign dividoPlans = dividoShop.selectedPlans  %}
+  {% endif %}
+
+  {% if dividoProduct.available == 'selected_plans' %}
+    {% if dividoProduct.selected_finances != 'none' %}
+      {% assign dividoShowWidget = true %}
+    {% endif %}
+  {% elsif dividoShop.productSelection == 'all' %}
+    {% assign dividoShowWidget = true %}
+  {% elsif dividoPrice >= threshold %}
+    {% assign dividoShowWidget = true %}
+  {% endif %}
+{% endif %}
+
+{% if dividoShowWidget %}
+  <div
+    id="divido-main-widget"
+    class="calculator-widget"
+    data-mode="lightbox"
+    style="margin-top:10px;"
+    data-calculator-widget
+    data-plans="{{ dividoPlans }}"
+    data-amount="{{ dividoPrice | times: 100 }}"></div>
+{% endif %}
+<!-- BEGIN: Divido-End -->

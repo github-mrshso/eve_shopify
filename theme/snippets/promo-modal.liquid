@@ -1,0 +1,76 @@
+{{ 'component-promo-modal.css' | asset_url | stylesheet_tag }}
+
+<div class="promo-modal js-promo-modal">
+  <div class="promo-modal__popup js-content">
+  </div>
+  <div class="promo-modal__overlay">
+  </div>
+  <script
+    id="promo-modal-tpl"
+    type="text/x-handlebars-template">
+    {% raw %}
+      <div class="promo-modal__img">
+        <img
+          class="img--fluid"
+          alt="Promo popup image"
+          src="{{img}}"
+          loading="lazy"
+          height="405">
+      </div>
+      <div class="promo-modal__content">
+        <div class="promo-modal__body">
+          {{#unless hasForm}}
+            <div class="rte">
+              {{#if copyAbove}}
+                {{md copy}}
+              {{/if}}
+              <h2>{{title}}</h2>
+              {{#unless copyAbove}}
+                {{md copy}}
+              {{/unless}}
+              <a href="{{ctaUrl}}" class="button button--primary button--full-width">
+                {{ctaText}}
+              </a>
+            </div>
+          {{ else }}
+            <h2>{{title}}</h2>
+            <div class="promo-modal__form js-promo-form">
+              {{#if formCopy}}
+                <div class="rte">
+                  {{md formCopy}}
+                </div>
+              {{/if}}
+            </div>
+          {{/unless}}
+        </div>
+        {{#if hasCountdown}}
+          <div class="promo-modal__countdown">
+            {% endraw %}
+            {% render 'countdown', js_class: 'js-promo-countdown', is_small: false %}
+            {% raw %}
+          </div>
+        {{/if}}
+        <div class="promo-modal__small-print">
+          <p>
+            <small>
+              {{smallPrint}}
+              <a
+                class="ln"
+                href="{% endraw %}{{ settings.cart_terms_conditions_link }}{% raw %}"
+                target="_blank">
+                {% endraw %}
+                {{ 'general.promotions.see_our_terms' | t }}
+                {% raw %}
+              </a>.
+            </small>
+          </p>
+        </div>
+      </div>
+      <div class="promo-modal__close">
+        <button type="button" class="icon-btn icon-btn--light js-close-btn">
+          <i class="nc-icon nc-remove-16"></i>
+        </button>
+      </div>
+    {% endraw %}
+  </script>
+</div>

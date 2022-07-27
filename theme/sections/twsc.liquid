@@ -1,0 +1,381 @@
+{%- if settings.twsc_enabled -%}
+  {%- liquid
+    assign initialisation_steps = section.blocks | where: 'type', 'loading'
+    assign promo_products = section.blocks | where: 'type', 'promo_product'
+    assign decorations = section.blocks | where: 'type', 'decoration'
+    assign img_path = section.settings.base_img | img_url
+    assign file_part = img_path | split: '/' | slice: -1, 1
+    assign img_base = img_path | replace: file_part[0], ''
+    assign blog_url = shop.url | append: '/blogs/the-well-slept-club'
+    assign feed_url = shop.url | append: '/pages/the-well-slept-club'
+  -%}
+
+  {%- capture urls -%}
+    {
+      blog: {{ blog_url | json }},
+      feed: {{ feed_url | json }},
+    }
+  {%- endcapture -%}
+
+  {%- capture hero -%}
+    {%- if section.settings.enable_featured_article -%}
+      <div class="feed__hero">
+        {%- render 'article-card-twsc',
+          article: section.settings.featured_article,
+          as: 'feature'
+        -%}
+      </div>
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- capture promo_products_ctx -%}
+    [
+      {%- for promo_product in promo_products -%}
+        {%- assign block = promo_product.settings -%}
+        {% render 'product-card',
+          as: 'ctx',
+          product: all_products[block.product],
+          tagline: block.tagline,
+          smallprint: block.smallprint
+        %},
+      {%- endfor -%}
+    ]
+  {%- endcapture -%}
+
+  {% comment %}
+  {%- capture default_initialisation_slot -%}
+    {%- for initialisation_step in initialisation_steps limit: 1 -%}
+      {%- assign block = initialisation_step.settings -%}
+      <div class="info-state info-state--{{ forloop.index }}">
+        <div class="info-state__header">
+          <p class="info-state__title">
+            did you know&hellip;
+          </p>
+        </div>
+        <div class="info-state__img info-state__img--animated">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink">
+            <use href="#{{ block.image }}" />
+          </svg>
+        </div>
+        <div class="info-state__body">
+          {{ block.text }}
+        </div>
+      </div>
+    {%- endfor -%}
+  {%- endcapture -%}
+  {% endcomment %}
+
+  {%- capture initialisation_slots -%}
+    {%- for initialisation_step in initialisation_steps -%}
+      {%- assign block = initialisation_step.settings -%}
+      <div
+        class="info-state info-state--{{ forloop.index }}"
+        v-if="variant === {{ forloop.index }}">
+        <div class="info-state__header">
+          <p class="info-state__title">
+            did you know&hellip;
+          </p>
+        </div>
+        <div class="info-state__img info-state__img--animated">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink">
+            <use href="#{{ block.image }}" />
+          </svg>
+        </div>
+        <div class="info-state__body">
+          {{ block.text }}
+        </div>
+      </div>
+    {%- endfor -%}
+  {%- endcapture -%}
+
+  {%- capture intro_ctx -%}
+    {%- if section.settings.intro_enabled -%}
+      {
+        svgID: "twsc-feed-svg-little-stars",
+        title: {{ section.settings.intro_title | escape | json }},
+        content: {{ section.settings.intro_content | escape | json }}
+      }
+    {%- endif -%}
+  {%- endcapture -%}
+
+  {%- capture decorations_ctx -%}
+    [
+      {%- for decoration in decorations -%}
+        {%- assign block = decoration.settings -%}
+        {
+          svgID: {{ block.svg_id | json }},
+        },
+      {%- endfor -%}
+    ]
+  {%- endcapture -%}
+
+  <script>
+    contextualise('twsc', {
+      remURL: {{ settings.twsc_rem_api_url | json }},
+      blogURL: {{ blog_url | json }},
+      feedURL: {{ feed_url | json }},
+    });
+  </script>
+
+  <div id="twsc">
+    <v-twsc
+      :products='{{ promo_products_ctx | replace: "'", '&apos;' }}'
+      :decorations='{{ decorations_ctx | replace: "'", '&apos;' }}'
+      :intro='{{ intro_ctx | replace: "'", '&apos;' }}'
+      :initialisation-states-count="{{ initialisation_steps.size }}"
+      :initialisation-timeout="{{ section.settings.initialisation_timout }}"
+      img-base="{{ img_base }}"
+      :urls='{{ urls | replace: "'", '&apos;' }}'
+    >
+      {% comment %}
+      <div class="twsc__loading">
+        <div class="page page--narrow">
+          {{ default_initialisation_slot }}
+        </div>
+      </div>
+      {% endcomment %}
+      <template #landing>
+        {{ section.settings.quiz_landing_content }}
+      </template>
+      <template #hero>
+        {{ hero }}
+      </template>
+      <template #initialisation-state="{variant}">
+        {{ initialisation_slots }}
+      </template>
+    </v-twsc>
+  </div>
+
+  {{ 'bundle.twsc.css' | asset_url | stylesheet_tag }}
+
+  <script src="{{ 'bundle.twsc.js' | asset_url }}"></script>
+
+{% else %}
+  <div class="twsc__error">
+    <div class="page page--narrow">
+      <div class="info-state">
+        <div class="info-state__header">
+          <h1 class="info-state__title">
+            S<!--
+          --><span style="font-size: 0.9em">h<!--
+            --><span style="font-size: 0.9em">h<!--
+              --><span style="font-size: 0.9em">h<!--
+                --><span style="font-size: 0.9em">h<!--
+                  --><span style="font-size: 0.9em">h<!--
+                    --><span style="font-size: 0.9em">h<!--
+                      --><span style="font-size: 0.9em">h<!--
+                        --><span style="font-size: 0.9em">h<!--
+                          --><span style="font-size: 0.9em">h</span>
+                        </span>
+                      </span>
+                    </span>
+                  </span>
+                </span>
+              </span>
+            </span>
+          </h1>
+        </div>
+        <div class="info-state__img">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink">
+            <use href="#svg-twsc-logo-square" />
+          </svg>
+        </div>
+        <div class="info-state__body">
+          <p>The Well Slept Club is sleeping.<p>
+          <p>Please come back again shortly.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% render 'svg-sprite', for: 'twsc' %}
+
+{% style %}
+.twsc__landing {
+  background-image: url({{ 'twsc-bg-suns.svg' | asset_url }});
+}
+.quiz.is-clouds {
+  background-image: url({{ 'twsc-bg-clouds.svg' | asset_url }});
+}
+.quiz.is-sprinkles {
+  background-image: url({{ 'twsc-bg-sprinkles.svg' | asset_url }});
+}
+.quiz.is-zeds {
+  background-image: url({{ 'twsc-bg-zeds.svg' | asset_url }});
+}
+{% endstyle %}
+
+{% schema %}
+{
+  "name": "TWSC (feed)",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Control over whether or not TWSC is enabled resides in the main theme settings."
+    },
+    {
+      "type": "header",
+      "content": "Loading"
+    },
+    {
+      "type": "number",
+      "id": "initialisation_timout",
+      "label": "Minimum loading duration",
+      "info": "Minimum number of seconds for which to display the loading screen between states.",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "base_img",
+      "label": "Base image",
+      "info": "It doesn't matter which image is chosen, this is just so that the feed knows where the images live"
+    },
+    {
+      "type": "header",
+      "content": "Quiz"
+    },
+    {
+      "type": "richtext",
+      "id": "quiz_landing_content",
+      "label": "Landing page content",
+      "default": "<p>Content goes here</p>"
+    },
+    {
+      "type": "header",
+      "content": "Feed"
+    },
+    {
+      "type": "number",
+      "id": "prioritisation_threshold",
+      "label": "Prioritisation threshold",
+      "default": 10,
+      "info": "The display percentage at which a pillar is deprioritised"
+    },
+    {
+      "type": "header",
+      "content": "Hero"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_featured_article",
+      "label": "Enabled",
+      "default": false,
+      "info": "Enables the featured article hero block"
+    },
+    {
+      "type": "checkbox",
+      "id": "featured_quiz",
+      "label": "Force quiz",
+      "default": false,
+      "info": "Forces display of the quiz as the feed hero"
+    },
+    {
+      "type": "article",
+      "id": "featured_article",
+      "label": "Featured article",
+      "info": "Displays an article as the feed hero."
+    },
+    {
+      "type": "header",
+      "content": "Intro card"
+    },
+    {
+      "type": "checkbox",
+      "id": "intro_enabled",
+      "label": "Enabled",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "intro_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "intro_content",
+      "label": "Content"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "promo_product",
+      "name": "Promo product",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "Tagline"
+        },
+        {
+          "type": "textarea",
+          "id": "smallprint",
+          "label": "Smallprint"
+        }
+      ]
+    },
+    {
+      "type": "decoration",
+      "name": "Decoration",
+      "settings": [
+        {
+          "type": "select",
+          "id": "svg_id",
+          "label": "SVG",
+          "default": "svg-flying-mattress-stack",
+          "options": [
+            {
+              "value": "svg-flying-mattress-stack",
+              "label": "Flying mattress stack"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "loading",
+      "name": "Loading",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "select",
+          "id": "image",
+          "label": "Image",
+          "options": [
+            {
+              "value": "svg-flying-mattress",
+              "label": "Flying mattress"
+            },
+            {
+              "value": "svg-brain",
+              "label": "Brain"
+            }
+          ]
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "default": "<p><strong>Content</strong> goes here.</p>"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

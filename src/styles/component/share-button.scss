@@ -1,0 +1,46 @@
+@import '../partials/_variables';
+@import '../partials/_mixins';
+
+.share-button {
+  position: relative;
+  background: none;
+  border: none;
+  outline: none;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  font-family: $type_base_stack;
+  color: $color-icon;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  .icon {
+    width: 3rem;
+    height: 3rem;
+    opacity: 1;
+    fill: $color-icon;
+  }
+
+  &.is-loading {
+    .icon {
+      opacity: 0;
+    }
+
+    .share-button__notice {
+      opacity: 1;
+    }
+  }
+}
+
+.share-button__notice {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-60%);
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  opacity: 0;
+  transition: opacity .3s linear;
+}

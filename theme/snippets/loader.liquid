@@ -1,0 +1,16 @@
+{%- liquid
+    assign is_dark = is_dark | default: false
+    assign is_rising = is_rising | default: false
+    assign modifiers = ''
+    if is_dark
+      assign modifiers = modifiers | append: ' loader--dark'
+    endif
+    if is_rising
+      assign modifiers = modifiers | append: ' loader--rising'
+    endif
+-%}
+
+<span class="loader{{ modifiers }}">
+    <span class="loader__ring"></span>
+    <span class="loader__circle"></span>
+</span>

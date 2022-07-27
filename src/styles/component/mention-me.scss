@@ -1,0 +1,51 @@
+@import '../partials/variables';
+@import '../partials/link';
+
+// Mention Me
+// Lifted and adapted from legacy theme
+
+// stylelint-disable max-nesting-depth
+
+.checkout-mm--link,
+.cart-mm--link  {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  margin-bottom: $mention-me-bottom-margin;
+  min-height: 1.5rem;
+  text-transform: lowercase;
+
+  &::before {
+    // @include font('eve-icon');
+
+    content: $icon-mention-me;
+    text-transform: none;
+    display: block;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: color $transition-speed $transition-ease;
+    padding-right: $link-icon-margin;
+    opacity: 0;
+  }
+
+  &:not(:empty) {
+    &::before {
+      opacity: 1;
+    }
+  }
+
+  &:hover {
+    &,
+    &:focus {
+      &::before {
+        color: $color-link-hover-color;
+      }
+    }
+  }
+
+  a {
+    @include make-link;
+
+    text-decoration: none;
+  }
+}

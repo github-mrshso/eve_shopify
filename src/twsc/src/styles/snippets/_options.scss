@@ -1,0 +1,199 @@
+@use 'sass:list';
+
+// stylelint-disable max-line-length, scss/dollar-variable-colon-space-after
+$opt-width:                 2rem;
+$opt-spacing:               ($opt-width + $padding-xs);
+$padding-opt-x:             2.5rem;
+$padding-opt-strong-y:      $padding-xxs;
+$padding-opt-footer-left:   $padding-s;
+
+$grid-breakpoints: list.join($grid-breakpoints, (
+  'promo-bar-is-compressed' '(max-width: 599px)',
+  'promo-bar-can-expand' '(min-width: 600px)',
+  'promo-bar-can-fit-code-and-countdown' '(min-width: 992px)'
+));
+// stylelint-enable max-line-length, scss/dollar-variable-colon-space-after
+
+@mixin opt-state($state) {
+  @if $state == hover {
+    &:not(.opt--disabled):hover,
+    &.is-hover {
+      @content;
+    }
+  }
+
+  @if $state == focus {
+    &:not(.is-disabled):focus,
+    &.is-focus,
+    .opt__input:focus ~ {
+      @content;
+    }
+  }
+
+  @if $state == disabled {
+    &.is-disabled,
+    .opt__input:disabled ~ {
+      @content;
+    }
+  }
+
+  @if $state == checked {
+    &.is-checked,
+    .opt__input:checked ~ {
+      @content;
+    }
+  }
+
+  @if $state == active {
+    &.is-active,
+    &:active,
+    .opt__proxy:active {
+      @content;
+    }
+  }
+}
+
+.opt {
+  position: relative;
+  display: inline-flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  cursor: pointer;
+  margin: 0;
+  outline: none;
+
+  @include opt-state(hover) {
+    .opt__proxy {
+      border-color: $color-opt-hover-border;
+    }
+  }
+
+  html.tab-outline & {
+    @include opt-state(focus) {
+      .opt__proxy {
+        box-shadow: 0 0 0 1px $color-opt-border;
+        border-color: $color-opt-border;
+      }
+    }
+  }
+
+  @include opt-state(checked) {
+    .opt__proxy::after {
+      opacity: 1;
+    }
+  }
+
+  @include opt-state(disabled) {
+    .opt__label,
+    .opt__proxy {
+      cursor: no-drop;
+      color: $color-disabled;
+    }
+
+    .opt__proxy {
+      border-color: $color-opt-disabled-border;
+      color: $color-opt-disabled-color;
+    }
+  }
+}
+
+.opt__input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  z-index: $z-index-opt-label;
+  width: auto;
+  height: auto;
+}
+
+.opt__proxy {
+  position: relative;
+  z-index: $z-index-opt-proxy;
+  flex: 0 0 auto;
+  display: block;
+  width: $opt-width;
+  height: $opt-width;
+  border: 2px solid $color-opt-border;
+  background: 50% 50% no-repeat $color-opt-bg;
+  margin-right: $padding-opt-x;
+  transition: {
+    duration: $transition-speed;
+    timing-function: $transition-ease;
+    property: background-color, box-shadow, border-color;
+  }
+
+  &::after {
+    color: $color-opt-border;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+.opt__label,
+.opt__footer--value {
+  @include font('input-01');
+}
+
+.opt__label {
+  flex: 1 1 auto;
+  display: block;
+
+  strong {
+    display: block;
+    margin-bottom: $padding-opt-strong-y;
+
+    + span {
+      @include font('caption-01');
+    }
+  }
+}
+
+.opt__footer {
+  flex: 0 0 auto;
+  margin-left: auto;
+  padding-left: $padding-opt-footer-left;
+  font-weight: bold;
+  text-align: right;
+
+  .nc-icon {
+    font-size: $form-field-icon-width;
+    display: block;
+    // Ugly but necessary. Ensures that the icon aligns with the title
+    transform: translate(0, -0.1875rem);
+  }
+}
+
+.opt__input[type="checkbox"] {
+  + .opt__proxy::after {
+    @include font('eve-icon');
+    content: $icon-tick;
+  }
+}
+
+
+.opt__input[type="radio"] {
+  + .opt__proxy {
+    $opt-radio-pip-width: 10px;
+
+    border-radius: 50%;
+
+    &::after {
+      content: '';
+      border-radius: 50%;
+      background-color: $color-opt-border;
+      width: $opt-radio-pip-width;
+      height: $opt-radio-pip-width;
+    }
+  }
+
+  @include opt-state(disabled) {
+    + .opt__proxy::after {
+      background-color: $color-disabled;
+    }
+  }
+}

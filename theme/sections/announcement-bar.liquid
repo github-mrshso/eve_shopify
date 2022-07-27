@@ -1,0 +1,627 @@
+  {%- comment -%}Promo Bar or Announcement Bar logic{%- endcomment -%}
+  {% if section.settings.announcement_or_promo_bar == 'promo' %}
+    {% render 'promo-bar', section: section %}
+  {% else %}
+    {% if overlay_header or section.settings.announcement_above_header %}
+      {% render 'announcement-bar' %}
+    {% endif %}
+  {% endif %}
+
+{% schema %}
+{
+  "name": "Announcement Bar",
+  "class": "section-header js-site-header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Promotion"
+    },
+    {
+      "type": "paragraph",
+      "content": "Either an announcement slider or a promo bar can be displayed. These would need to be configured below."
+    },
+    {
+      "type": "radio",
+      "id": "announcement_or_promo_bar",
+      "label": "Additional header content",
+      "options": [
+        {
+          "value": "announcement",
+          "label": "Announcement"
+        },
+        {
+          "value": "promo",
+          "label": "Promo bar"
+        }
+     ]
+    },
+    {
+      "type": "header",
+      "content": "Announcement bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "announcement_compact",
+      "label": "Use compact style"
+    },
+    {
+      "type": "checkbox",
+      "id": "announcement_above_header",
+      "label": "Always show above header"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Heading",
+          "default": "Hassle-free returns"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Text",
+          "default": "30-day postage paid returns"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "promo_card",
+      "name": "Promo Card",
+      "settings": [ 
+        {
+          "type": "text",
+          "id": "menu_item", 
+          "label": "Menu item"
+        },
+        {
+          "type": "product",
+          "id": "featured_product",
+          "label": "Product"
+        }
+      ]
+    },
+    {
+      "type": "promo_bar",
+      "name": "Promo Bar",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "is_active",
+          "label": "Active",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "countdown_enabled",
+          "label": "Enable countdown",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "modal_enabled",
+          "label": "Enable popup",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "form_enabled",
+          "label": "Enable email capture in popup",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Promo bar"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Copy (required)",
+          "info": "Keep this as short as possible."
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "CTA copy (required)",
+          "default": "learn more"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "CTA URL (optional)",
+          "info": "Leave blank to open the pop up on the page that the customer is currently on. Or enter a URL to open the pop up on a different page."
+        },
+        {
+          "type": "text",
+          "id": "code",
+          "label": "Discount code (optional)",
+          "info": "This must match a discount code configured in [Shopify discounts](/admin/discounts)."
+        },
+        {
+          "type": "header",
+          "content": "Inclusion/exclusion",
+          "info": "Add URL parts or query parameters to exclude or include promos from certain pages. E.g. ‘collections/bed-frames’ or 'utm_source=google'. Add each entry on a new line. [read more](https://evemattress.atlassian.net/wiki/x/AYBPaw##Exclusion/inclusion)"
+        },
+        {
+          "type": "textarea",
+          "id": "blacklist",
+          "label": "Exclude on pages with these URL parts or query parameters"
+        },
+        {
+          "type": "textarea",
+          "id": "whitelist",
+          "label": "Only include on pages with these URL parts or query parameters",
+          "info": "This takes precedence over any exclusion."
+        },
+        {
+          "type": "header",
+          "content": "Start date",
+          "info": "Ensure that the start time is before the end time."
+        },
+        {
+          "type": "select",
+          "id": "start_date_year",
+          "label": "Year",
+          "options": [
+            { "value": "2020", "label": "2020" },
+            { "value": "2021", "label": "2021" },
+            { "value": "2022", "label": "2022" },
+            { "value": "2023", "label": "2023" },
+            { "value": "2024", "label": "2024" },
+            { "value": "2025", "label": "2025" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "start_date_month",
+          "label": "Month",
+          "options": [
+            { "value": "01", "label": "January" },
+            { "value": "02", "label": "February" },
+            { "value": "03", "label": "March" },
+            { "value": "04", "label": "April" },
+            { "value": "05", "label": "May" },
+            { "value": "06", "label": "June" },
+            { "value": "07", "label": "July" },
+            { "value": "08", "label": "August" },
+            { "value": "09", "label": "September" },
+            { "value": "10", "label": "October" },
+            { "value": "11", "label": "November" },
+            { "value": "12", "label": "December" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "start_date_day",
+          "label": "Day",
+          "options": [
+            { "value": "01", "label": "01" },
+            { "value": "02", "label": "02" },
+            { "value": "03", "label": "03" },
+            { "value": "04", "label": "04" },
+            { "value": "05", "label": "05" },
+            { "value": "06", "label": "06" },
+            { "value": "07", "label": "07" },
+            { "value": "08", "label": "08" },
+            { "value": "09", "label": "09" },
+            { "value": "10", "label": "10" },
+            { "value": "11", "label": "11" },
+            { "value": "12", "label": "12" },
+            { "value": "13", "label": "13" },
+            { "value": "14", "label": "14" },
+            { "value": "15", "label": "15" },
+            { "value": "16", "label": "16" },
+            { "value": "17", "label": "17" },
+            { "value": "18", "label": "18" },
+            { "value": "19", "label": "19" },
+            { "value": "20", "label": "20" },
+            { "value": "21", "label": "21" },
+            { "value": "22", "label": "22" },
+            { "value": "23", "label": "23" },
+            { "value": "24", "label": "24" },
+            { "value": "25", "label": "25" },
+            { "value": "26", "label": "26" },
+            { "value": "27", "label": "27" },
+            { "value": "28", "label": "28" },
+            { "value": "29", "label": "29" },
+            { "value": "30", "label": "30" },
+            { "value": "31", "label": "31" }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Start time"
+        },
+        {
+          "type": "paragraph",
+          "content": "All times should be converted from local to [UTC](https://www.timeanddate.com/worldclock/timezone/utc) before entering here."
+        },
+        {
+          "type": "select",
+          "id": "start_time_hour",
+          "label": "Hour",
+          "options": [
+            { "value": "00", "label": "00" },
+            { "value": "01", "label": "01" },
+            { "value": "02", "label": "02" },
+            { "value": "03", "label": "03" },
+            { "value": "04", "label": "04" },
+            { "value": "05", "label": "05" },
+            { "value": "06", "label": "06" },
+            { "value": "07", "label": "07" },
+            { "value": "08", "label": "08" },
+            { "value": "09", "label": "09" },
+            { "value": "10", "label": "10" },
+            { "value": "11", "label": "11" },
+            { "value": "12", "label": "12" },
+            { "value": "13", "label": "13" },
+            { "value": "14", "label": "14" },
+            { "value": "15", "label": "15" },
+            { "value": "16", "label": "16" },
+            { "value": "17", "label": "17" },
+            { "value": "18", "label": "18" },
+            { "value": "19", "label": "19" },
+            { "value": "20", "label": "20" },
+            { "value": "21", "label": "21" },
+            { "value": "22", "label": "22" },
+            { "value": "23", "label": "23" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "start_time_min",
+          "label": "Minute",
+          "options": [
+            { "value": "00", "label": "00" },
+            { "value": "01", "label": "01" },
+            { "value": "02", "label": "02" },
+            { "value": "03", "label": "03" },
+            { "value": "04", "label": "04" },
+            { "value": "05", "label": "05" },
+            { "value": "06", "label": "06" },
+            { "value": "07", "label": "07" },
+            { "value": "08", "label": "08" },
+            { "value": "09", "label": "09" },
+            { "value": "10", "label": "10" },
+            { "value": "11", "label": "11" },
+            { "value": "12", "label": "12" },
+            { "value": "13", "label": "13" },
+            { "value": "14", "label": "14" },
+            { "value": "15", "label": "15" },
+            { "value": "16", "label": "16" },
+            { "value": "17", "label": "17" },
+            { "value": "18", "label": "18" },
+            { "value": "19", "label": "19" },
+            { "value": "20", "label": "20" },
+            { "value": "21", "label": "21" },
+            { "value": "22", "label": "22" },
+            { "value": "23", "label": "23" },
+            { "value": "24", "label": "24" },
+            { "value": "25", "label": "25" },
+            { "value": "26", "label": "26" },
+            { "value": "27", "label": "27" },
+            { "value": "28", "label": "28" },
+            { "value": "29", "label": "29" },
+            { "value": "30", "label": "30" },
+            { "value": "31", "label": "31" },
+            { "value": "32", "label": "32" },
+            { "value": "33", "label": "33" },
+            { "value": "34", "label": "34" },
+            { "value": "35", "label": "35" },
+            { "value": "36", "label": "36" },
+            { "value": "37", "label": "37" },
+            { "value": "38", "label": "38" },
+            { "value": "39", "label": "39" },
+            { "value": "40", "label": "40" },
+            { "value": "41", "label": "41" },
+            { "value": "42", "label": "42" },
+            { "value": "43", "label": "43" },
+            { "value": "44", "label": "44" },
+            { "value": "45", "label": "45" },
+            { "value": "46", "label": "46" },
+            { "value": "47", "label": "47" },
+            { "value": "48", "label": "48" },
+            { "value": "49", "label": "49" },
+            { "value": "50", "label": "50" },
+            { "value": "51", "label": "51" },
+            { "value": "52", "label": "52" },
+            { "value": "53", "label": "53" },
+            { "value": "54", "label": "54" },
+            { "value": "55", "label": "55" },
+            { "value": "56", "label": "56" },
+            { "value": "57", "label": "57" },
+            { "value": "58", "label": "58" },
+            { "value": "59", "label": "59" }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "End date",
+          "info": "Ensure that the end time is after the start time."
+        },
+        {
+          "type": "select",
+          "id": "end_date_year",
+          "label": "Year",
+          "options": [
+            { "value": "2020", "label": "2020" },
+            { "value": "2021", "label": "2021" },
+            { "value": "2022", "label": "2022" },
+            { "value": "2023", "label": "2023" },
+            { "value": "2024", "label": "2024" },
+            { "value": "2025", "label": "2025" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "end_date_month",
+          "label": "Month",
+          "options": [
+            { "value": "01", "label": "January" },
+            { "value": "02", "label": "February" },
+            { "value": "03", "label": "March" },
+            { "value": "04", "label": "April" },
+            { "value": "05", "label": "May" },
+            { "value": "06", "label": "June" },
+            { "value": "07", "label": "July" },
+            { "value": "08", "label": "August" },
+            { "value": "09", "label": "September" },
+            { "value": "10", "label": "October" },
+            { "value": "11", "label": "November" },
+            { "value": "12", "label": "December" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "end_date_day",
+          "label": "Day",
+          "options": [
+            { "value": "01", "label": "01" },
+            { "value": "02", "label": "02" },
+            { "value": "03", "label": "03" },
+            { "value": "04", "label": "04" },
+            { "value": "05", "label": "05" },
+            { "value": "06", "label": "06" },
+            { "value": "07", "label": "07" },
+            { "value": "08", "label": "08" },
+            { "value": "09", "label": "09" },
+            { "value": "10", "label": "10" },
+            { "value": "11", "label": "11" },
+            { "value": "12", "label": "12" },
+            { "value": "13", "label": "13" },
+            { "value": "14", "label": "14" },
+            { "value": "15", "label": "15" },
+            { "value": "16", "label": "16" },
+            { "value": "17", "label": "17" },
+            { "value": "18", "label": "18" },
+            { "value": "19", "label": "19" },
+            { "value": "20", "label": "20" },
+            { "value": "21", "label": "21" },
+            { "value": "22", "label": "22" },
+            { "value": "23", "label": "23" },
+            { "value": "24", "label": "24" },
+            { "value": "25", "label": "25" },
+            { "value": "26", "label": "26" },
+            { "value": "27", "label": "27" },
+            { "value": "28", "label": "28" },
+            { "value": "29", "label": "29" },
+            { "value": "30", "label": "30" },
+            { "value": "31", "label": "31" }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "End time"
+        },
+        {
+          "type": "paragraph",
+          "content": "All times should be converted from local to [UTC](https://www.timeanddate.com/worldclock/timezone/utc) before entering here."
+        },
+        {
+          "type": "select",
+          "id": "end_time_hour",
+          "label": "Hour",
+          "options": [
+            { "value": "00", "label": "00" },
+            { "value": "01", "label": "01" },
+            { "value": "02", "label": "02" },
+            { "value": "03", "label": "03" },
+            { "value": "04", "label": "04" },
+            { "value": "05", "label": "05" },
+            { "value": "06", "label": "06" },
+            { "value": "07", "label": "07" },
+            { "value": "08", "label": "08" },
+            { "value": "09", "label": "09" },
+            { "value": "10", "label": "10" },
+            { "value": "11", "label": "11" },
+            { "value": "12", "label": "12" },
+            { "value": "13", "label": "13" },
+            { "value": "14", "label": "14" },
+            { "value": "15", "label": "15" },
+            { "value": "16", "label": "16" },
+            { "value": "17", "label": "17" },
+            { "value": "18", "label": "18" },
+            { "value": "19", "label": "19" },
+            { "value": "20", "label": "20" },
+            { "value": "21", "label": "21" },
+            { "value": "22", "label": "22" },
+            { "value": "23", "label": "23" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "end_time_min",
+          "label": "Minute",
+          "options": [
+            { "value": "00", "label": "00" },
+            { "value": "01", "label": "01" },
+            { "value": "02", "label": "02" },
+            { "value": "03", "label": "03" },
+            { "value": "04", "label": "04" },
+            { "value": "05", "label": "05" },
+            { "value": "06", "label": "06" },
+            { "value": "07", "label": "07" },
+            { "value": "08", "label": "08" },
+            { "value": "09", "label": "09" },
+            { "value": "10", "label": "10" },
+            { "value": "11", "label": "11" },
+            { "value": "12", "label": "12" },
+            { "value": "13", "label": "13" },
+            { "value": "14", "label": "14" },
+            { "value": "15", "label": "15" },
+            { "value": "16", "label": "16" },
+            { "value": "17", "label": "17" },
+            { "value": "18", "label": "18" },
+            { "value": "19", "label": "19" },
+            { "value": "20", "label": "20" },
+            { "value": "21", "label": "21" },
+            { "value": "22", "label": "22" },
+            { "value": "23", "label": "23" },
+            { "value": "24", "label": "24" },
+            { "value": "25", "label": "25" },
+            { "value": "26", "label": "26" },
+            { "value": "27", "label": "27" },
+            { "value": "28", "label": "28" },
+            { "value": "29", "label": "29" },
+            { "value": "30", "label": "30" },
+            { "value": "31", "label": "31" },
+            { "value": "32", "label": "32" },
+            { "value": "33", "label": "33" },
+            { "value": "34", "label": "34" },
+            { "value": "35", "label": "35" },
+            { "value": "36", "label": "36" },
+            { "value": "37", "label": "37" },
+            { "value": "38", "label": "38" },
+            { "value": "39", "label": "39" },
+            { "value": "40", "label": "40" },
+            { "value": "41", "label": "41" },
+            { "value": "42", "label": "42" },
+            { "value": "43", "label": "43" },
+            { "value": "44", "label": "44" },
+            { "value": "45", "label": "45" },
+            { "value": "46", "label": "46" },
+            { "value": "47", "label": "47" },
+            { "value": "48", "label": "48" },
+            { "value": "49", "label": "49" },
+            { "value": "50", "label": "50" },
+            { "value": "51", "label": "51" },
+            { "value": "52", "label": "52" },
+            { "value": "53", "label": "53" },
+            { "value": "54", "label": "54" },
+            { "value": "55", "label": "55" },
+            { "value": "56", "label": "56" },
+            { "value": "57", "label": "57" },
+            { "value": "58", "label": "58" },
+            { "value": "59", "label": "59" }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Popup"
+        },
+        {
+          "type": "range",
+          "id": "modal_scroll_delay",
+          "label": "Scroll delay",
+          "info": "-10px delay prevents the popup from auto opening in any situation.",
+          "min": -10,
+          "max": 500,
+          "step": 10,
+          "unit": "px",
+          "default": 150
+        },
+        {
+          "type": "image_picker",
+          "id": "modal_img",
+          "label": "Image (required)"
+        },
+        {
+          "type": "text",
+          "id": "modal_title",
+          "label": "Title (required)"
+        },
+        {
+          "type": "select",
+          "id": "modal_copy_position",
+          "label": "Copy position (required)",
+          "options": [
+            {
+              "value": "above",
+              "label": "Above title"
+            },
+            {
+              "value": "below",
+              "label": "Below title"
+            }
+          ],
+          "default": "below"
+        },
+        {
+          "type": "paragraph",
+          "content": "When email capture in popup is enabled, the 'Copy','Copy CTA' and 'CTA URL' will appear once the email has been captured."
+        },
+        {
+          "type": "textarea",
+          "id": "modal_copy",
+          "label": "Copy (required)"
+        },
+        {
+          "type": "text",
+          "id": "modal_cta_text",
+          "label": "CTA copy (required)",
+          "default": "shop now"
+        },
+        {
+          "type": "url",
+          "id": "modal_cta_url",
+          "label": "CTA URL (required)"
+        },
+        {
+          "type": "text",
+          "id": "modal_small_print",
+          "label": "Small print (required)",
+          "info": "Do not forget to add a full-stop."
+        },
+        {
+          "type": "header",
+          "content": "Email capture",
+          "info": "Complete this section if you have enabled email capture in the pop up."
+        },
+        {
+          "type": "text",
+          "id": "form_ometria_bucket",
+          "label": "Ometria bucket (required)"
+        },
+        {
+          "type": "textarea",
+          "id": "form_copy",
+          "label": "Copy (required)",
+          "info": "This will be replaced with the copy from the section above once the email has been captured."
+        },
+        {
+          "type": "textarea",
+          "id": "form_opt_in_copy",
+          "label": "Opt-in copy (required)",
+          "default": "I'd like advice, exclusive offers and product ideas to help me sleep like a dream."
+        },
+        {
+          "type": "text",
+          "id": "form_submit_copy",
+          "label": "Button copy",
+          "default": "sign up"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

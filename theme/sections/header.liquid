@@ -1,0 +1,1386 @@
+<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-cart-items.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-megamenu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'section-cart-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- if settings.predictive_search_enabled -%}
+  <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'component-loading-overlay.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
+
+<noscript>{{ 'component-list-menu.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-search.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-menu-drawer.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-cart-notification.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-cart-items.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'component-megamenu.css' | asset_url | stylesheet_tag }}</noscript>
+<noscript>{{ 'section-cart-drawer.css' | asset_url | stylesheet_tag }}</noscript>
+
+{% assign image_width = settings.page_width | divided_by: 3 %}
+{% assign image_height = image_width | times: 0.75 %}
+{% capture image_sizes %}
+(min-width: 1220px) 500px, 370px
+{% endcapture %}
+
+<style>
+  #shopify-section-header {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+
+  header-drawer {
+    justify-self: start;
+    margin-left: -1.2rem;
+  }
+
+  @media screen and (min-width: 990px) {
+    header-drawer {
+      display: none;
+    }
+  }
+
+  .menu-drawer-container {
+    display: flex;
+  }
+
+  .menu-drawer {
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .list-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .list-menu li {
+    text-align: left;
+  }
+
+  .list-menu--inline {
+    display: inline-flex;
+    flex-wrap: wrap;
+  }
+
+  summary.list-menu__item {
+    padding-right: 2.7rem;
+  }
+
+  .list-menu__item a {
+    text-decoration: none;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .list-menu__item {
+    display: flex;
+    align-items: center;
+    line-height: calc(1 + 0.3 / var(--font-body-scale));
+    column-gap: 1rem;
+  }
+
+  .list-menu__item--link {
+    text-decoration: none;
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+    line-height: calc(1 + 0.8 / var(--font-body-scale));
+  }
+
+  .menu-drawer__featured-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+  }
+
+  .list-menu__item--flex-col {
+    flex-direction: column;
+  }
+
+  .list-menu__item--flex-col > * {
+    text-decoration: none;
+    margin-bottom: 1.5rem;
+  }
+
+  .list-menu__item--flex-left {
+    align-items: flex-start;
+  }
+
+  @media screen and (min-width: 750px) {
+    .list-menu__item--link {
+      padding-bottom: 0.5rem;
+      padding-top: 0.5rem;
+    }
+  }
+</style>
+
+{%- style -%}
+  .section-header {
+    margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-header {
+      margin-bottom: {{ section.settings.margin_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<script src="{{ 'details-disclosure.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'component-cart-notification.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'section-cart-drawer.js' | asset_url }}" defer="defer"></script>
+
+<svg xmlns="http://www.w3.org/2000/svg" class="hidden">
+  <symbol id="icon-search" viewBox="0 0 24 24" class="icon icon-search">
+    <title>search</title>
+    <g stroke-linecap="round" stroke-width="2" fill="currentColor" stroke="currentColor" stroke-linejoin="round">
+      <path data-color="color-2" fill="currentColor" stroke-miterlimit="10" d="M22 22l-3-3" stroke="inherit"></path>
+      <circle fill="none" stroke="currentColor" stroke-miterlimit="10" cx="10" cy="10" r="9"></circle>
+      <path data-color="color-2" fill="none" stroke-miterlimit="10" d="M5.1 9C5.5 7 7 5.5 9 5.1" stroke="currentColor"></path>
+    </g>
+  </symbol>
+
+  <symbol id="icon-close" viewBox="0 0 24 24" class="icon icon-close">
+    <title>close</title>
+    <g stroke-linecap="square" stroke-width="2" fill="none" stroke="currentColor" stroke-linejoin="miter" class="nc-icon-wrapper" stroke-miterlimit="10">
+      <line x1="19" y1="5" x2="5" y2="19"></line> 
+      <line x1="19" y1="19" x2="5" y2="5"></line>
+    </g>
+  </symbol>
+</svg>
+<div class="header-wrapper color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}">
+  <header class="header header--middle-left page-width{% if section.settings.menu != blank %} header--has-menu{% endif %}">
+    {%- if request.page_type == 'index' -%}
+      <h1 class="header__heading">
+    {%- endif -%}
+      <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
+        <svg width="80" height="50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 734 484.44">
+          <title>{{ shop.name }}</title>
+          <defs>
+            <clipPath id="clip-path">
+              <path fill="none" d="M32.84 152.74h662.48v331.65H32.84z"></path>
+            </clipPath>
+            <clipPath id="clip-path-2">
+              <path fill="none" d="M32.84 152.23h662.82v332.21H32.84z"></path>
+            </clipPath>
+          </defs>
+          <g clip-path="url(#clip-path)">
+            <path fill="#ffce00" d="M364.07 152.74C181.14 152.74 32.84 301 32.84
+              484v.45h662.47V484c.01-183-148.31-331.26-331.24-331.26">
+            </path>
+          </g>
+          <g clip-path="url(#clip-path-2)">
+            <path fill="#333333" d="M372.48 458.62h-19.84l-56.91-132.98h26.06l39.4
+              99.89h1.78l39.82-99.89h25.65l-55.96 132.98M294.71
+              401c.23-1.63.7-8.19.7-12.41-.23-37.91-30.89-66.48-66-66.48-36.53
+              0-66.48 29.26-66.48 68.14 0 36.74 29.25 68.35 66 68.35 19.12 0
+              46.88-9.56 60.25-39.2h-23.54c-8 11.39-20.74 18.78-35.12 18.78A42.41
+              42.41 0 0 1 199 423.85a47.7 47.7 0 0 1-13.1-32.93 49.1 49.1 0 0 1
+              6.77-25.6 42.91 42.91 0 0 1 22.42-18.47 52.52 52.52 0 0 1
+              5.19-1.77v.26a42.44 42.44 0 0 1 8.89-1c23.41 0 41.83 17 42.77
+              37.93h-75.88a51.77 51.77 0 0 0-.64 8.13 50.27 50.27 0 0 0 1.12
+              10.6h37.86M429 401c-.23-1.63-.7-8.19-.7-12.41.23-37.91 30.9-66.48
+              66-66.48 36.53 0 66.49 29.26 66.49 68.14 0 36.74-29.26 68.36-66
+              68.35-19.12 0-46.87-9.55-60.25-39.2h23.53c8 11.39 20.73 18.78 35.11
+              18.78a42.43 42.43 0 0 0 31.56-14.34 47.74 47.74 0 0 0 13.1-32.93 49.11
+              49.11 0 0 0-6.78-25.6 42.92 42.92 0 0 0-22.41-18.47 56.68 56.68 0 0
+              0-5.2-1.79v.27a42.49 42.49 0 0 0-8.89-1c-23.41 0-41.83 17-42.77
+              37.93h75.91a52.89 52.89 0 0 1 .62 8.14 50.64 50.64 0 0 1-1.1
+              10.56H429">
+            </path>
+          </g>
+        </svg>
+      </a>
+    {%- if request.page_type == 'index' -%}
+      </h1>
+    {%- endif -%}
+    
+    {%- comment -%}Desktop nav{%- endcomment -%}
+    {%- if section.settings.menu != blank -%}
+      <nav class="header__inline-menu">
+        <ul class="list-menu list-menu--inline" role="list">
+          {%- for link in section.settings.menu.links -%}
+            <li>
+              {%- if link.links != blank -%}
+                {% liquid
+                  assign has_grandchildren_or_featured = false
+                  for childlink in link.links
+                    if childlink.links != blank or childlink.title contains 'Featured:'
+                      assign has_grandchildren_or_featured = true
+                      break
+                    endif
+                  endfor
+                %}
+                
+                <details-disclosure data-hoverable="true">
+                  <details id="Details-HeaderMenu-{{ forloop.index }}" {% if has_grandchildren_or_featured %}class="has-megamenu"{% endif %}>
+                    <summary class="header__menu-item list-menu__item link focus-inset">
+                      <span {%- if link.child_active %} class="header__active-menu-item"{% endif %}>{{ link.title | escape }}</span>
+                      {% render 'icon-caret' %}
+                    </summary>
+                    {%- comment -%} Beginning of megamenu version {%- endcomment -%}
+                    {% if has_grandchildren_or_featured %}
+                      <div id="HeaderMenu-MenuList-{{ forloop.index }}" class="list-menu list-menu--disclosure caption-large motion-reduce gradient megamenu" role="list" tabindex="-1">
+                        <ul class="page-width megamenu__inner">
+                          {%- for childlink in link.links -%}
+                            <li>
+                              {% comment %}
+                                <div id="Details-HeaderSubMenu-{{ forloop.index }}" class="megamenu__tier megamenu__tier--1 appear-animation appear-delay-{{ forloop.index }}">
+
+                                The above code has been commented out as the transition animations were bugging (appear-animation appear-delay-* classes specifically).
+                                This is due to a lack of support for CSS transitions on Details & Summary HTML elements
+                              {% endcomment %}
+                              <div id="Details-HeaderSubMenu-{{ forloop.index }}" class="megamenu__tier megamenu__tier--1">
+                                {%- if childlink.title contains 'Featured:' and childlink.type == 'collection_link' or childlink.type == 'product_link' -%}
+                                  <div class="menu-drawer__featured-content">
+                                    <a href="{{ childlink.url }}">
+                                      <div class="header__menu-item list-menu__item">
+                                        <div class="media media--4-3"> 
+                                          {{ childlink.object.featured_image | image_url: width: image_width | image_tag: widths: '370, 500', sizes: image_sizes }}
+                                        </div>
+                                      </div>
+                                    </a>
+                                    <div class="header__menu-item link link--text list-menu__item list-menu__item--flex-col list-menu__item--flex-left focus-inset caption-large">
+                                      <a href="{{ childlink.url }}">
+                                        <span class="h3">{{ childlink.title | remove: 'Featured:' | strip | escape }}</span>          
+                                        {%- liquid
+                                          assign custom_badge_text = false
+                                          if childlink.type == 'product_link'
+                                            comment
+                                            # Custom badge logic for childlink 
+                                            endcomment
+                                            if settings.custom_badges
+                                              assign tag_base = settings.custom_badges_syntax | strip
+                                              for tag in childlink.object.tags
+                                                if tag contains tag_base
+                                                  assign custom_badge_text = tag | remove: tag_base
+                                                  break
+                                                endif
+                                              endfor
+                                            endif
+                                          endif
+                                        -%}                                  
+                                        {% if custom_badge_text %}
+                                          <span class="badge badge--custom color-{{ settings.custom_badge_color_scheme }}">{{ custom_badge_text }}</span>
+                                        {% endif %}
+                                      </a>
+                                      <a href="{{ childlink.url }}" class="button button--full-width">{{ 'general.navigation.shop_now' | t | upcase }}</a>
+                                    </div>
+                                  </div>
+                                {%- else -%}
+                                  <div class="header__menu-item link link--text list-menu__item focus-inset caption-large">
+                                    <a href="{{ childlink.url }}"><span class="h2">{{ childlink.title | escape }}</span></a>
+                                  </div>
+                                  {% if childlink.links != blank %}                                
+                                    <ul id="HeaderMenu-SubMenuList-{{ forloop.index }}" class="header__submenu list-menu motion-reduce megamenu__tier megamenu__tier--2">
+                                    {%- for grandchildlink in childlink.links -%}
+                                      <li class="megamenu__grandchild">
+                                        {%- liquid
+                                          assign custom_badge_text = false
+                                          if grandchildlink.type == 'product_link'
+                                            comment
+                                            # Custom badge logic for grandchildlink
+                                            endcomment
+                                            if settings.custom_badges
+                                              assign tag_base = settings.custom_badges_syntax | strip
+                                              for tag in grandchildlink.object.tags
+                                                if tag contains tag_base
+                                                  assign custom_badge_text = tag | remove: tag_base
+                                                  break
+                                                endif
+                                              endfor
+                                            endif
+                                          endif
+                                        -%}
+                                        <a href="{{ grandchildlink.url }}" class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if grandchildlink.current %} list-menu__item--active{% endif %}"{% if grandchildlink.current %} aria-current="page"{% endif %}>
+                                          {{ grandchildlink.title | escape }}
+                                          {% if custom_badge_text %}
+                                            <span class="badge badge--custom color-{{ settings.custom_badge_color_scheme }}">{{ custom_badge_text }}</span>
+                                          {% endif %}
+                                        </a>
+                                      </li>
+                                    {%- endfor -%}
+                                    </ul>
+                                  {% endif %}
+                                {%- endif -%}
+                              </div>
+                            </li>
+                          {%- endfor -%}
+                        </ul>
+                      </div>
+                    {% else %}
+                      {%- comment -%} Beginning of non-megamenu version {%- endcomment -%}
+                      <ul id="HeaderMenu-MenuList-{{ forloop.index }}" class="list-menu list-menu--disclosure caption-large motion-reduce gradient" role="list" tabindex="-1">
+                        {%- for childlink in link.links -%}
+                          <li>
+                            <div id="Details-HeaderSubMenu-{{ forloop.index }}" class="megamenu__tier megamenu__tier--1">
+                                <a href="{{ childlink.url }}" class="header__menu-item list-menu__item link link--text focus-inset caption-large{% if childlink.current %} list-menu__item--active{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}>
+                                    {{ childlink.title | escape }}
+                                </a>
+                            </div>
+                          </li>
+                        {%- endfor -%}
+                      </ul>
+                    {% endif %}
+                  </details>
+                </details-disclosure>
+              {%- else -%}
+                <a href="{{ link.url }}" class="header__menu-item header__menu-item list-menu__item link link--text focus-inset"{% if link.current %} aria-current="page"{% endif %}>
+                  <span {%- if link.current %} class="header__active-menu-item"{% endif %}>{{ link.title | escape }}</span>
+                </a>
+              {%- endif -%}
+            </li>
+          {%- endfor -%}
+        </ul>
+      </nav>
+    {%- endif -%}
+
+    <div class="header__icons">
+      {%- comment -%}Mobile nav{%- endcomment -%}
+      {%- if section.settings.menu != blank -%}
+        <header-drawer data-breakpoint="tablet">
+          <details id="Details-menu-drawer-container" class="menu-drawer-container">
+            <summary class="header__icon header__icon--menu header__icon--summary link focus-inset" aria-label="{{ 'sections.header.menu' | t }}">
+              <span>
+                {% render 'icon-hamburger' %}
+                {% render 'icon-close' %}
+              </span>
+            </summary>
+            <div id="menu-drawer" class="menu-drawer motion-reduce gradient" tabindex="-1">
+              <div class="menu-drawer__inner-container">
+                <div class="menu-drawer__navigation-container">
+                  <nav class="menu-drawer__navigation">
+                    <ul class="menu-drawer__menu list-menu" role="list">
+                      {%- for link in section.settings.menu.links -%}
+                        <li>
+                          {%- if link.links != blank -%}
+                            <details id="Details-menu-drawer-menu-item-{{ forloop.index }}">
+                              <summary class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.child_active %} menu-drawer__menu-item--active{% endif %}">
+                                {{ link.title | escape }}
+                                {% render 'icon-arrow' %}
+                                {% render 'icon-caret' %}
+                              </summary>
+                              <div id="link-{{ link.title | escape }}" class="menu-drawer__submenu motion-reduce gradient" tabindex="-1">
+                                <div class="menu-drawer__inner-submenu">
+                                  <button class="menu-drawer__close-button link link--text focus-inset" aria-expanded="true">
+                                    {% render 'icon-arrow' %}
+                                    {{ link.title | escape }}
+                                  </button>
+                                  <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+                                    {%- for childlink in link.links -%}
+                                      {%- if childlink.title contains 'Featured:' -%}
+                                      <div class="menu-drawer__featured-content">
+                                        <a href="{{ childlink.url }}">
+                                          <div class="header__menu-item list-menu__item">
+                                            <div class="media media--4-3">
+                                              {{ childlink.object.featured_image | image_url: width: image_width | image_tag: widths: '370, 500', sizes: image_sizes }}
+                                            </div>
+                                          </div>
+                                        </a>
+        
+                                        <div class="header__menu-item link link--text list-menu__item list-menu__item--flex-col list-menu__item--flex-left focus-inset caption-large">
+                                          <a href="{{ childlink.url }}">
+                                            <span class="h3">{{ childlink.title | remove: 'Featured:' | strip | escape }}</span>
+                                            {%- liquid
+                                              assign custom_badge_text = false
+                                              if childlink.type == 'product_link'
+                                                comment
+                                                # Custom badge logic for childlink 
+                                                endcomment
+                                                if settings.custom_badges
+                                                  assign tag_base = settings.custom_badges_syntax | strip
+                                                  for tag in childlink.object.tags
+                                                    if tag contains tag_base
+                                                      assign custom_badge_text = tag | remove: tag_base
+                                                      break
+                                                    endif
+                                                  endfor
+                                                endif
+                                              endif
+                                            -%}
+                                            {% if custom_badge_text %}
+                                              <span class="badge badge--custom color-{{ settings.custom_badge_color_scheme }}">{{ custom_badge_text }}</span>
+                                            {% endif %}
+                                          </a>
+                                          <a href="{{ childlink.url }}" class="button button--full-width">Shop Now</a>
+                                        </div>
+                                      </div>
+                                      {%- else -%}
+                                        <li>
+                                          {%- if childlink.links == blank -%}
+                                            <a href="{{ childlink.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if childlink.current %} menu-drawer__menu-item--active{% endif %}"{% if childlink.current %} aria-current="page"{% endif %}>
+                                              {{ childlink.title | escape }}
+                                            </a>
+                                          {%- else -%}
+                                            <details id="Details-menu-drawer-submenu-{{ forloop.index }}">
+                                              <summary class="menu-drawer__menu-item link link--text list-menu__item focus-inset">
+                                                {{ childlink.title | escape }}
+                                                {% render 'icon-arrow' %}
+                                                {% render 'icon-caret' %}
+                                              </summary>
+                                              <div id="childlink-{{ childlink.title | escape }}" class="menu-drawer__submenu motion-reduce gradient">
+                                                <button class="menu-drawer__close-button link link--text focus-inset" aria-expanded="true">
+                                                  {% render 'icon-arrow' %}
+                                                  {{ childlink.title | escape }}
+                                                </button>
+                                                <ul class="menu-drawer__menu list-menu" role="list" tabindex="-1">
+                                                  {%- for grandchildlink in childlink.links -%}
+                                                    {%- liquid
+                                                      assign custom_badge_text = false
+                                                      if grandchildlink.type == 'product_link'
+                                                        comment
+                                                        # Custom badge logic for grandchildlink 
+                                                        endcomment
+                                                        if settings.custom_badges
+                                                          assign tag_base = settings.custom_badges_syntax | strip
+                                                          for tag in grandchildlink.object.tags
+                                                            if tag contains tag_base
+                                                              assign custom_badge_text = tag | remove: tag_base
+                                                              break
+                                                            endif
+                                                          endfor
+                                                        endif
+                                                      endif
+                                                    -%}
+                                                    <li>
+                                                      <a href="{{ grandchildlink.url }}" class="menu-drawer__menu-item link link--text list-menu__item focus-inset{% if grandchildlink.current %} menu-drawer__menu-item--active{% endif %}"{% if grandchildlink.current %} aria-current="page"{% endif %}>
+                                                        {{ grandchildlink.title | escape }}
+                                                        {% if custom_badge_text %}
+                                                          <span class="badge badge--custom color-{{ settings.custom_badge_color_scheme }}">{{ custom_badge_text }}</span>
+                                                        {% endif %}
+                                                      </a>
+                                                    </li>
+                                                  {%- endfor -%}
+                                                </ul>
+                                              </div>
+                                            </details>
+                                          {%- endif -%}
+                                        </li>
+                                      {%- endif -%}
+                                    {%- endfor -%}
+                                  </ul>
+                                </div>
+                              </div>
+                            </details>
+                          {%- else -%}
+                            <a href="{{ link.url }}" class="menu-drawer__menu-item list-menu__item link link--text focus-inset{% if link.current %} menu-drawer__menu-item--active{% endif %}"{% if link.current %} aria-current="page"{% endif %}>
+                              {{ link.title | escape }}
+                            </a>
+                          {%- endif -%}
+                        </li>
+                      {%- endfor -%}
+                    </ul>
+                  </nav>
+                  <div class="menu-drawer__utility-links">
+                    {%- if shop.customer_accounts_enabled -%}
+                      <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="menu-drawer__account link focus-inset h5">
+                        {% render 'icon-account' %}
+                        {%- liquid
+                          if customer
+                            echo 'customer.account_fallback' | t
+                          else
+                            echo 'customer.log_in' | t
+                          endif
+                        -%}
+                      </a>
+                    {%- endif -%}
+                    <ul class="list list-social list-unstyled" role="list">
+                      {%- if settings.social_twitter_link != blank -%}
+                        <li class="list-social__item">
+                          <a href="{{ settings.social_twitter_link }}" class="list-social__link link">
+                            {%- render 'icon-twitter' -%}
+                            <span class="visually-hidden">{{ 'general.social.links.twitter' | t }}</span>
+                          </a>
+                        </li>
+                      {%- endif -%}
+                      {%- if settings.social_facebook_link != blank -%}
+                        <li class="list-social__item">
+                          <a href="{{ settings.social_facebook_link }}" class="list-social__link link">
+                            {%- render 'icon-facebook' -%}
+                            <span class="visually-hidden">{{ 'general.social.links.facebook' | t }}</span>
+                          </a>
+                        </li>
+                      {%- endif -%}
+                      {%- if settings.social_pinterest_link != blank -%}
+                        <li class="list-social__item">
+                          <a href="{{ settings.social_pinterest_link }}" class="list-social__link link">
+                            {%- render 'icon-pinterest' -%}
+                            <span class="visually-hidden">{{ 'general.social.links.pinterest' | t }}</span>
+                          </a>
+                        </li>
+                      {%- endif -%}
+                      {%- if settings.social_instagram_link != blank -%}
+                        <li class="list-social__item">
+                          <a href="{{ settings.social_instagram_link }}" class="list-social__link link">
+                            {%- render 'icon-instagram' -%}
+                            <span class="visually-hidden">{{ 'general.social.links.instagram' | t }}</span>
+                          </a>
+                        </li>
+                      {%- endif -%}
+                      {%- if settings.social_tiktok_link != blank -%}
+                        <li class="list-social__item">
+                          <a href="{{ settings.social_tiktok_link }}" class="list-social__link link">
+                            {%- render 'icon-tiktok' -%}
+                            <span class="visually-hidden">{{ 'general.social.links.tiktok' | t }}</span>
+                          </a>
+                        </li>
+                      {%- endif -%}
+                      {%- if settings.social_tumblr_link != blank -%}
+                        <li class="list-social__item">
+                          <a href="{{ settings.social_tumblr_link }}" class="list-social__link link">
+                            {%- render 'icon-tumblr' -%}
+                            <span class="visually-hidden">{{ 'general.social.links.tumblr' | t }}</span>
+                          </a>
+                        </li>
+                      {%- endif -%}
+                      {%- if settings.social_snapchat_link != blank -%}
+                        <li class="list-social__item">
+                          <a href="{{ settings.social_snapchat_link }}" class="list-social__link link">
+                            {%- render 'icon-snapchat' -%}
+                            <span class="visually-hidden">{{ 'general.social.links.snapchat' | t }}</span>
+                          </a>
+                        </li>
+                      {%- endif -%}
+                      {%- if settings.social_youtube_link != blank -%}
+                        <li class="list-social__item">
+                          <a href="{{ settings.social_youtube_link }}" class="list-social__link link">
+                            {%- render 'icon-youtube' -%}
+                            <span class="visually-hidden">{{ 'general.social.links.youtube' | t }}</span>
+                          </a>
+                        </li>
+                      {%- endif -%}
+                      {%- if settings.social_vimeo_link != blank -%}
+                        <li class="list-social__item">
+                          <a href="{{ settings.social_vimeo_link }}" class="list-social__link link">
+                            {%- render 'icon-vimeo' -%}
+                            <span class="visually-hidden">{{ 'general.social.links.vimeo' | t }}</span>
+                          </a>
+                        </li>
+                      {%- endif -%}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </details>
+        </header-drawer>
+      {%- endif -%}
+      <details-modal class="header__search">
+        <details>
+          <summary class="header__icon header__icon--search header__icon--summary link focus-inset modal__toggle" aria-haspopup="dialog" aria-label="{{ 'general.search.search' | t }}">
+            <span>
+              <svg class="modal__toggle-open icon icon-search" aria-hidden="true" focusable="false" role="presentation">
+                <use href="#icon-search">
+              </svg>
+              <svg class="modal__toggle-close icon icon-close" aria-hidden="true" focusable="false" role="presentation">
+                <use href="#icon-close">
+              </svg>
+            </span>
+          </summary>
+          <div class="search-modal modal__content" role="dialog" aria-modal="true" aria-label="{{ 'general.search.search' | t }}">
+            <div class="modal-overlay"></div>
+            <div class="search-modal__content{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} search-modal__content-top{% else %} search-modal__content-bottom{% endif %}" tabindex="-1">
+              {%- if settings.predictive_search_enabled -%}
+                <predictive-search class="search-modal__form" data-loading-text="{{ 'accessibility.loading' | t }}">
+              {%- endif -%}
+                <form action="{{ routes.search_url }}" method="get" role="search" class="search search-modal__form">
+                  <div class="field">
+                    <input class="search__input field__input"
+                      id="Search-In-Modal"
+                      type="search"
+                      name="q"
+                      value=""
+                      placeholder="{{ 'general.search.search' | t }}"
+                      {%- if settings.predictive_search_enabled -%}
+                        role="combobox"
+                        aria-expanded="false"
+                        aria-owns="predictive-search-results-list"
+                        aria-controls="predictive-search-results-list"
+                        aria-haspopup="listbox"
+                        aria-autocomplete="list"
+                        autocorrect="off"
+                        autocomplete="off"
+                        autocapitalize="off"
+                        spellcheck="false"
+                      {%- endif -%}
+                    >
+                    <label class="field__label" for="Search-In-Modal">{{ 'general.search.search' | t }}</label>
+                    <input type="hidden" name="options[prefix]" value="last">
+                    <input type="hidden" name="type" value="product">
+                    <button class="search__button field__button" aria-label="{{ 'general.search.search' | t }}">
+                      <svg class="icon icon-search" aria-hidden="true" focusable="false" role="presentation">
+                        <use href="#icon-search">
+                      </svg>
+                    </button>
+                  </div>
+
+                  {%- if settings.predictive_search_enabled -%}
+                    <div class="predictive-search predictive-search--header" tabindex="-1" data-predictive-search>
+                      <div class="predictive-search__loading-state">
+                        <svg aria-hidden="true" focusable="false" role="presentation" class="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+                          <circle class="path" fill="none" stroke-width="6" cx="33" cy="33" r="30"></circle>
+                        </svg>
+                      </div>
+                    </div>
+
+                    <span class="predictive-search-status visually-hidden" role="status" aria-hidden="true"></span>
+                  {%- endif -%}
+                </form>
+              {%- if settings.predictive_search_enabled -%}
+                </predictive-search>
+              {%- endif -%}
+              <button type="button" class="search-modal__close-button modal__close-button link link--text focus-inset" aria-label="{{ 'accessibility.close' | t }}">
+                <svg class="icon icon-close" aria-hidden="true" focusable="false" role="presentation">
+                  <use href="#icon-close">
+                </svg>
+              </button>
+            </div>
+          </div>
+        </details>
+      </details-modal>
+
+      {%- if shop.customer_accounts_enabled -%}
+        <a href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}{%- endif -%}" class="header__icon header__icon--account link focus-inset{% if section.settings.menu != blank %} small-hide{% endif %}">
+          {% render 'icon-account' %}
+          <span class="visually-hidden">
+            {%- liquid
+              if customer
+                echo 'customer.account_fallback' | t
+              else
+                echo 'customer.log_in' | t
+              endif
+            -%}
+          </span>
+        </a>
+      {%- endif -%}
+
+      <a 
+        href="{{ routes.cart_url }}" 
+        class="header__icon header__icon--cart link focus-inset" 
+        id="cart-icon-bubble"
+        {% if settings.ajax_cart_enabled %}data-cart-drawer-open{% endif %}
+      >
+        {%- liquid
+          if cart == empty
+            render 'icon-cart-empty'
+          else
+            render 'icon-cart'
+          endif
+        -%}
+        <span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
+        {%- if cart != empty -%}
+          <div class="cart-count-bubble">
+            {%- if cart.item_count < 100 -%}
+              <span aria-hidden="true">{{ cart.item_count }}</span>
+            {%- endif -%}
+            <span class="visually-hidden">{{ 'sections.header.cart_count' | t: count: cart.item_count }}</span>
+          </div>
+        {%- endif -%}
+      </a>
+    </div>
+  </header>
+</div>
+
+{% unless settings.ajax_cart_enabled %}
+  {%- render 'cart-notification', color_scheme: section.settings.color_scheme -%}
+{% endunless %}
+
+<script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": {{ shop.name | json }},
+    {% if section.settings.logo %}
+      "logo": {{ section.settings.logo | image_url: width: section.settings.logo.width | prepend: "https:" | json }},
+    {% endif %}
+    "sameAs": [
+      {{ settings.social_twitter_link | json }},
+      {{ settings.social_facebook_link | json }},
+      {{ settings.social_pinterest_link | json }},
+      {{ settings.social_instagram_link | json }},
+      {{ settings.social_tiktok_link | json }},
+      {{ settings.social_tumblr_link | json }},
+      {{ settings.social_snapchat_link | json }},
+      {{ settings.social_youtube_link | json }},
+      {{ settings.social_vimeo_link | json }}
+    ],
+    "url": {{ request.origin | append: page.url | json }}
+  }
+</script>
+ 
+{%- if request.page_type == 'index' -%}
+  {% assign potential_action_target = request.origin | append: routes.search_url | append: "?q={search_term_string}" %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "WebSite",
+      "name": {{ shop.name | json }},
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {{ potential_action_target | json }},
+        "query-input": "required name=search_term_string"
+      },
+      "url": {{ request.origin | append: page.url | json }}
+    }
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "t:sections.header.name",
+  "class": "section-header js-site-header",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "t:sections.all.colors.accent_1.label"
+        },
+        {
+          "value": "accent-2",
+          "label": "t:sections.all.colors.accent_2.label"
+        },
+        {
+          "value": "background-1",
+          "label": "t:sections.all.colors.background_1.label"
+        },
+        {
+          "value": "background-2",
+          "label": "t:sections.all.colors.background_2.label"
+        },
+        {
+          "value": "inverse",
+          "label": "t:sections.all.colors.inverse.label"
+        }
+      ],
+      "default": "background-1",
+      "label": "t:sections.all.colors.label"
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "t:sections.header.settings.menu.label"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_line_separator",
+      "default": true,
+      "label": "t:sections.header.settings.show_line_separator.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.spacing"
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.header.settings.margin_bottom.label",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Toolbar"
+    },
+    {
+      "type": "link_list",
+      "id": "toolbar_menu",
+      "label": "Navigation",
+      "info": "This menu won't show dropdown items"
+    },
+    {
+      "type": "checkbox",
+      "id": "toolbar_social",
+      "label": "Show social icons"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "announcement",
+      "name": "Announcement",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Heading",
+          "default": "Hassle-free returns"
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Text",
+          "default": "30-day postage paid returns"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        }
+      ]
+    },
+    {
+      "type": "promo_card",
+      "name": "Promo Card",
+      "settings": [ 
+        {
+          "type": "text",
+          "id": "menu_item", 
+          "label": "Menu item"
+        },
+        {
+          "type": "product",
+          "id": "featured_product",
+          "label": "Product"
+        }
+      ]
+    },
+    {
+      "type": "promo_bar",
+      "name": "Promo Bar",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "is_active",
+          "label": "Active",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "countdown_enabled",
+          "label": "Enable countdown",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "modal_enabled",
+          "label": "Enable popup",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "form_enabled",
+          "label": "Enable email capture in popup",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Promo bar"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Copy (required)",
+          "info": "Keep this as short as possible."
+        },
+        {
+          "type": "text",
+          "id": "cta_text",
+          "label": "CTA copy (required)",
+          "default": "learn more"
+        },
+        {
+          "type": "url",
+          "id": "cta_url",
+          "label": "CTA URL (optional)",
+          "info": "Leave blank to open the pop up on the page that the customer is currently on. Or enter a URL to open the pop up on a different page."
+        },
+        {
+          "type": "text",
+          "id": "code",
+          "label": "Discount code (optional)",
+          "info": "This must match a discount code configured in [Shopify discounts](/admin/discounts)."
+        },
+        {
+          "type": "header",
+          "content": "Inclusion/exclusion",
+          "info": "Add URL parts or query parameters to exclude or include promos from certain pages. E.g. ‘collections/bed-frames’ or 'utm_source=google'. Add each entry on a new line. [read more](https://evemattress.atlassian.net/wiki/x/AYBPaw##Exclusion/inclusion)"
+        },
+        {
+          "type": "textarea",
+          "id": "blacklist",
+          "label": "Exclude on pages with these URL parts or query parameters"
+        },
+        {
+          "type": "textarea",
+          "id": "whitelist",
+          "label": "Only include on pages with these URL parts or query parameters",
+          "info": "This takes precedence over any exclusion."
+        },
+        {
+          "type": "header",
+          "content": "Start date",
+          "info": "Ensure that the start time is before the end time."
+        },
+        {
+          "type": "select",
+          "id": "start_date_year",
+          "label": "Year",
+          "options": [
+            { "value": "2020", "label": "2020" },
+            { "value": "2021", "label": "2021" },
+            { "value": "2022", "label": "2022" },
+            { "value": "2023", "label": "2023" },
+            { "value": "2024", "label": "2024" },
+            { "value": "2025", "label": "2025" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "start_date_month",
+          "label": "Month",
+          "options": [
+            { "value": "01", "label": "January" },
+            { "value": "02", "label": "February" },
+            { "value": "03", "label": "March" },
+            { "value": "04", "label": "April" },
+            { "value": "05", "label": "May" },
+            { "value": "06", "label": "June" },
+            { "value": "07", "label": "July" },
+            { "value": "08", "label": "August" },
+            { "value": "09", "label": "September" },
+            { "value": "10", "label": "October" },
+            { "value": "11", "label": "November" },
+            { "value": "12", "label": "December" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "start_date_day",
+          "label": "Day",
+          "options": [
+            { "value": "01", "label": "01" },
+            { "value": "02", "label": "02" },
+            { "value": "03", "label": "03" },
+            { "value": "04", "label": "04" },
+            { "value": "05", "label": "05" },
+            { "value": "06", "label": "06" },
+            { "value": "07", "label": "07" },
+            { "value": "08", "label": "08" },
+            { "value": "09", "label": "09" },
+            { "value": "10", "label": "10" },
+            { "value": "11", "label": "11" },
+            { "value": "12", "label": "12" },
+            { "value": "13", "label": "13" },
+            { "value": "14", "label": "14" },
+            { "value": "15", "label": "15" },
+            { "value": "16", "label": "16" },
+            { "value": "17", "label": "17" },
+            { "value": "18", "label": "18" },
+            { "value": "19", "label": "19" },
+            { "value": "20", "label": "20" },
+            { "value": "21", "label": "21" },
+            { "value": "22", "label": "22" },
+            { "value": "23", "label": "23" },
+            { "value": "24", "label": "24" },
+            { "value": "25", "label": "25" },
+            { "value": "26", "label": "26" },
+            { "value": "27", "label": "27" },
+            { "value": "28", "label": "28" },
+            { "value": "29", "label": "29" },
+            { "value": "30", "label": "30" },
+            { "value": "31", "label": "31" }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Start time"
+        },
+        {
+          "type": "paragraph",
+          "content": "All times should be converted from local to [UTC](https://www.timeanddate.com/worldclock/timezone/utc) before entering here."
+        },
+        {
+          "type": "select",
+          "id": "start_time_hour",
+          "label": "Hour",
+          "options": [
+            { "value": "00", "label": "00" },
+            { "value": "01", "label": "01" },
+            { "value": "02", "label": "02" },
+            { "value": "03", "label": "03" },
+            { "value": "04", "label": "04" },
+            { "value": "05", "label": "05" },
+            { "value": "06", "label": "06" },
+            { "value": "07", "label": "07" },
+            { "value": "08", "label": "08" },
+            { "value": "09", "label": "09" },
+            { "value": "10", "label": "10" },
+            { "value": "11", "label": "11" },
+            { "value": "12", "label": "12" },
+            { "value": "13", "label": "13" },
+            { "value": "14", "label": "14" },
+            { "value": "15", "label": "15" },
+            { "value": "16", "label": "16" },
+            { "value": "17", "label": "17" },
+            { "value": "18", "label": "18" },
+            { "value": "19", "label": "19" },
+            { "value": "20", "label": "20" },
+            { "value": "21", "label": "21" },
+            { "value": "22", "label": "22" },
+            { "value": "23", "label": "23" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "start_time_min",
+          "label": "Minute",
+          "options": [
+            { "value": "00", "label": "00" },
+            { "value": "01", "label": "01" },
+            { "value": "02", "label": "02" },
+            { "value": "03", "label": "03" },
+            { "value": "04", "label": "04" },
+            { "value": "05", "label": "05" },
+            { "value": "06", "label": "06" },
+            { "value": "07", "label": "07" },
+            { "value": "08", "label": "08" },
+            { "value": "09", "label": "09" },
+            { "value": "10", "label": "10" },
+            { "value": "11", "label": "11" },
+            { "value": "12", "label": "12" },
+            { "value": "13", "label": "13" },
+            { "value": "14", "label": "14" },
+            { "value": "15", "label": "15" },
+            { "value": "16", "label": "16" },
+            { "value": "17", "label": "17" },
+            { "value": "18", "label": "18" },
+            { "value": "19", "label": "19" },
+            { "value": "20", "label": "20" },
+            { "value": "21", "label": "21" },
+            { "value": "22", "label": "22" },
+            { "value": "23", "label": "23" },
+            { "value": "24", "label": "24" },
+            { "value": "25", "label": "25" },
+            { "value": "26", "label": "26" },
+            { "value": "27", "label": "27" },
+            { "value": "28", "label": "28" },
+            { "value": "29", "label": "29" },
+            { "value": "30", "label": "30" },
+            { "value": "31", "label": "31" },
+            { "value": "32", "label": "32" },
+            { "value": "33", "label": "33" },
+            { "value": "34", "label": "34" },
+            { "value": "35", "label": "35" },
+            { "value": "36", "label": "36" },
+            { "value": "37", "label": "37" },
+            { "value": "38", "label": "38" },
+            { "value": "39", "label": "39" },
+            { "value": "40", "label": "40" },
+            { "value": "41", "label": "41" },
+            { "value": "42", "label": "42" },
+            { "value": "43", "label": "43" },
+            { "value": "44", "label": "44" },
+            { "value": "45", "label": "45" },
+            { "value": "46", "label": "46" },
+            { "value": "47", "label": "47" },
+            { "value": "48", "label": "48" },
+            { "value": "49", "label": "49" },
+            { "value": "50", "label": "50" },
+            { "value": "51", "label": "51" },
+            { "value": "52", "label": "52" },
+            { "value": "53", "label": "53" },
+            { "value": "54", "label": "54" },
+            { "value": "55", "label": "55" },
+            { "value": "56", "label": "56" },
+            { "value": "57", "label": "57" },
+            { "value": "58", "label": "58" },
+            { "value": "59", "label": "59" }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "End date",
+          "info": "Ensure that the end time is after the start time."
+        },
+        {
+          "type": "select",
+          "id": "end_date_year",
+          "label": "Year",
+          "options": [
+            { "value": "2020", "label": "2020" },
+            { "value": "2021", "label": "2021" },
+            { "value": "2022", "label": "2022" },
+            { "value": "2023", "label": "2023" },
+            { "value": "2024", "label": "2024" },
+            { "value": "2025", "label": "2025" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "end_date_month",
+          "label": "Month",
+          "options": [
+            { "value": "01", "label": "January" },
+            { "value": "02", "label": "February" },
+            { "value": "03", "label": "March" },
+            { "value": "04", "label": "April" },
+            { "value": "05", "label": "May" },
+            { "value": "06", "label": "June" },
+            { "value": "07", "label": "July" },
+            { "value": "08", "label": "August" },
+            { "value": "09", "label": "September" },
+            { "value": "10", "label": "October" },
+            { "value": "11", "label": "November" },
+            { "value": "12", "label": "December" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "end_date_day",
+          "label": "Day",
+          "options": [
+            { "value": "01", "label": "01" },
+            { "value": "02", "label": "02" },
+            { "value": "03", "label": "03" },
+            { "value": "04", "label": "04" },
+            { "value": "05", "label": "05" },
+            { "value": "06", "label": "06" },
+            { "value": "07", "label": "07" },
+            { "value": "08", "label": "08" },
+            { "value": "09", "label": "09" },
+            { "value": "10", "label": "10" },
+            { "value": "11", "label": "11" },
+            { "value": "12", "label": "12" },
+            { "value": "13", "label": "13" },
+            { "value": "14", "label": "14" },
+            { "value": "15", "label": "15" },
+            { "value": "16", "label": "16" },
+            { "value": "17", "label": "17" },
+            { "value": "18", "label": "18" },
+            { "value": "19", "label": "19" },
+            { "value": "20", "label": "20" },
+            { "value": "21", "label": "21" },
+            { "value": "22", "label": "22" },
+            { "value": "23", "label": "23" },
+            { "value": "24", "label": "24" },
+            { "value": "25", "label": "25" },
+            { "value": "26", "label": "26" },
+            { "value": "27", "label": "27" },
+            { "value": "28", "label": "28" },
+            { "value": "29", "label": "29" },
+            { "value": "30", "label": "30" },
+            { "value": "31", "label": "31" }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "End time"
+        },
+        {
+          "type": "paragraph",
+          "content": "All times should be converted from local to [UTC](https://www.timeanddate.com/worldclock/timezone/utc) before entering here."
+        },
+        {
+          "type": "select",
+          "id": "end_time_hour",
+          "label": "Hour",
+          "options": [
+            { "value": "00", "label": "00" },
+            { "value": "01", "label": "01" },
+            { "value": "02", "label": "02" },
+            { "value": "03", "label": "03" },
+            { "value": "04", "label": "04" },
+            { "value": "05", "label": "05" },
+            { "value": "06", "label": "06" },
+            { "value": "07", "label": "07" },
+            { "value": "08", "label": "08" },
+            { "value": "09", "label": "09" },
+            { "value": "10", "label": "10" },
+            { "value": "11", "label": "11" },
+            { "value": "12", "label": "12" },
+            { "value": "13", "label": "13" },
+            { "value": "14", "label": "14" },
+            { "value": "15", "label": "15" },
+            { "value": "16", "label": "16" },
+            { "value": "17", "label": "17" },
+            { "value": "18", "label": "18" },
+            { "value": "19", "label": "19" },
+            { "value": "20", "label": "20" },
+            { "value": "21", "label": "21" },
+            { "value": "22", "label": "22" },
+            { "value": "23", "label": "23" }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "end_time_min",
+          "label": "Minute",
+          "options": [
+            { "value": "00", "label": "00" },
+            { "value": "01", "label": "01" },
+            { "value": "02", "label": "02" },
+            { "value": "03", "label": "03" },
+            { "value": "04", "label": "04" },
+            { "value": "05", "label": "05" },
+            { "value": "06", "label": "06" },
+            { "value": "07", "label": "07" },
+            { "value": "08", "label": "08" },
+            { "value": "09", "label": "09" },
+            { "value": "10", "label": "10" },
+            { "value": "11", "label": "11" },
+            { "value": "12", "label": "12" },
+            { "value": "13", "label": "13" },
+            { "value": "14", "label": "14" },
+            { "value": "15", "label": "15" },
+            { "value": "16", "label": "16" },
+            { "value": "17", "label": "17" },
+            { "value": "18", "label": "18" },
+            { "value": "19", "label": "19" },
+            { "value": "20", "label": "20" },
+            { "value": "21", "label": "21" },
+            { "value": "22", "label": "22" },
+            { "value": "23", "label": "23" },
+            { "value": "24", "label": "24" },
+            { "value": "25", "label": "25" },
+            { "value": "26", "label": "26" },
+            { "value": "27", "label": "27" },
+            { "value": "28", "label": "28" },
+            { "value": "29", "label": "29" },
+            { "value": "30", "label": "30" },
+            { "value": "31", "label": "31" },
+            { "value": "32", "label": "32" },
+            { "value": "33", "label": "33" },
+            { "value": "34", "label": "34" },
+            { "value": "35", "label": "35" },
+            { "value": "36", "label": "36" },
+            { "value": "37", "label": "37" },
+            { "value": "38", "label": "38" },
+            { "value": "39", "label": "39" },
+            { "value": "40", "label": "40" },
+            { "value": "41", "label": "41" },
+            { "value": "42", "label": "42" },
+            { "value": "43", "label": "43" },
+            { "value": "44", "label": "44" },
+            { "value": "45", "label": "45" },
+            { "value": "46", "label": "46" },
+            { "value": "47", "label": "47" },
+            { "value": "48", "label": "48" },
+            { "value": "49", "label": "49" },
+            { "value": "50", "label": "50" },
+            { "value": "51", "label": "51" },
+            { "value": "52", "label": "52" },
+            { "value": "53", "label": "53" },
+            { "value": "54", "label": "54" },
+            { "value": "55", "label": "55" },
+            { "value": "56", "label": "56" },
+            { "value": "57", "label": "57" },
+            { "value": "58", "label": "58" },
+            { "value": "59", "label": "59" }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Popup"
+        },
+        {
+          "type": "range",
+          "id": "modal_scroll_delay",
+          "label": "Scroll delay",
+          "info": "-10px delay prevents the popup from auto opening in any situation.",
+          "min": -10,
+          "max": 500,
+          "step": 10,
+          "unit": "px",
+          "default": 150
+        },
+        {
+          "type": "image_picker",
+          "id": "modal_img",
+          "label": "Image (required)"
+        },
+        {
+          "type": "text",
+          "id": "modal_title",
+          "label": "Title (required)"
+        },
+        {
+          "type": "select",
+          "id": "modal_copy_position",
+          "label": "Copy position (required)",
+          "options": [
+            {
+              "value": "above",
+              "label": "Above title"
+            },
+            {
+              "value": "below",
+              "label": "Below title"
+            }
+          ],
+          "default": "below"
+        },
+        {
+          "type": "paragraph",
+          "content": "When email capture in popup is enabled, the 'Copy','Copy CTA' and 'CTA URL' will appear once the email has been captured."
+        },
+        {
+          "type": "textarea",
+          "id": "modal_copy",
+          "label": "Copy (required)"
+        },
+        {
+          "type": "text",
+          "id": "modal_cta_text",
+          "label": "CTA copy (required)",
+          "default": "shop now"
+        },
+        {
+          "type": "url",
+          "id": "modal_cta_url",
+          "label": "CTA URL (required)"
+        },
+        {
+          "type": "text",
+          "id": "modal_small_print",
+          "label": "Small print (required)",
+          "info": "Do not forget to add a full-stop."
+        },
+        {
+          "type": "header",
+          "content": "Email capture",
+          "info": "Complete this section if you have enabled email capture in the pop up."
+        },
+        {
+          "type": "text",
+          "id": "form_ometria_bucket",
+          "label": "Ometria bucket (required)"
+        },
+        {
+          "type": "textarea",
+          "id": "form_copy",
+          "label": "Copy (required)",
+          "info": "This will be replaced with the copy from the section above once the email has been captured."
+        },
+        {
+          "type": "textarea",
+          "id": "form_opt_in_copy",
+          "label": "Opt-in copy (required)",
+          "default": "I'd like advice, exclusive offers and product ideas to help me sleep like a dream."
+        },
+        {
+          "type": "text",
+          "id": "form_submit_copy",
+          "label": "Button copy",
+          "default": "sign up"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+ 

@@ -1,0 +1,33 @@
+<script
+    id="promo-card-tpl"
+    type="text/x-handlebars-template">
+    {%- raw -%}
+    <div class="promo-card__img">
+      <img
+        class="lazyload"
+        data-src="{{img}}"
+        data-widths="[259, 342, 426]"
+        data-sizes="auto"
+        alt="{{alt}}">
+    </div>
+    <p class="promo-card__title">
+      {{title}}
+      {{#if isNew}}
+        {%- endraw -%}
+        {%- assign badge_text = 'products.badges.new' | t -%}
+        {%- render 'badge', text: badge_text -%}
+        {%- raw -%}
+      {{/if}}
+      {{#if isPopular}}
+        {%- endraw -%}
+        {%- assign badge_text = 'products.badges.popular' | t -%}
+        {%- render 'badge', text: badge_text -%}
+        {%- raw -%}
+      {{/if}}
+    </p>
+    <span class="btn btn--primary">
+      {{btn}}
+    </span>
+    {%- endraw -%}
+  </script>
+  

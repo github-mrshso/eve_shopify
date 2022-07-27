@@ -1,0 +1,88 @@
+<blog-filter>
+  <div class="feed-filter js-feed-filter">
+    <div class="feed-filter__dropdowns">
+      <form class="form">
+        <div class="form-field form-field--dropdown form-field--icon">
+          <label class="visually-hidden">
+            {{ 'blogs.filter.pillar' | t }}
+          </label>
+          <div class="form-field__field">
+            {% render 'blog-filter-item',
+              by: 'pillar',
+              as: 'select'
+            %}
+          </div>
+        </div>
+        <div class="form-field form-field--dropdown form-field--icon">
+          <label class="visually-hidden">
+            {{ 'blogs.filter.type' | t }}
+          </label>
+          <div class="form-field__field">
+            {% render 'blog-filter-item',
+              by: 'type',
+              as: 'select'
+            %}
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div class="feed-filter__drawer">
+      <button class="button button--secondary button--full-width button--icon js-toggle">
+        {% render 'icon-list', icon: 'preferences_circle'  %}
+        Filter
+      </button>
+      <div id="feed-filter-drawer" class="drawer drawer--left js-drawer">
+        <div class="drawer__inner">
+          <div class="drawer__header">
+            <div class="drawer__close">
+              <button class="js-close link">
+                <span>
+                  {% render 'icon-close' %}
+                </span>
+              </button>
+            </div>
+          </div>
+          <div class="drawer__content">
+            <div class="drawer__body">
+              <form class="form js-form">
+                <fieldset class="feed-filter__group">
+                  <legend class="feed-filter__title">
+                    <span class="feed-filter__title-inner">
+                      {% render 'icon-list', icon: 'preferences_circle'  %}
+                      {{ 'blogs.filter.pillar' | t }}
+                    </span>
+                  </legend>
+                  <div class="feed-filter__items">
+                    {% render 'blog-filter-item',
+                      by: 'pillar',
+                      as: 'list'
+                    %}
+                  </div>
+                </fieldset>
+                <fieldset class="feed-filter__group">
+                  <legend class="feed-filter__title">
+                    <span class="feed-filter__title-inner">
+                      {% render 'icon-list', icon: 'preferences_circle'  %}
+                      {{ 'blogs.filter.type' | t }}
+                    </span>
+                  </legend>
+                  <div class="feed-filter__items">
+                    {% render 'blog-filter-item',
+                      by: 'type',
+                      as: 'list'
+                    %}
+                  </div>
+                </fieldset>
+              </form>
+
+              <button class="button button--secondary button--full-width button--icon js-toggle">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</blog-filter>

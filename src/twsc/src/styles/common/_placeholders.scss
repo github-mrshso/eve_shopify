@@ -1,0 +1,51 @@
+$signpost-bg: $color-grey-bg;
+$signpost-padding: $padding-l;
+
+%signpost {
+  background: $signpost-bg;
+  padding: $signpost-padding;
+}
+
+%highlight {
+  $top: 10%;
+  $bottom: 88%;
+
+  background: linear-gradient(
+    to bottom,
+    transparent $top,
+    $color-primary $top,
+    $color-primary $bottom,
+    transparent $bottom,
+  );
+}
+
+%article-width {
+  $padding: 1rem;
+
+  max-width: #{$feed-width-1-col + (px($padding) * 2)};
+  margin: 0 auto;
+  padding: {
+    left: px($padding);
+    right: px($padding);
+  }
+
+  @include media-query('feed-2-cols') {
+    max-width: $feed-width-2-col;
+    padding: {
+      left: 0;
+      right: 0;
+    }
+  }
+
+  @include media-query('feed-3-cols') {
+    max-width: $feed-width-3-col;
+  }
+}
+
+%blog-width {
+  @extend %article-width;
+
+  @include media-query('feed-3-cols') {
+    max-width: $feed-width-3-col;
+  }
+}

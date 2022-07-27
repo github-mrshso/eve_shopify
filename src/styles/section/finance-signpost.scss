@@ -1,0 +1,127 @@
+@use 'sass:list';
+@use 'sass:math';
+
+@import '../partials/_variables';
+@import '../partials/_mixins';
+@import '../partials/functions';
+
+// stylelint-disable max-line-length, scss/dollar-variable-colon-space-after
+$signpost-bg: $color-grey-bg;
+$signpost-padding: $padding-l;
+
+%signpost {
+  background: $signpost-bg;
+  padding: $signpost-padding;
+}
+
+$finance-signpost-logo-width: 7rem;
+$finance-signpost-copy-max-width: 500px;
+
+$finance-signpost-logos: (
+  'alma' 589 320,
+  'divido' 271.8 83.7,
+  'klarna' 45 25,
+);
+
+$grid-breakpoints: list.join($grid-breakpoints, (
+  'finance-signpost-is-stacked' '(max-width: 711px)',
+  'finance-signpost-is-inline' '(min-width: 711.01px)',
+  'finance-signpost-img-shown' '(min-width: 936px)',
+));
+// stylelint-enable max-line-length, scss/dollar-variable-colon-space-after
+
+.finance-signpost {
+  @extend %signpost;
+}
+
+.finance-signpost__content {
+  flex: 1 1 auto;
+
+  .h1 {
+    margin: 0;
+  }
+}
+
+.finance-signpost__copy {
+  p {
+    margin: 0 0 0.25rem;
+  }
+}
+
+.finance-signpost__smallprint {
+  font-size: 1.2rem;
+  line-height: 1.3;
+  margin-top: 0;
+  max-width: $finance-signpost-copy-max-width;
+}
+
+.finance-signpost__img {
+  position: relative;
+  flex: 1 0 20%;
+  display: none;
+
+  @include media-query('finance-signpost-img-shown') {
+    display: block;
+  }
+
+  svg {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 100%;
+    width: 100%;
+    display: block;
+    transform: translateX(-50%);
+  }
+}
+
+.finance-signpost__logo {
+  flex: 0 0 auto;
+  align-self: flex-end;
+  margin-right: 0;
+
+  svg {
+    width: $finance-signpost-logo-width;
+    display: block;
+  }
+}
+
+@each $logo in $finance-signpost-logos {
+  $logo-name: list.nth($logo, 1);
+  $logo-intrinsic-width: list.nth($logo, 2);
+  $logo-intrinsic-height: list.nth($logo, 3);
+  $logo-aspect: calc(math.div($logo-intrinsic-width, $logo-intrinsic-height));
+  $logo-height: calc(math.div($finance-signpost-logo-width, $logo-aspect));
+
+  .finance-signpost__logo--svg-#{$logo-name}-logo {
+    svg {
+      height: $logo-height;
+    }
+  }
+}
+
+@include media-query('finance-signpost-is-inline') {
+  .finance-signpost {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+  }
+
+  .finance-signpost__content,
+  .finance-signpost__img,
+  .finance-signpost__logo {
+    margin: 0 0.5rem;
+  }
+
+  .finance-signpost__content {
+    margin-left: 0;
+  }
+
+  .finance-signpost__smallprint {
+    margin-bottom: 0;
+  }
+
+  .finance-signpost__logo {
+    margin-right: 0;
+  }
+}

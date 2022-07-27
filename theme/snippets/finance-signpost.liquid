@@ -1,0 +1,36 @@
+{{ 'section-finance-signpost.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+          padding-top: {{ section.settings.padding_top }}px;
+          padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+  }
+{%- endstyle -%}
+
+<section class="finance-signpost section-{{ section.id }}-padding">
+    <div class="finance-signpost__content">
+        <p class="h1">{{ title }}</p>
+        <div class="finance-signpost__copy">{{ subtitle }}</div>
+        <p class="finance-signpost__smallprint">
+            {{ smallprint }}
+        </p>
+    </div>
+    <div class="finance-signpost__img">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <use href="#svg-zero-percent" />
+        </svg>
+    </div>
+    <div class="finance-signpost__logo finance-signpost__logo--{{ logo }}">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <use href="#{{ logo }}" />
+        </svg>
+    </div>
+</section>
+
+  

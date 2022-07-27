@@ -1,0 +1,252 @@
+ <!DOCTYPE html>
+<html class="{{ checkout_html_classes }}" lang="{{ locale }}" dir="{{ direction }}">
+<head>
+  {% include 'ab-tasty-js' %}
+  {% include 'snowplow-js' %}
+  {%- render 'elevar-head' -%}
+  {%- include 'globals' -%}
+  {%- include 'theme-strings' -%}
+  {%- include 'bugsnag' -%}
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, height=device-height, minimum-scale=1.0, user-scalable=0">
+  <meta name="theme-color" content="{{ settings.color_button }}">
+  <meta name="referrer" content="origin">
+
+  {%- if settings.favicon -%}
+  <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png" />
+  {%- endif -%}
+
+  <title>{{ page_title }}</title>
+
+  {% render 'critical-css' %}
+
+  {{ checkout_stylesheets }}
+
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+  {{ 'component-progress-indicator.css' | asset_url | stylesheet_tag }}
+  {{ 'component-icons.css' | asset_url | stylesheet_tag }}
+  {{ 'bundle.checkout.css' | asset_url | stylesheet_tag }}
+
+  {% comment %}
+    Contextualise has to go here as all script tags are deferred and this needs
+    to be present before the page has finished parsing
+  {% endcomment %}
+  {%- render 'contextualise' -%}
+  {%- include 'ometria-js' -%}
+
+  {{ checkout_scripts }}
+
+  {%- capture currencies -%}
+    {
+      {%- for currency in shop.enabled_currencies %}
+        {{ currency.iso_code }}: '{{ currency.symbol }}',
+      {% endfor -%}
+    }
+  {%- endcapture -%}
+
+  {% comment %}
+  This is an inefficient way of outputting the list of GFS services but due to
+  the limitation of static settings we should assume that the max number of
+  services possible is 5.
+  {% endcomment %}
+  {%- capture delivery_descriptions -%}
+    {%- assign maxServices = 5 -%}
+    {%- assign baseKey = 'delivery_gfs_description_' -%}
+    {
+      {%- for i in (1..maxServices) -%}
+        {%- assign idKey = baseKey | append: i | append: '_id' -%}
+        {%- assign contentKey = baseKey | append: i | append: '_content' -%}
+        {%- if settings[idKey] != blank -%}
+          {{ settings[idKey] | json }}: {{ settings[contentKey] | json }},
+        {%- endif -%}
+      {%- endfor -%}
+    }
+  {%- endcapture -%}
+
+  {% assign has_eco_tax = false %}
+  {% if global_region == 'fr' %}
+    {% assign has_eco_tax = true %}
+  {% endif %}
+
+  {% if has_eco_tax %}
+    {%- capture eco_tax -%}
+      [
+      {%- for line_item in checkout.line_items %}
+        {
+          variant: '{{ line_item.variant.id }}',
+          quantity: '{{ line_item.quantity  }}',
+          eco_tax: {{ line_item.variant.metafields.custom_fields['total_eco_tax_rate'] }},
+        },
+      {% endfor -%}
+      ]
+    {%- endcapture -%}
+  {% endif %}
+
+  <script>
+    document.documentElement.className = document.documentElement.className
+      .replace('no-js', 'js');
+  </script>
+
+  {{ content_for_header }}
+
+  <script>
+    contextualise('checkout', {
+      dayDefiniteName: {{ settings.delivery_gfs_day_definite_name | json }},
+      dayDefiniteID: {{ settings.delivery_gfs_day_definite_id | json }},
+      deliveryNotes: {{ delivery_descriptions }}
+    });
+
+    contextualise('payment', {
+      financeEnabled: {{ settings.finance_enabled }},
+      financeProvider: {{ settings.finance_provider | json }},
+      financeThreshold: {{ settings.finance_threshold | default: 'null' }},
+      financeTimeout: {{ settings.finance_timeout }}
+    });
+
+    {% if has_eco_tax %}
+      contextualise('ecoTax', {
+        ecoTax: {{ eco_tax }},
+        currency: {{ currencies }}
+      });
+    {% endif %}
+  </script>
+
+  <script src="{{ 'component-event-bus-gwp.js' | asset_url }}"></script>
+  <script src="{{ 'bundle.checkout.js' | asset_url }}" defer="defer"></script>
+
+  {% render 'shogun-head' %}
+</head>
+
+<body class="region--{{ global_region }} template--checkout">
+  {{ skip_to_content_link }}
+  <div class="banner" data-header>
+    <h1 class="header__heading">
+    <a href="{{ routes.root_url }}" class="header__heading-link link link--text focus-inset">
+      {%- if section.settings.logo != blank -%}
+        {%- assign image_size_2x = section.settings.logo_width | times: 2 | at_most: 5760 -%}
+        <img srcset="{{ section.settings.logo | image_url: width: section.settings.logo_width }} 1x, {{ section.settings.logo | image_url: width: image_size_2x }} 2x"
+          src="{{ section.settings.logo | image_url: width: section.settings.logo_width }}"
+          loading="lazy"
+          class="header__heading-logo"
+          width="{{ section.settings.logo.width }}"
+          height="{{ section.settings.logo.height }}"
+          alt="{{ section.settings.logo.alt | default: shop.name | escape }}"
+        >
+        {%- else -%}
+          <svg width="80" height="50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 734 484.44">
+            <title>{{ shop.name }}</title>
+            <defs>
+              <clipPath id="clip-path">
+                <path fill="none" d="M32.84 152.74h662.48v331.65H32.84z"></path>
+              </clipPath>
+              <clipPath id="clip-path-2">
+                <path fill="none" d="M32.84 152.23h662.82v332.21H32.84z"></path>
+              </clipPath>
+            </defs>
+            <g clip-path="url(#clip-path)">
+              <path fill="#ffce00" d="M364.07 152.74C181.14 152.74 32.84 301 32.84
+                484v.45h662.47V484c.01-183-148.31-331.26-331.24-331.26">
+              </path>
+            </g>
+            <g clip-path="url(#clip-path-2)">
+              <path fill="#333333" d="M372.48 458.62h-19.84l-56.91-132.98h26.06l39.4
+                99.89h1.78l39.82-99.89h25.65l-55.96 132.98M294.71
+                401c.23-1.63.7-8.19.7-12.41-.23-37.91-30.89-66.48-66-66.48-36.53
+                0-66.48 29.26-66.48 68.14 0 36.74 29.25 68.35 66 68.35 19.12 0
+                46.88-9.56 60.25-39.2h-23.54c-8 11.39-20.74 18.78-35.12 18.78A42.41
+                42.41 0 0 1 199 423.85a47.7 47.7 0 0 1-13.1-32.93 49.1 49.1 0 0 1
+                6.77-25.6 42.91 42.91 0 0 1 22.42-18.47 52.52 52.52 0 0 1
+                5.19-1.77v.26a42.44 42.44 0 0 1 8.89-1c23.41 0 41.83 17 42.77
+                37.93h-75.88a51.77 51.77 0 0 0-.64 8.13 50.27 50.27 0 0 0 1.12
+                10.6h37.86M429 401c-.23-1.63-.7-8.19-.7-12.41.23-37.91 30.9-66.48
+                66-66.48 36.53 0 66.49 29.26 66.49 68.14 0 36.74-29.26 68.36-66
+                68.35-19.12 0-46.87-9.55-60.25-39.2h23.53c8 11.39 20.73 18.78 35.11
+                18.78a42.43 42.43 0 0 0 31.56-14.34 47.74 47.74 0 0 0 13.1-32.93 49.11
+                49.11 0 0 0-6.78-25.6 42.92 42.92 0 0 0-22.41-18.47 56.68 56.68 0 0
+                0-5.2-1.79v.27a42.49 42.49 0 0 0-8.89-1c-23.41 0-41.83 17-42.77
+                37.93h75.91a52.89 52.89 0 0 1 .62 8.14 50.64 50.64 0 0 1-1.1
+                10.56H429">
+              </path>
+            </g>
+          </svg>
+        {%- endif -%}
+      </a>
+    </h1>
+    <span class="banner__security-img">
+      <i class="nc-icon nc-lock-2"></i>
+      <span class="banner__security-copy">
+        {{ 'general.checkout.general.secure_checkout' | t }}
+      </span>
+    </span>
+    <div class="banner__summary-toggle">
+      {{ order_summary_toggle }}
+    </div>
+  </div>
+
+  <div class="content checkout" data-content>
+    <div class="wrap">
+      <div class="main" role="main">
+        <div class="main__header">
+          <div class=breadcrumb__wrapper>
+            {%- if checkout_html_classes contains 'page--thank-you' -%}
+              {% assign locale_keys = 'cart|address|delivery|payment|review|done' | split: '|' %}
+              {% assign locale_prefix = 'general.checkout.navigation.checkout_stepper_' %}
+              {% include 'breadcrumbs-static', locale_keys: locale_keys, locale_prefix: locale_prefix, active_key: 'done' %}
+            {% else %}
+              {{ breadcrumb }}
+              <span class="breadcrumb breadcrumb__item breadcrumb__text breadcrumb__done">
+                {{ 'general.checkout.navigation.checkout_stepper_done' | t }}
+              </span>
+            {%- endif -%}
+          </div>
+          {% comment %}
+            Hiding Paypal express checkout widget on address step
+            {{ alternative_payment_methods }}
+          {% endcomment %}
+        </div>
+        <div class="main__content js-checkout-content">
+          {{ content_for_layout }}
+          <p class="terms">
+            {{ 'general.cart.terms_html' | t: terms_url: settings.cart_terms_conditions_link, returns_url: settings.cart_returns_conditions_link }}
+          </p>
+        </div>
+        <div class="main__footer">
+          {{ content_for_footer }}
+        </div>
+      </div>
+      <div class="sidebar" role="complementary">
+        <div class="sidebar__header">
+          {{ content_for_logo }}
+        </div>
+        <div class="sidebar__content">
+          {{ content_for_order_summary }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% comment %}
+    De-scoped from eve 'lift-and-shift' project
+    {% section 'gift-with-purchase' %}
+  {% endcomment %}
+
+  {%- if settings.finance_enabled -%}
+    {% include 'finance-js' %}
+  {%- endif -%}
+
+  {{ tracking_code }}
+  {% render 'elevar-checkout-end' %}
+</body>
+
+{% include 'mention-me-js',
+  selector_class: '.order-summary__section--discount',
+  tag_position: 'checkout'
+%}
+
+{%- if settings.fetchify_enabled -%}
+  {% include 'crafty-clicks-js' %}
+{%- endif -%}
+
+</html>

@@ -1,0 +1,76 @@
+@use 'sass:list';
+@use 'sass:math';
+
+@import '../partials/_variables';
+@import '../partials/_mixins';
+@import '../partials/_animations';
+
+// stylelint-disable scss/dollar-variable-colon-space-after
+$countdown-label-spacing:              1rem;
+$countdown-segment-spacing:            0.5rem;
+$countdown-label-spacing-compressed:   0.25rem;
+$countdown-segment-spacing-compressed: $countdown-label-spacing-compressed;
+$grid-breakpoints: list.join($grid-breakpoints, (
+  'promo-bar-is-compressed' '(max-width: 599px)',
+  'promo-bar-can-expand' '(min-width: 600px)'
+));
+// stylelint-enable scss/dollar-variable-colon-space-after
+
+.countdown {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: baseline;
+  justify-content: flex-start;
+}
+
+.countdown__label {
+  margin: 0 $countdown-label-spacing 0 0;
+  flex: 0 0 auto;
+}
+
+.countdown__segments {
+  flex: 0 0 auto;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: baseline;
+  justify-content: space-between;
+
+  var {
+    @include font('big-price-01');
+
+    font-style: normal;
+  }
+}
+
+.countdown__seg {
+  margin-right: $countdown-segment-spacing;
+
+  &:last-child {
+    margin-right: 0;
+  }
+}
+
+.countdown--small {
+  font-size: 1em;
+
+  .countdown__label,
+  .countdown__seg {
+    margin-right: $countdown-label-spacing-compressed;
+  }
+
+  .countdown__segments {
+    var {
+      font-size: 1.5em;
+      line-height: 1;
+    }
+  }
+
+  @include media-query('promo-bar-can-expand') {
+    margin-right: $countdown-segment-spacing;
+
+    .countdown__label,
+    .countdown__seg {
+      margin-right: $countdown-segment-spacing;
+    }
+  }
+}

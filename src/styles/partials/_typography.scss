@@ -1,0 +1,303 @@
+@use 'sass:math';
+
+@import './functions';
+@import './variables';
+
+/**
+ * Generates a fluid type scheme by building a linear scale between viewport
+ * width and font size. https://css-tricks.com/snippets/css/fluid-typography/
+ *
+ * @param      {Number}  $vmin   [<default>]  - Min viewport width
+ * @param      {Number}  $vmax   [<default>]  - Max viewport max
+ * @param      {Number}  $min    [<default>]  - Min font size
+ * @param      {Number}  $max    [<default>]  - Max font size
+ * @param      {Number}  $hmin   [false]      - Min line height
+ * @param      {Number}  $hmax   [false]      - Max line height
+ */
+@mixin fluid-type($vmin, $vmax, $min, $max, $hmin: false, $hmax: false) {
+  $u1: $vmin;
+  $u2: $vmax;
+  $u3: $min;
+  $u4: $max;
+
+  display: block;
+
+  @if $u1 == $u2 and $u1 == $u3 and $u1 == $u4 {
+    font-size: $min;
+
+    @if $hmin and $hmax {
+      line-height: $hmin;
+    }
+    @media screen and (min-width: $vmin) {
+      // stylelint-disable-next-line max-line-length
+      font-size: calc(#{$min} + #{strip-unit($max - $min)} * ((100vw - #{$vmin}) / #{strip-unit($vmax - $vmin)}));
+
+      @if $hmin and $hmax {
+        // stylelint-disable-next-line max-line-length
+        line-height: calc(#{$hmin} + #{strip-unit($hmax - $hmin)} * ((100vw - #{$vmin}) / #{strip-unit($vmax - $vmin)}));
+      }
+    }
+    @media screen and (min-width: $vmax) {
+      font-size: $max;
+
+      @if $hmin and $hmax {
+        line-height: $hmax;
+      }
+    }
+  } @else {
+    // stylelint-disable-next-line declaration-no-important
+    color: $errorRed !important;
+  }
+}
+
+/**
+ * { function_description }
+ *
+ * @param      {String}  $preset  [<default>]  - The named preset
+ * @param      {String}  $color   [false]      - The color
+ */
+@mixin font($preset, $color: false) {
+  @if $preset == 'display-01' {
+    font: {
+      family: $type_header_stack;
+      weight: $type_header_weight;
+    };
+
+    letter-spacing: $type_header_spacing;
+
+    @include fluid-type(
+      768px,
+      1400px,
+      px($type-min-font-size-display-01),
+      px($type-max-font-size-display-01),
+      px($type-min-line-height-display-01),
+      px($type-max-line-height-display-01)
+    );
+
+  } @else if $preset == 'display-02' {
+    font: {
+      family: $type_header_stack;
+      weight: $type_header_weight;
+    };
+
+    letter-spacing: $type_header_spacing;
+
+    @include fluid-type(
+      768px,
+      1400px,
+      px($type-min-font-size-display-02),
+      px($type-max-font-size-display-02),
+      px($type-min-line-height-display-02),
+      px($type-max-line-height-display-02)
+    );
+
+  } @else if $preset == 'heading-01' {
+    font: {
+      family: $type_header_stack;
+      weight: $type_header_weight;
+    };
+
+    letter-spacing: $type_header_spacing;
+
+    @include fluid-type(
+      768px,
+      1400px,
+      px($type-min-font-size-heading-01),
+      px($type-max-font-size-heading-01),
+      px($type-min-line-height-heading-01),
+      px($type-max-line-height-heading-01)
+    );
+
+  } @else if $preset == 'heading-02' {
+    font: {
+      family: $type_header_stack;
+      weight: $type_header_weight;
+    };
+
+    letter-spacing: $type_header_spacing;
+
+    @include fluid-type(
+      768px,
+      1400px,
+      px($type-min-font-size-heading-02),
+      px($type-max-font-size-heading-02),
+      px($type-min-line-height-heading-02),
+      px($type-max-line-height-heading-02)
+    );
+
+  } @else if $preset == 'heading-03' {
+    font: {
+      family: $type_header_stack;
+      weight: $type_header_weight;
+    };
+
+    letter-spacing: $type_header_spacing;
+
+    @include fluid-type(
+      768px,
+      1400px,
+      px($type-min-font-size-heading-03),
+      px($type-max-font-size-heading-03),
+      px($type-min-line-height-heading-03),
+      px($type-max-line-height-heading-03)
+    );
+
+  } @else if $preset == 'heading-04' {
+    font: {
+      family: $type_base_stack;
+      weight: $type_header_weight;
+    };
+
+    letter-spacing: $type_header_spacing_compressed;
+
+    @include fluid-type(
+      768px,
+      1400px,
+      px($type-min-font-size-heading-03),
+      px($type-max-font-size-heading-03),
+      px($type-min-line-height-heading-03),
+      px($type-max-line-height-heading-03)
+    );
+
+  } @else if $preset == 'body-long-01' {
+    font: {
+      family: $type_base_stack;
+      weight: $type_base_weight;
+    };
+
+    letter-spacing: $type_header_spacing_compressed;
+
+    @include fluid-type(
+      768px,
+      1400px,
+      px($type-min-font-size-body-01),
+      px($type-max-font-size-body-01),
+      px($type-min-line-height-body-01),
+      px($type-max-line-height-body-01)
+    );
+
+  } @else if $preset == 'body-short-01' {
+    font: {
+      family: $type_base_stack;
+      size: $type_base_size;
+      weight: $type_base_weight;
+    };
+
+    letter-spacing: $type_base_spacing;
+    line-height: $type-base-line-height;
+
+  } @else if $preset == 'body-short-02' {
+    font: {
+      family: $type_base_stack;
+      size: $type-font-size-body-02;
+      weight: $type_base_weight;
+    };
+
+    letter-spacing: $type_base_spacing;
+    line-height: $type-line-height-body-02;
+
+  } @else if $preset == 'blockquote-01' {
+    font: {
+      family: $type_header_stack;
+      size: $type-font-size-blockquote-01;
+      weight: $type_header_weight;
+    };
+
+    line-height: $type-line-height-blockquote-01;
+    letter-spacing: $type_base_spacing;
+
+  } @else if $preset == 'button-01' {
+    font: {
+      family: $type_base_stack;
+      size: $type-font-size-button-01;
+      weight: bold;
+    };
+
+    line-height: $type-line-height-button-01;
+    letter-spacing: $type_base_spacing;
+    color: $colorBtnPrimaryText;
+
+  } @else if $preset == 'button-02' {
+    font: {
+      family: $type_base_stack;
+      size: $type-font-size-button-02;
+      weight: bold;
+    };
+
+    line-height: $type-line-height-button-02;
+    letter-spacing: $type_base_spacing;
+
+  } @else if $preset == 'input-01' {
+    font: {
+      family: $type_base_stack;
+      size: $type-font-size-input-01;
+      weight: normal;
+    };
+
+    line-height: $type-line-height-input-01;
+    letter-spacing: $type_base_spacing;
+    color: $color-input-color;
+
+  } @else if $preset == 'label-01' {
+    font: {
+      family: $type_base_stack;
+      size: $type-font-size-label-01;
+      weight: bold;
+    };
+
+    letter-spacing: $type_base_spacing;
+    line-height: $type-line-height-label-01;
+    color: $color-text-muted;
+
+  } @else if $preset == 'caption-01' {
+    font: {
+      family: $type_base_stack;
+      size: $type-font-size-caption-01;
+      weight: $type_base_weight;
+    };
+
+    line-height: $type-line-height-caption-01;
+    letter-spacing: $type_base_spacing;
+    color: $color-text-muted;
+
+  } @else if $preset == 'helper-01' {
+    font: {
+      family: $type_base_stack;
+      size: $type-font-size-helper-01;
+      weight: $type_base_weight;
+    };
+
+    line-height: $type-line-height-helper-01;
+    letter-spacing: $type_base_spacing;
+    color: $color-text-muted;
+
+  } @else if $preset == 'big-price-01' {
+    font: {
+      family: $type_base_stack;
+      weight: $type_base_weight;
+      size: $type-font-size-big-price-01;
+    };
+
+    line-height: 1.5;
+    letter-spacing: $type_header_spacing_compressed;
+
+  } @else if $preset == 'eve-icon' {
+    font: normal normal normal #{$icon-width}/1 $icon-font;
+    letter-spacing: inherit;
+    speak: none;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  } @else if $preset == 'code-01' {
+    font: {
+      family: $type_base_stack;
+      size: 1.3rem;
+      weight: bold;
+    };
+
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  } @else {
+    @error '"#{$preset}" is not a valid font';
+  }
+}

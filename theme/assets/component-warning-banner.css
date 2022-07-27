@@ -1,0 +1,7 @@
+/**
+ * This is a compiled CSS file.
+ * Changes here could be overwritten. 
+ * Contact your Shopify developers if changes need to be made.
+ */
+
+.warning-banner--modal-style{padding-right:1.5rem;padding-left:1.5rem}@media screen and (min-width: 750px){.warning-banner--modal-style{padding-right:5rem;padding-left:5rem}}.warning-banner__banner{position:relative}.warning-banner--modal-style .warning-banner__banner{padding:2.5rem 3.5rem;border-radius:var(--popup-corner-radius);border-color:rgba(var(--color-foreground), var(--popup-border-opacity));border-style:solid;border-width:var(--popup-border-width)}.warning-banner__contents{display:flex}.warning-banner__close{height:4.4rem;width:4.4rem;position:absolute;top:0;right:0}.warning-banner__icon{margin-right:2rem}.warning-banner__icon .icon{vertical-align:sub;fill:currentColor;flex:1}.warning-banner__header{margin-top:0;padding-right:40px}.warning-banner__message p:last-child{margin-bottom:0}.warning-banner__message a{color:inherit}

@@ -1,0 +1,77 @@
+@import '../partials/_variables';
+
+$colour-swatch-size: 50px;
+$colour-swatch-size--collection: 33px;
+
+.colour-swatch {
+    width: $colour-swatch-size;
+    height: $colour-swatch-size;    
+
+    display: inline-block;
+    position: relative;
+    margin: 0.5rem 0.5rem 0.5rem 0;
+    font-size: 1.4rem;
+    line-height: 1;
+    letter-spacing: 0.1rem;
+    text-align: center;
+    cursor: pointer;
+
+    border: 1px solid $color-base-grey-03;
+    border-radius: 100%;
+
+    background-color: $color-base-grey-01;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    box-shadow: 0 0 0 1px $color-base-grey-03;
+    transition: box-shadow 0.2s ease;
+
+    &:before {
+        content: "";
+        position: absolute;
+        border-color: #FFF;
+        border-style: solid;
+        border-width: 4px;
+        border-radius: 100%;
+        top: -1px;
+        left: -1px;
+        right: -1px;
+        bottom: -1px;
+    }
+
+    .collection-colour-swatches & {
+        width: $colour-swatch-size--collection;
+        height: $colour-swatch-size--collection;
+
+        &:before {
+            border-width: 3px;
+        }
+    }
+}
+
+input[type=radio]:checked + .colour-swatch,
+.collection-colour-swatches .colour-swatch:hover {
+    box-shadow: 0 0 0 2px #{rgb(var(--color-foreground))} !important;
+}
+
+.collection-colour-swatches {
+    z-index: 1;
+}
+
+
+// Collection template Swatch hovering functionality
+@media screen and (min-width: 990px) {
+    .collection-colour-image {
+        opacity: 0;
+        will-change: transform, opacity;
+        transition: transform var(--duration-long) ease, opacity var(--duration-long) ease;
+    }
+
+    .collection-colour-image.is-active {
+        opacity: 1 !important;
+        transition: transform var(--duration-long) ease !important;
+        transform: scale(1.03) !important;
+        z-index: 1 !important;
+    }
+}

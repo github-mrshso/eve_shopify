@@ -1,0 +1,239 @@
+@mixin make-icon-button($width) {
+  $padding: (($icon-button-width - $width) / 2);
+
+  font-size: $width;
+  width: $min-touch-area;
+  height: $min-touch-area;
+  margin: -#{$padding};
+  padding: #{$padding};
+
+  .nc-icon ~ .nc-icon,
+  .loader {
+    top: $padding;
+    left: $padding;
+  }
+}
+
+@mixin icon-button {
+  @include font('eve-icon');
+  @include make-icon-button($icon-width);
+
+  position: relative;
+  vertical-align: text-bottom;
+  display: inline-block;
+  color: $color-icon-button;
+  transition: color $transition-speed $transition-ease;
+  border: none;
+  background-color: transparent;
+  font-family: inherit;
+
+  &,
+  &:hover,
+  &:active {
+    background: transparent;
+  }
+
+  &:hover,
+  &:active {
+    color: $color-icon-button-hover;
+  }
+
+  &.is-disabled,
+  &:disabled {
+    color: $color-icon-button-disabled;
+    pointer-events: none;
+  }
+
+  &.is-loading {
+    &,
+    &:disabled {
+      color: $color-icon-button;
+      pointer-events: none;
+    }
+  }
+}
+
+.icon-btn {
+  @include icon-button;
+
+  .nc-icon ~ .nc-icon,
+  .loader {
+    position: absolute;
+  }
+
+  .loader {
+    margin: 0;
+    opacity: 0;
+  }
+
+  &.is-loading {
+    .nc-icon {
+      opacity: 0 !important;
+    }
+
+    .loader {
+      opacity: 1;
+    }
+  }
+}
+
+.icon-btn--light {
+  color: $color-icon-button-light;
+
+  &.icon-button--hover,
+  &:hover {
+    color: $color-icon-button-light-hover;
+  }
+
+  &:disabled {
+    color: $color-icon-button-light-disabled;
+  }
+}
+
+.icon-btn--medium {
+  @include make-icon-button($icon-width-md);
+}
+
+.icon-btn--large {
+  @include make-icon-button($icon-width-lg);
+}
+
+.icon-btn__badge {
+  $color-guard-width: 2px;
+  @include font(caption-01);
+
+  position: absolute;
+  top: 2px; // Magic number, get over it!
+  right: 0;
+  color: $color-body;
+  display: block;
+  margin: 0;
+  border-radius: 50%;
+  border: $color-guard-width solid $color-body-bg;
+  background-color: $color-icon-button-badge-bg;
+  width: $icon-button-badge-width;
+  height: $icon-button-badge-width;
+  line-height: calc(#{$icon-button-badge-width} - #{$color-guard-width * 2});
+  text-align: center;
+}
+
+.icon-btn--nav {
+  $stroke-width: 2px;
+  $stroke-gap: 6px;
+  $bar-3-length: $icon-width-lg;
+  $bar-1-length: 0.75rem;
+  $bar-2-length: #{$icon-width-lg - (($bar-3-length - $bar-1-length) / 2)};
+
+  display: block;
+  max: {
+    height: none;
+    width: none;
+  }
+
+  .icon-button__inner {
+    position: relative;
+    display: block;
+    height: (3 * $stroke-width) + (2 * $stroke-gap);
+  }
+
+  .icon-button__bars {
+    top: auto;
+    bottom: 0;
+    margin-top: $stroke-width / -2;
+    width: $bar-3-length;
+
+    &,
+    &::before,
+    &::after {
+      position: absolute;
+      display: block;
+      height: $stroke-width;
+      background-color: $color-icon-button;
+      border-radius: $stroke-width;
+      transition: {
+        property: transform, background-color, width;
+        duration: $transition-speed;
+        timing-function: $transition-ease;
+      };
+    }
+
+    &::before,
+    &::after {
+      content: '';
+    }
+
+    &::before {
+      top: ($stroke-gap + $stroke-width) * -1;
+      width: $bar-2-length;
+      // stylelint-disable indentation
+      transition: width $transition-speed $transition-ease,
+                  background-color $transition-speed $transition-ease,
+                  top 0.12s 0.2s cubic-bezier(0.3333, 0.6667, 0.6667, 1),
+                  transform 0.13s cubic-bezier(0.55, 0.055, 0.675, 0.19);
+      // stylelint-enable indentation
+    }
+
+    &::after {
+      top: ($stroke-gap * 2 + $stroke-width * 2) * -1;
+      bottom: ($stroke-gap + $stroke-width) * -1;
+      width: $bar-1-length;
+      // stylelint-disable indentation
+      transition: width $transition-speed $transition-ease,
+                  background-color $transition-speed $transition-ease,
+                  top 0.2s 0.2s cubic-bezier(0.3333, 0.6667, 0.6667, 1),
+                  opacity 0.1s linear;
+      // stylelint-enable indentation
+    }
+  }
+
+  &:hover {
+    .icon-button__bars {
+      &,
+      &::before,
+      &::after {
+        background-color: $color-icon-button-hover;
+      }
+    }
+  }
+
+  &.is-active {
+    .icon-button__bars {
+      transform: translate(0, -#{$stroke-gap + $stroke-width}) rotate(-45deg);
+      // stylelint-disable indentation, max-line-length
+      transition: width $transition-speed $transition-ease,
+                  background-color $transition-speed $transition-ease,
+                  transform $transition-speed cubic-bezier(0.215, 0.61, 0.355, 1) 0.22s;
+      // stylelint-enable indentation, max-line-length
+
+      &::before {
+        top: 0;
+        transform: rotate(-90deg);
+        // stylelint-disable indentation
+        transition: width $transition-speed $transition-ease,
+                    background-color $transition-speed $transition-ease,
+                    top 0.1s 0.16s cubic-bezier(0.3333, 0, 0.6667, 0.3333),
+                    transform 0.13s 0.25s cubic-bezier(0.215, 0.61, 0.355, 1);
+        // stylelint-enable indentation
+      }
+
+      &::after {
+        top: 0;
+        opacity: 0;
+        // stylelint-disable indentation
+        transition: width $transition-speed $transition-ease,
+                    background-color $transition-speed $transition-ease,
+                    top 0.2s cubic-bezier(0.3333, 0, 0.6667, 0.3333),
+                    opacity 0.1s 0.22s linear;
+        // stylelint-enable indentation
+      }
+
+      &,
+      &::before,
+      &::after {
+        $sqrt-2: 1.4142;
+
+        width: ($sqrt-2 * 1.5rem);
+      }
+    }
+  }
+}

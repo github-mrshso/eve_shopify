@@ -1,0 +1,96 @@
+.feed__hero {
+  @extend %blog-width;
+  margin: {
+    top: px(3.25rem);
+    bottom: $gutter;
+  }
+
+  @include media-query('feed-2-cols') {
+    max-width: ($card-img-width-feed-hero + ($page-width-gutter-small * 2));
+  }
+
+  @include media-query('feed-hero-leaves-full-bleed') {
+    padding: {
+      left: $page-width-gutter-small;
+      right: $page-width-gutter-small;
+    }
+  }
+}
+
+.feed__body {
+  @extend %blog-width;
+}
+
+.feed__filter {
+  margin: $gutter 0;
+}
+
+.feed__list {
+  display: grid;
+  grid-template-columns: 1fr;
+  column-gap: $feed-gutter;
+  row-gap: $feed-gutter;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  &.is-loading {
+    display: none;
+  }
+
+  @include media-query('feed-2-cols') {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include media-query('feed-3-cols') {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.feed__loading {
+  width: 160px;
+  margin: $gutter auto;
+
+  .loader {
+    margin: 0;
+  }
+}
+
+.feed__intro {
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  justify-content: center;
+
+  svg, img {
+    display: block;
+    margin-bottom: px(2rem);
+    max-width: 100%;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  strong {
+    @include font('heading-01');
+
+    margin-bottom: px(2rem);
+  }
+}
+
+.feed__footer {
+  @extend %blog-width;
+  margin: {
+    top: ($gutter * 2);
+    bottom: ($gutter * 2);
+  }
+
+  text-align: center;
+
+  .pagination {
+    // TODO: remove this from the base component or add it as margin so that it
+    // will collapse
+    padding: 0;
+  }
+}

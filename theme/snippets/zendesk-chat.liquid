@@ -1,0 +1,9 @@
+{% if settings.zendesk_chat %}    
+    <script>
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.id = 'ze-snippet';
+        script.src = 'https://static.zdassets.com/ekr/snippet.js?key=258253cd-5440-45d8-9088-939fd65e55b6';
+        document.getElementsByTagName('head')[0].appendChild(script);
+    </script>
+{% endif %}

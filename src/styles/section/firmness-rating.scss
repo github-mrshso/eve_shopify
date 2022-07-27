@@ -1,0 +1,117 @@
+@use 'sass:list';
+
+@import '../partials/_variables';
+@import '../partials/_mixins';
+
+$firmness-sun-width: 68px;
+$firmness-line-width: 2px;
+$firmness-line-spacing: 8px;
+$firmness-value-fade-duration: 2s;
+$firmness-value-fade-delay: 1s;
+$firmness-sun-fade-duration: 2s;
+$firmness-sun-fade-delay: 0s;
+$firmness-steps: (
+  'soft',
+  'medium-soft',
+  'medium',
+  'medium-firm',
+  'firm'
+);
+
+.firmness-scale {
+  position: relative;
+  display: flex;
+  border-top: $firmness-line-width solid $color-primary;
+  margin-top: $firmness-sun-width;
+  padding-top: $firmness-line-spacing;
+  font-size: 0.875rem;
+
+  &::before,
+  &::after {
+    display: block;
+    flex: 0 0 auto;
+  }
+
+  &::before {
+    content: attr(data-label-from);
+  }
+
+  &::after {
+    content: attr(data-label-to);
+    text-align: right;
+  }
+}
+
+.firmness-scale__value {
+  position: relative;
+  display: block;
+  flex: 0 0 $firmness-sun-width;
+  font-weight: bold;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.firmness-scale__label {
+  display: block;
+  opacity: 0;
+}
+
+.firmness-scale__sun {
+  position: absolute;
+  bottom: calc(100% + #{$firmness-line-spacing});
+  left: 50%;
+  transform: translateX(-50%);
+  display: block;
+  overflow: hidden;
+  width: $firmness-sun-width;
+  height: calc($firmness-sun-width / 2);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    display: block;
+    width: $firmness-sun-width;
+    height: calc($firmness-sun-width / 2);
+    background-color: $color-primary;
+    border-radius: $firmness-sun-width $firmness-sun-width 0 0;
+  }
+}
+
+@each $step in $firmness-steps {
+  $name: $step;
+  $level: list.index($firmness-steps, $step) - 1;
+  $length: list.length($firmness-steps) - 1;
+
+  .firmness-scale--#{$name} {
+    &::before {
+      flex-grow: ($length - ($length - $level));
+
+      @if $level == 0 {
+        display: none;
+      }
+    }
+
+    &::after {
+      flex-grow: ($length - $level);
+
+      @if $level == $length {
+        display: none;
+      }
+    }
+  }
+}
+
+.firmness-scale.is-visible {
+  .firmness-scale__label {
+    opacity: 1;
+    // stylelint-disable-next-line max-line-length
+    transition: opacity $firmness-value-fade-duration ease $firmness-value-fade-delay;
+  }
+
+  .firmness-scale__sun::before {
+    top: 0;
+    transition: top $firmness-sun-fade-duration ease $firmness-sun-fade-delay;
+  }
+}

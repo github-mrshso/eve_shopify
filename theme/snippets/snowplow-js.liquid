@@ -1,0 +1,34 @@
+{% if settings.snowplow_enabled and settings.snowplow_version != blank %}
+
+  <!-- Snowplow starts plowing -->
+  <script type="text/javascript">
+    ;(function(p,l,o,w,i,n,g){if(!p[i]){p.GlobalSnowplowNamespace=p.GlobalSnowplowNamespace||[];
+    p.GlobalSnowplowNamespace.push(i);p[i]=function(){(p[i].q=p[i].q||[]).push(arguments)
+    };p[i].q=p[i].q||[];n=l.createElement(o);g=l.getElementsByTagName(o)[0];n.async=1;
+    n.src=w;g.parentNode.insertBefore(n,g)}}(window,document,"script",
+      "//dgp6rrt0p5s4p.cloudfront.net/{{ settings.snowplow_version }}/sp.js","snowplow"));
+
+    // Initialise tracker
+    snowplow(
+      'newTracker',
+      '{{ settings.snowplow_locale }}',
+      '{{ settings.snowplow_endpoint }}',
+      {
+        appId: "{{ settings.snowplow_app_id }}", // descriptive filter field
+        platform: 'web',
+        discoverRootDomain: true,
+        eventMethod: 'post',                     // POST recommended
+        contexts: {
+          webPage: true,                         // automatically tracked entities list
+          performanceTiming: true
+        }
+      },
+    );
+    snowplow('enableLinkClickTracking');         // track every <a> link click
+    snowplow('enableFormTracking');              // track every html form interaction
+    snowplow('enableActivityTracking', 10, 10);  // first ping 10 seconds after the page-view, subsequently every 10 seconds
+    snowplow('trackPageView');                   // track every page view
+  </script>
+  <!-- Snowplow stops plowing -->
+
+{% endif %}

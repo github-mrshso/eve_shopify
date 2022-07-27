@@ -1,0 +1,53 @@
+{%- liquid
+    if product.compare_at_price > product.price
+        assign compare_price = product.compare_at_price | times: 1.0
+        assign new_price = product.price | divided_by: compare_price | times: 100
+        assign sale_percent = 100 | minus: new_price | round
+    endif
+      
+    assign sale_percent_varies = -1
+    assign sale_percent_compare = false
+      
+    for variant in product.variants
+        if variant.compare_at_price > variant.price
+            assign variant_compare_price = variant.compare_at_price | times: 1.0
+            assign variant_new_price = variant.price | divided_by: variant_compare_price | times: 100
+            assign variant_sale_percent = 100 | minus: variant_new_price | round
+            
+            if sale_percent_compare != variant_sale_percent
+                assign sale_percent_varies = sale_percent_varies | plus: 1
+            endif
+      
+            if sale_percent_compare > variant_sale_percent
+                assign sale_percent = sale_percent_compare
+            else
+                assign sale_percent = variant_sale_percent
+            endif
+      
+            assign sale_percent_compare = variant_sale_percent
+        else
+            assign variant_no_sale = true
+        endif
+      endfor
+-%}
+{%- if settings.sale_badge_as_percentage -%}
+    {%- if template contains 'product' -%}
+        <span class="badge badge--sale" style="display: none;" js-variant-sale-percent>
+            {{- 'products.product.on_sale_percentage' | t: discount: sale_percent -}}
+        </span>
+    {%- else -%}
+        {%- if sale_percent_varies > 0 or variant_no_sale -%}
+            <span class="badge badge--sale">
+                {{- 'products.product.on_sale_percentage_up_to' | t: discount: sale_percent -}}
+            </span>
+        {%- else -%}
+            <span class="badge badge--sale">
+                {{- 'products.product.on_sale_percentage' | t: discount: sale_percent -}}
+            </span>
+        {%- endif -%}
+    {%- endif -%}
+{%- else -%}
+    <span class="badge badge--sale">
+        {{- 'products.product.on_sale' | t -}}
+    </span>
+{%- endif -%}

@@ -1,0 +1,110 @@
+@use 'sass:list';
+
+// stylelint-disable max-line-length
+
+/**
+ * Convert REM values to PX values
+ *
+ * @param      {number}  $rems    The rem value to be converted
+ * @param      {number}  $root    [$font-size-root]  - The root font size
+ *
+ * @return     {string}  The pixel value converted with REM units
+ */
+@function px($rems, $root: 16) {
+  $int: strip-unit($rems);
+
+  @return ($int * $root) * 1px;
+}
+
+/**
+ * Convert PX values to EM values
+ *
+ * @param      {number}  $pixels  The pixel value to be converted
+ * @param      {number}  $root    [$font-size-root]  - The root font size
+ *
+ * @return     {string}  The pixel value converted with EM units
+ */
+@function em($pixels, $root: $type-base-size) {
+  @if $pixels == 0 {
+    @return 0;
+  }
+
+  @return $pixels / $root + 0;
+}
+
+/**
+ * Strips units from a value
+ *
+ * @param      {string}  $value  [<default>]  - The value to be stripped
+ *
+ * @return     {number}  The numerical element of the value
+ */
+@function strip-unit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+/**
+ * Find and replace strings within another string
+ *
+ * @param      {<type>}  $haystack  The haystack
+ * @param      {<type>}  $needle    The needle
+ * @param      {<type>}  $replace   The string with which to replace the needle
+ *
+ * @return     {<type>}  The new string with the needle replaced
+ */
+@function str-replace($haystack, $needle, $replace: '') {
+  $index: list.index($haystack, $needle);
+
+  @if $index {
+    @return str-slice($haystack, 1, $index - 1) + $replace + str-replace(str-slice($haystack, $index + str-length($needle)), $needle, $replace);
+  }
+
+  @return $haystack;
+}
+
+/**
+ * URL encodes a SVG string for sue as a data URI
+ *
+ * @param      {string}  $svg    The SVG in string form
+ *
+ * @return     {string}  The SVG in string form with non-URL chars replaced
+ */
+@function encode-svg($svg) {
+  // #([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})
+  $icon-encoded: $svg;
+  $replaces: (
+    '%':  '%25',
+    '<':  '%3C',
+    '>':  '%3E',
+    ' ':  '%20',
+    '!':  '%21',
+    '*':  '%2A',
+    '(':  '%28',
+    ')':  '%29',
+    ';':  '%3B',
+    ':':  '%3A',
+    '@':  '%40',
+    '&':  '%26',
+    '=':  '%3D',
+    '+':  '%2B',
+    '$':  '%24',
+    ',':  '%2C',
+    '/':  '%2F',
+    '?':  '%3F',
+    '#': '%23',
+    '[': '%5B',
+    ']': '%5D',
+    "'": '%27'
+  );
+
+  @each $needle, $replace in $replaces {
+    // stylelint-disable-next-line scss/no-duplicate-dollar-variables
+    $icon-encoded: str-replace($icon-encoded, $needle, $replace);
+  }
+
+  @return 'data:image/svg+xml;utf8,#{$icon-encoded}';
+}
+
+@function unicode($str) {
+  @return unquote("\"\\#{$str}\"");
+}

@@ -1,0 +1,32 @@
+{% comment %}
+  When sending a string through this snippet any words wrapped in * will be
+  converted to <em>.
+
+  It works by splitting the string by the deliminator and wrapping every
+  even-indexed element in an <em> tag.
+
+  e.g.
+
+  *consider* this string => ['', 'consider', 'this string'] => consider
+  consider *this* string => ['consider', 'this', 'string'] => this
+  consider this *string* => ['consider this', 'string'] => string
+{% endcomment %}
+
+{%- liquid
+  assign text = text | default: ''
+  assign parts = text | split: '*'
+
+  if parts.size > 1
+    for part in parts
+      assign is_even = forloop.index | modulo: 2
+
+      if is_even == 0
+        echo '<em>' | append: part | append: '</em>'
+      else
+        echo part
+      endif
+    endfor
+  else
+    echo text
+  endif
+-%}

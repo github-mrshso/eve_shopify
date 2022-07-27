@@ -1,0 +1,8 @@
+root: theme
+
+MatchingTranslations:
+  enabled: false
+
+UndefinedObject:
+  enabled: false
+  exclude_snippets: true

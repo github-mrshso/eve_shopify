@@ -1,0 +1,385 @@
+@use 'sass:list';
+@use 'sass:math';
+
+@import '../partials/_variables';
+@import '../partials/_mixins';
+@import '../partials/_typography';
+
+// stylelint-disable max-line-length, scss/dollar-variable-colon-space-after
+$promo-bar-height:                   65px;
+$promo-bar-height-mobile:            100px;
+$promo-bar-font-size-sm:             $type-font-size-label-01;
+$promo-bar-font-size-lg:             $type-min-font-size-body-01;
+$promo-bar-animation-duration:       2s;
+$promo-bar-animation-delay:          2s;
+$promo-bar-animation-ease:           ease;
+$promo-bar-animation-config:         $promo-bar-animation-duration $promo-bar-animation-ease $promo-bar-animation-delay forwards;
+$promo-bar-content-animation-config: $promo-bar-animation-duration $promo-bar-animation-ease ($promo-bar-animation-delay * 1.5) forwards;
+$promo-bar-sun-min-width:            100px;
+$promo-bar-sun-active-growth:        0.15rem;
+$promo-bar-sun-bg:                   $color-primary;
+$promo-bar-sun-hover-bg:             $color-primary-hover;
+$promo-bar-star-bg:                  $color-base-white;
+$promo-bar-nighttime-color:          $color-primary;
+$promo-bar-nighttime-bg:             $color-body;
+$promo-bar-daytime-color:            $color-body;
+$promo-bar-daytime-bg:               $color-grey-bg;
+$promo-bar-spacing:                  $padding-l;
+$color-code-copied-color:            $color-success;
+$color-code-copied-bg:               $color-base-white;
+$promo-bar-cta-color:                $color-link-hover-color;
+$promo-bar-cta-hover-color:          $color-link-color;
+$promo-bar-code-shift:               ($page-width-gutter-small + 10px);
+$grid-breakpoints: list.join($grid-breakpoints, (
+  'promo-bar-is-compressed' '(max-width: 599px)',
+  'promo-bar-can-expand' '(min-width: 600px)'
+));
+// stylelint-enable max-line-length, scss/dollar-variable-colon-space-after
+
+.promo-bar {
+  position: relative;
+  z-index: $z-index-promo-bar;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  padding: 0 $page-width-gutter-small;
+  color: $promo-bar-nighttime-color;
+  background: $promo-bar-nighttime-bg;
+  transition: height $transition-speed $transition-ease;
+  animation: switch-bar-color $promo-bar-animation-config;
+
+  &.is-shown {
+    min-height: $promo-bar-height;
+  }
+
+  &.promo-bar--countdown {
+    @include media-query($small) {
+      height: $promo-bar-height-mobile;
+    }
+  }
+
+  &.is-hidden {
+    height: 0;
+  }
+
+  button {
+    border: none;
+    background-color: transparent;
+    
+    &.promo-bar__cta {
+      border-bottom-color: #949494;
+      border-bottom-width: 1px;
+      border-bottom-style: solid;
+    }
+  }
+}
+
+.promo-bar__copy {
+  position: relative;
+  z-index: $z-index-promo-bar-text;
+  flex: 0 1 auto;
+}
+
+.promo-bar__text {
+  padding: 1rem 0;
+
+  font: {
+    family: $type_header_stack;
+    weight: $type_header_weight;
+    size: $promo-bar-font-size-sm;
+  }
+
+  opacity: 0;
+  animation: fade-in-code $promo-bar-content-animation-config;
+}
+
+.promo-bar__cta {
+  cursor: pointer;
+  font: inherit;
+  padding: 3px 2px 0px;
+  color: $promo-bar-cta-color;
+  line-height: normal;
+  transition: {
+    duration: $transition-speed;
+    timing-function: $transition-ease;
+    property: color, border-color;
+  }
+
+  &:hover,
+  &:focus {
+    color: $promo-bar-cta-hover-color
+  }
+}
+
+.promo-bar__countdown {
+  z-index: $z-index-promo-bar-countdown;
+  display: block;
+  animation: fade-in-code $promo-bar-content-animation-config;
+  opacity: 0;
+  margin-top: 0.25rem;
+  font-size: 12px;
+}
+
+.promo-bar__code {
+  position: relative;
+  z-index: $z-index-promo-bar-sun;
+  flex: 0 0 auto;
+  padding: 0;
+  min-width: 113px;
+  margin: 0 0 0 $padding-s;
+
+  // Temporarily hidden until we get site-notifications working to indicate that
+  // code is has been copied
+
+  // &:hover,
+  // &.is-copied {
+  //   &::after {
+  //     background: $promo-bar-sun-hover-bg;
+  //     box-shadow: 0 0 0 $promo-bar-sun-active-growth $promo-bar-sun-hover-bg;
+  //   }
+  // }
+
+  // &:active {
+  //   &::after {
+  //     background: $promo-bar-sun-bg;
+  //     box-shadow: 0 0 0 0 $promo-bar-sun-bg;;
+  //   }
+  // }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: $z-index-promo-bar-sun;
+    display: block;
+    width: 100%;
+    padding-bottom: 100%;
+    border-radius: 50%;
+    background: $promo-bar-sun-bg;
+    box-shadow: 0 0 0 0 $promo-bar-sun-bg;
+    transform: translate(-20%, 50%);
+    transition: {
+      property: background, box-shadow, width, padding;
+      duration: calc($transition-speed / 2);
+      timing-function: $transition-ease;
+    }
+
+    animation: raise-the-sun $promo-bar-animation-config;
+  }
+}
+
+.promo-bar__code-content {
+  font-size: 0.75rem;
+  position: relative;
+  z-index: $z-index-promo-bar-code;
+  opacity: 0;
+  animation: fade-in-code $promo-bar-content-animation-config;
+  display: block;
+  text-align: center;
+  padding: 0 $page-width-gutter-small;
+  cursor: copy;
+
+  span {
+    @include font('code-01');
+
+    display: block;
+  }
+}
+
+.stars {
+  z-index: $z-index-promo-bar-stars;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  animation: hide-stars $promo-bar-animation-config;
+
+  .star-container {
+    $star-num: 40; // if changing, match amount of .star div's on the frontend
+    $star-base-size: 2;
+
+    position: absolute;
+    animation: {
+      iteration-count: infinite;
+      timing-function: linear;
+    }
+
+    @for $i from 1 through $star-num {
+      &:nth-child(#{$i}) {
+        $circle-size: math.random(3);
+        $start-position-y: math.random(50);
+        $start-position-x: math.random(100);
+
+        width: $circle-size + px;
+        height: $circle-size + px;
+        transform: translate3d(
+          #{$start-position-x + vw},
+          #{$start-position-y + px},
+          0
+        );
+      }
+    }
+  }
+
+  .star {
+    width: 120%;
+    height: 120%;
+    border-radius: 50%;
+    background-color: $promo-bar-star-bg;
+  }
+}
+
+.promo-bar--countdown {
+  .promo-bar__copy {
+    flex: 1 1 auto;
+    justify-content: center;
+    align-items: center;
+
+    // We hide the code that accompanies the text. This is only shown on wider
+    // screens. there is another identical code that is a sibling to the copy
+    // wrapper which gets shown on mobile devices.
+    .promo-bar__code {
+      display: none;
+    }
+  }
+
+  .promo-bar__text,
+  .promo-bar__countdown {
+    // @include fluid-type(320px, 450px, 10px, 14px, 12px, 16px);
+
+    flex: 1 1 auto;
+  }
+
+  .promo-bar__code {
+    margin: {
+      left: 0.25rem;
+      right: -#{$promo-bar-code-shift};
+    }
+  }
+
+  .promo-bar__code-content {
+    padding: 0 $page-width-gutter-small;
+  }
+}
+
+@include media-query('promo-bar-can-expand') {
+  .promo-bar__text {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    font-size: $promo-bar-font-size-lg;
+  }
+
+  .promo-bar--countdown {
+    flex-flow: row nowrap;
+    padding: 0 $page-width-gutter-small;
+
+    .promo-bar__copy {
+      display: flex;
+      flex-flow: row nowrap;
+      height: 100%;
+
+      .promo-bar__code {
+        display: block;
+      }
+    }
+
+    .promo-bar__text,
+    .promo-bar__countdown {
+      flex-basis: 50%;
+    }
+
+    .promo-bar__text {
+      font-size: $promo-bar-font-size-lg;
+      order: 1;
+      margin-bottom: 0;
+      line-height: 1.4;
+    }
+
+    .promo-bar__countdown {
+      margin-top: 0;
+      order: 3;
+    }
+
+    .promo-bar__code {
+      position: relative;
+      top: 0;
+      right: 0;
+      flex: 0 0 auto;
+      order: 2;
+      transform: translateY(0);
+      margin: {
+        left: $promo-bar-spacing;
+        right: $promo-bar-spacing;
+      };
+
+      display: none;
+
+      &::after {
+        border-radius: 50%;
+      }
+    }
+
+    .promo-bar__code-content {
+      span {
+        font-size: $type-min-font-size-body-01;
+      }
+    }
+  }
+}
+
+// Animations
+
+@keyframes hide-stars {
+  0% {
+    opacity: 1;
+  }
+
+  99% {
+    opacity: 0;
+    display: block;
+  }
+
+  100% {
+    opacity: 0;
+    display: none;
+  }
+}
+
+@keyframes raise-the-sun {
+  0% {
+    transform: translate(100%, 100%);
+  }
+
+  100% {
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes switch-bar-color {
+  0% {
+    background: $promo-bar-nighttime-bg;
+    color: $promo-bar-nighttime-color;
+  }
+
+  100% {
+    background: $promo-bar-daytime-bg;
+    color: $promo-bar-daytime-color;
+  }
+}
+
+@keyframes fade-in-code {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

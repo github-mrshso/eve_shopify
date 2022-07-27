@@ -1,0 +1,18 @@
+<share-button
+  {{dataset}}
+>  
+  <button
+    type="button"
+    class="share-button"
+    data-share-button
+  >
+    {% render 'icon-list', icon: 'share' %}
+    <span class="share-button__notice">
+      {{ 'blogs.article.copied' | t }}
+    </span>
+    <span class="visually-hidden">
+      {{ 'blogs.article.share' | t }}
+    </span>
+  </button>  
+</share-button>
+<script src="{{ 'component-share-button.js' | asset_url }}" defer="defer"></script>

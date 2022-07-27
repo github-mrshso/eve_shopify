@@ -1,0 +1,10 @@
+{%- if settings.finance_enabled -%}
+  {%- case settings.finance_provider -%}
+    {%- when 'divido' -%}
+      {%- render 'divido-js-eve' -%}
+    {%- when 'alma' -%}
+      {% comment %}
+        No scripts for Alma
+      {% endcomment %}
+  {%- endcase -%}
+{%- endif -%}

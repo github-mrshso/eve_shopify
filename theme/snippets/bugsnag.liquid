@@ -1,0 +1,47 @@
+{%- if settings.bugsnag_api_key != blank -%}
+  {%- assign bugsnag_build = build_commit -%}
+  {%- assign bugsnag_region = global_region -%}
+  {%- assign bugsnag_env = build_env -%}
+  {%- assign bugsnag_release_stage = build_env -%}
+  {%- assign bugsnag_api_key = settings.bugsnag_api_key -%}
+  {%- assign bugsnag_company = settings.bugsnag_company -%}
+  {%- assign bugsnag_theme_name = theme.name -%}
+  {% comment %}
+    {%- assign bugsnag_url = '//d2wy8f7a9ursnm.cloudfront.net/v7/bugsnag.min.js' -%}
+  {% endcomment %}
+  {%- assign bugsnag_url = 'vendor-bs.js' | asset_url -%}
+
+  <link rel="preload" href="{{ bugsnag_url }}" as="script">
+  <script src="{{ bugsnag_url }}"></script>
+  <script>
+    Bugsnag.start({
+      apiKey: {{ bugsnag_api_key | json }},
+      autoCaptureSessions: true,
+      appVersion: {{ bugsnag_build | json }},
+      releaseStage: {{ bugsnag_release_stage | json }},
+      notifyReleaseStages: ['staging', 'production'],
+      metaData: {
+        env: {{ bugsnag_env | json }},
+        themeName: {{ bugsnag_theme_name | json }},
+        company: {
+          name: {{ bugsnag_company | json }},
+          country: {{ bugsnag_region | upcase | json }}
+        }
+      }
+    });
+
+    {%- if bugsnag_release_stage == 'development' -%}
+      Bugsnag = {
+        notify: function (msg, cb) {
+          if (typeof msg === 'string') {
+            console.error(msg.split(/\n/).map(function (line) {
+              return line.trim();
+            }).join(' '));
+          } else {
+            console.error(msg);
+          }
+        }
+      };
+    {%- endif -%}
+  </script>
+{%- endif -%}

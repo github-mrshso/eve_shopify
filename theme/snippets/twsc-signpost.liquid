@@ -1,0 +1,54 @@
+{{ 'section-twsc-signpost.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+.section-{{ section.id }}-padding {
+  padding-top: calc({{ section.settings.padding_top }}px * 0.75);
+  padding-bottom: calc({{ section.settings.padding_bottom }}px  * 0.75);
+}
+
+@media screen and (min-width: 750px) {
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
+}
+{%- endstyle -%}
+
+{%- liquid
+    assign copy = copy | default: 'Answer 5 quizzical questions, and we&apos;ll help you get the sleep you need to rise and shine.'
+    assign btn_copy = btn_copy | default: 'let&apos;s go'
+  -%}
+  
+  {%- if settings.twsc_enabled -%}
+    <div class="section-{{ section.id }}-padding page-width twsc-signpost">
+      <div class="twsc-signpost__img twsc-signpost__img--sm">
+        <svg>
+          <use href="#svg-twsc-logo-zeds-mobile" />
+        </svg>
+      </div>
+      <div class="twsc-signpost__img twsc-signpost__img--lg">
+        <svg>
+          <use href="#svg-twsc-logo-square-centred" />
+        </svg>
+        <div class="twsc-signpost__zeds">
+          <svg>
+            <use href="#svg-zeds-square" />
+          </svg>
+          <svg>
+            <use href="#svg-zeds-square" />
+          </svg>
+        </div>
+      </div>
+      <div class="twsc-signpost__body">
+        <p>{{ copy }}</p>
+      </div>
+      <div class="twsc-signpost__footer">
+        <a
+          class="button"
+          href="/pages/the-well-slept-club">
+          {{ btn_copy }}
+        </a>
+      </div>
+    </div>
+  {%- endif -%}
+  

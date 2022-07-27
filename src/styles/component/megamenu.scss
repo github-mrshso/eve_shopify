@@ -1,0 +1,87 @@
+// Positioning
+.has-megamenu {
+    position: static;
+}
+
+.megamenu {
+    // transform: none;
+    // opacity: 0;
+    // transition: all 300ms cubic-bezier(0.2, 0.06, 0.05, 0.95);
+    // transition-delay: .3s;
+    // visibility: hidden;
+    width: 100%;
+    margin-left: auto; 
+    margin-right: auto; 
+    left: 0;
+    right: 0;
+    min-width: 0;
+    z-index: 1;
+    top: calc(100% + 1px );
+
+    &__inner {
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 2.8rem 2rem 2rem 2rem;
+
+        .megamenu__tier {
+            padding: 0; 
+        }
+    
+        > li {
+            flex: 0 0 33%;
+            margin: 0 0 2rem 0;
+            list-style: none;
+        }
+    }
+}
+
+// Opening animation
+details[open] {
+    .megamenu {
+        // display: block;
+        // visibility: visible;
+        // transition: all 300ms cubic-bezier(0.2, 0.06, 0.05, 0.95);
+        // opacity: 1;
+        // transition-delay: 0s;
+
+        /* 
+            The above code has been commented out as the transition animations were bugging. This is due
+            to a lack of support for CSS transitions on Details & Summary HTML elements
+        */
+    }
+    .appear-animation {
+        opacity: 1;
+        transform: translateY(0px);
+        transition-delay: 0s;
+    }
+}
+
+/*
+    The below styles allow wrapped nav items to open a megamenu that is positionied 
+    beneath the header. Usually the cursor would have to down, over the other nav items
+    which would trigger a different megamenu.  
+
+    The below styles add a pathway for each nav item that opens a megamenu, allowing the 
+    cursor to move over the top of these other nav items. 
+ */
+
+summary.header__menu-item.list-menu__item:after {
+    content: "";
+    display: block;
+    width: calc(100% + 300px);
+    left: -150px;
+    top: 100%;
+    height: 50px;
+    position: absolute;
+    pointer-events: none;
+    // Uncomment for a visual representation of what these styles are doing
+    // background-color: rgba(0, 0, 255, 0.4);
+}
+
+details[open] summary.header__menu-item.list-menu__item:after {
+    pointer-events: initial;
+    // Uncomment for a visual representation of what these styles are doing
+    // background-color: rgba(0, 0, 255, 0.8); 
+}

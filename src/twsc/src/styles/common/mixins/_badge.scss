@@ -1,0 +1,7 @@
+@mixin make-badge-inverse {
+  $color-badge-inverse-text: $color-base-white;
+  $color-badge-inverse-bg: fade-out($color-body, 0.1);
+
+  color: $color-badge-inverse-text;
+  background-color: $color-badge-inverse-bg;
+}

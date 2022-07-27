@@ -1,0 +1,404 @@
+@use 'sass:list';
+
+@import '../partials/_variables';
+@import '../partials/_mixins';
+@import '../vendor/_flickity';
+
+$layers-block-max-count:                  10;
+$layers-block-transition-adjust:          0.75;
+$layers-block-transition-duration:        500ms;
+$layers-block-transition-shadow-duration: ($layers-block-transition-duration * $layers-block-transition-adjust);
+$layers-block-transition-shadow-delay:    ($layers-block-transition-duration - $layers-block-transition-shadow-duration);
+$layers-block-transition-ease:            cubic-bezier(0.785, 0.135, 0.150, 0.860);
+$layers-block-btn-font-size:              12px;
+$layers-block-btn-width:                  10px;
+$layers-block-btn-border-color:           $color-border;
+$layers-block-btn-active-width:           32px;
+$layers-block-btn-active-bg:              $color-primary;
+$layers-block-btn-active-border-color:    $layers-block-btn-active-bg;
+$layers-block-btn-focus-width:            calc($layers-block-btn-active-width / 2);
+$layers-block-btn-focus-bg:               $layers-block-btn-active-bg;
+$layers-block-btn-focus-border-color:     $layers-block-btn-focus-bg;
+
+$grid-breakpoints: list.join($grid-breakpoints, $layers-block-breakpoints);
+
+.layers-block {
+  @include set-js-flag('is-slider', 'layers-block-is-stacked');
+  @include set-js-flag('is-static', 'layers-block-can-expand');
+
+  max-width: $grid-widescreen;
+  margin: 0 auto;
+}
+
+// Slides
+.layers-block__slider {
+  order: 2;
+
+  p {
+    line-height: $type_condensed_line_height;
+  }
+}
+
+.layers-block__slide-title {
+  transition: transform $transition-speed $transition-ease;
+  line-height: normal;
+  margin: 0;
+}
+
+.layers-block__slide-btn {
+  display: block;
+  pointer-events: none;
+  text-decoration: none;
+}
+
+.layers-block__slide-icon {
+  display: none;
+
+ svg.icon {
+    color: $color-base-black !important;
+  }
+}
+
+// Diagram
+.layers-block__diagram {
+  position: relative;
+  order: 1;
+  counter-reset: pip;
+  width: 75vw;
+  margin: 0 auto $padding-l;
+}
+
+.layers-block__diagram-inner {
+  padding-bottom: 83%;
+}
+
+.layers-block__layers {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding-top: 42%;
+}
+
+.layers-block__layer {
+  position: relative;
+  width: 100%;
+  // This is magic and should be adjusted to suit the artwork
+  padding-bottom: 7%;
+  height: 0;
+  box-sizing: content-box;
+  transition: {
+    property: height;
+    duration: $layers-block-transition-duration;
+    timing-function: $layers-block-transition-ease;
+  }
+
+  img {
+    display: block;
+  }
+
+  &:nth-child(odd) {
+    .layers-block__btn {
+      // These are magic and should be adjusted to suit the artwork
+      top: 49%;
+      left: -2%;
+      transform: translate(-50%, -50%);
+    }
+  }
+
+  &:nth-child(even) {
+    .layers-block__btn {
+      top: 35%;
+      right: -1%;
+      transform: translate(50%, -50%);
+    }
+  }
+
+  @for $i from 1 through $layers-block-max-count {
+    &:nth-child(#{$i}) {
+      z-index: ($layers-block-max-count - ($i - 1));
+    }
+  }
+}
+
+.layers-block__btn {
+  $counter-name: pip;
+
+  z-index: 3;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  counter-increment: $counter-name;
+  border: 1px solid $layers-block-btn-border-color;
+  border-radius: 50%;
+  text-align: center;
+  font-size: $layers-block-btn-font-size;
+  height: $layers-block-btn-width;
+  width: $layers-block-btn-width;
+  background: $color-body-bg;
+  transition: $transition-speed $transition-ease 200ms;
+  transition-property: border-color, width, height;
+  cursor: pointer;
+  padding: 0;
+
+  &::before {
+    content: counter($counter-name);
+    opacity: 0;
+    transition: opacity $transition-speed $transition-ease;
+  }
+
+  &:hover,
+  &:focus {
+    border-color: $layers-block-btn-active-border-color;
+  }
+
+  &:hover {
+    width: $layers-block-btn-active-width;
+    height: $layers-block-btn-active-width;
+  }
+
+  &:focus:not(:hover) {
+    outline: none;
+
+    .layers-block__layer:not(.is-active) &   {
+      background-color: $layers-block-btn-focus-bg;
+      width: $layers-block-btn-focus-width;
+      height: $layers-block-btn-focus-width;
+    }
+  }
+
+  &:active {
+    background-color: $layers-block-btn-active-bg;
+  }
+
+  span {
+    display: none;
+  }
+}
+
+.layers-block__img {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+
+  img {
+    width: 100%;
+  }
+}
+
+.layers-block__shadow {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  transition: {
+    property: opacity;
+    duration: $layers-block-transition-shadow-duration;
+    timing-function: $layers-block-transition-ease;
+    delay: $layers-block-transition-shadow-delay;
+  }
+}
+
+@include media-query('layers-block-can-expand') {
+  $spacing-x: ($icon-width-lg + $padding-s);
+
+  .layers-block {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: flex-start;
+    transition: height $transition-speed $transition-ease;
+  }
+
+  .layers-block__slider {
+    flex: 1 1 50%;
+    order: 1;
+    padding-right: $spacing-x;
+  }
+
+  .layers-block__slides {
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+
+  .layers-block__slide {
+    padding-left: $spacing-x;
+  }
+
+  .layers-block__slide-btn {
+    pointer-events: all;
+    position: relative;
+  }
+
+  .layers-block__slide-title {
+    transition: transform $transition-speed ease-out;
+
+    &:hover {
+      transform: translateX(0.5rem);
+    }
+  }
+
+  .layers-block__slide-icon {
+    $width: ($icon-width-lg);
+    $border-width: 1px;
+    $padding: calc(($width - (2 * $border-width) - ($icon-width)) / 2);
+
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: -#{$spacing-x};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: $width;
+    height: $width;
+    border-radius: 50%;
+    border: $border-width solid $color-body;
+    padding: $padding;
+
+    .icon {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity $transition-speed $transition-ease;
+    }
+
+    .icon-delete {
+      opacity: 0;
+    }
+
+    .icon-add {
+      opacity: 1;
+    }
+
+    .is-active & {
+      .icon-delete {
+        opacity: 1;
+      }
+
+      .icon-add {
+        opacity: 0;
+      }
+    }
+  }
+
+  .layers-block__slide-content {
+    margin: 2rem 0;
+    height: 0;
+    overflow: hidden;
+    transition: height $transition-speed $transition-ease;
+
+    .is-active & {
+      transition-delay: $transition-speed;
+    }
+  }
+
+  .layers-block__diagram {
+    flex: 1 1 50%;
+    order: 2;
+    width: auto;
+    margin: {
+      left: ($layers-block-btn-width * 2);
+      right: ($layers-block-btn-width * 2);
+      bottom: 0;
+    }
+  }
+
+  .layers-block__layers {
+    top: 0;
+    bottom: auto;
+  }
+}
+
+
+// Slider
+.slider {
+  &__slides:focus-visible {
+      outline: none;
+      outline-offset: none;
+      box-shadow: none
+  }
+
+  &__slide {
+    @media only screen and (max-width: 769px) {
+      margin-left: 40px;
+      margin-right: 40px;
+    }
+  }
+}
+
+
+// States
+
+.layers-block__layer.is-active,
+.layers-block__layer.is-before,
+.no-js .layers-block__layer {
+  height: 6vw;
+  transition: {
+    property: height;
+    duration: $layers-block-transition-duration;
+    timing-function: $layers-block-transition-ease;
+  }
+
+  @include media-query('layers-block-can-expand') {
+    height: 3vw;
+  }
+
+  .layers-block__shadow {
+    opacity: 0.1;
+    transition: {
+      delay: 0s;
+      timing-function: $layers-block-transition-ease;
+    }
+  }
+}
+
+.layers-block__layer.is-active,
+.no-js .layers-block__layer {
+  .layers-block__btn {
+    width: $layers-block-btn-active-width;
+    height: $layers-block-btn-active-width;
+    border-color: $layers-block-btn-active-border-color;
+    transition-delay: 0ms;
+    pointer-events: none;
+
+    &::before {
+      opacity: 1;
+      transition-delay: 100ms;
+    }
+  }
+}
+
+// stylelint-disable value-no-vendor-prefix, declaration-no-important
+.no-js {
+  .layers-block__layers {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 75px;
+    padding-top: 34%;
+  }
+
+  .layers-block__slide-btn {
+    color: var(--color-base-text);
+    pointer-events: none;
+  }
+
+  .layers-block__slide-title {
+    color: var(--color-base-text);
+    transform: none;
+  }
+
+  .layers-block__slide-content {
+    color: var(--color-base-text);
+    height: auto;
+  }
+
+  .layers-block__diagram {
+    justify-content: flex-start;
+  }
+}

@@ -1,0 +1,96 @@
+@use 'sass:math';
+
+$progress-indicator-item-width: 1rem;
+$progress-indicator-height: 1.6rem;
+$color-progress-indicator-complete-border: $color-button-bg;
+$color-progress-indicator-stringer: $color-border;
+$color-progress-indicator-upcoming-border: $color-grey-bg;
+$color-progress-indicator-upcoming-bg: $color-grey-bg;
+$color-progress-indicator-complete-background: $color-body-bg;
+$progress-indicator-clearance: 7px;
+
+@mixin progress-indicator($state) {
+  @if $state == complete {
+    &.is-complete button::before {
+      @content;
+    }
+  }
+
+  @if $state == active {
+    .is-active button::before {
+      @content;
+    }
+  }
+
+  @if $state == upcoming {
+    button::before {
+      @content;
+    }
+  }
+}
+
+.progress-indicator {
+  ol {
+    @include custom-list-style('li', $format: decimal);
+
+    position: relative;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: #{calc(math.div($progress-indicator-height,2))};
+      left: #{calc(math.div($progress-indicator-item-width, 2))};
+      right: #{calc(math.div($progress-indicator-item-width, 2))};
+      z-index: 1;
+      display: block;
+      height: 1px;
+      background-color: $color-progress-indicator-stringer;
+    }
+
+    // stylelint-disable-next-line selector-max-type
+    li {
+      flex: 0 1 10px;
+      display: block;
+      margin: 0;
+
+      span, button {
+        @include visually-hidden;
+      }
+
+      &::before {
+        content: '';
+        color: $colorTextBody;
+        position: relative;
+        font-size: 0.75rem;
+        line-height: 1.4rem;
+        z-index: 2;
+        border-radius: 50%;
+        display: block;
+        margin: 0 auto;
+        width: $progress-indicator-height;
+        height: $progress-indicator-height;
+        text-align: center;
+        box-shadow: 0 0 0 $progress-indicator-clearance $color-body-bg;
+        transition: background-color $transition-speed $transition-ease;
+        border: 2px solid $color-progress-indicator-upcoming-border;
+        background-color: $color-progress-indicator-upcoming-bg;
+      }
+
+      &.is-active,
+      &.is-complete {
+        &::before {
+          // content: $nc-d-check;
+          content: "\2713";
+          border-color: $color-progress-indicator-complete-border;
+          background-color: $color-progress-indicator-complete-background;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,48 @@
+{% comment %}
+Renders cart drawer
+
+#cart-drawer-body section content is updated by API calls in
+src/scripts/component-cart-drawer.js
+
+Usage:
+{% render 'cart-drawer' %}
+{% endcomment %}
+
+<link rel="stylesheet" href="{{ 'component-cart-totals.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-totals.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+
+<script src="{{ 'component-cart-promo-messaging.js' | asset_url }}" defer="defer"></script>
+
+<noscript>
+  {{ 'component-cart-totals.css' | asset_url | stylesheet_tag }}
+  {{ 'component-totals.css' | asset_url | stylesheet_tag }}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+</noscript>
+
+<cart-drawer
+  style="display: none" 
+  class="cart-drawer focus-inset" 
+  aria-modal="true"
+  aria-label="{{ 'general.cart.item_added' | t }}"
+  role="dialog"
+  tabindex="-1"
+  id="cart-drawer"
+>
+  <div class="cart-drawer__section">
+    <div id="cart-drawer-heading">
+      {%- comment -%}Content here replaced with cart-drawer-heading.liquid when cart drawer is updated{%- endcomment -%}
+    </div>
+    <button type="button" class="cart-drawer__close modal__close-button link link--text focus-inset"
+      aria-label="{{ 'accessibility.close' | t }}">
+      <svg class="icon icon-close" aria-hidden="true" focusable="false">
+        <use href="#icon-close">
+      </svg>
+    </button>
+  </div>
+  <div id="cart-drawer-body" class="cart-drawer__body">
+    {%- comment -%}Content here replaced with cart-drawer-body.liquid when cart drawer is updated{%- endcomment -%}
+  </div>
+</cart-drawer>
+
+<cart-promo-messaging></cart-promo-messaging>

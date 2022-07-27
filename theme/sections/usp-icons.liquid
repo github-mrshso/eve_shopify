@@ -1,0 +1,167 @@
+{% comment %}
+------------------------------------------------------------------------------
+  Section: USP Icon Section
+  - A flexible section to display multiple USP items.
+------------------------------------------------------------------------------
+{% endcomment %}
+
+<link rel="stylesheet" href="{{ 'section-usp-icons.css' | asset_url }}">
+<noscript>{{ 'section-usp-icons.css' | asset_url | stylesheet_tag }}</noscript>
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+      padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+      .section-{{ section.id }}-padding {
+          padding-top: {{ section.settings.padding_top }}px;
+          padding-bottom: {{ section.settings.padding_bottom }}px;
+      }
+  }
+{%- endstyle -%}
+
+<section class="usp-icons color-{{ section.settings.color_scheme }} section-{{ section.id }}-padding">
+  <div class="page-width usp-icons__inner">
+    {% for block in section.blocks %}
+      <div class="usp-icons__block text-center">
+        <div class="usp-icons__image">
+          <img src="{{ block.settings.image }}" alt="{{ block.settings.image.alt }}">
+        </div>
+        <h3 class="usp-icons__title">
+          {{ block.settings.title }}
+        </h3>
+        <p class="usp-icons__copy">
+          {{ block.settings.copy }}
+        </p>
+      </div>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "USP Icons",
+  "max_blocks": 4,
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "color_scheme",
+      "options": [
+        {
+          "value": "accent-1",
+          "label": "t:sections.footer.settings.color_scheme.options__1.label"
+        },
+        {
+          "value": "accent-2",
+          "label": "t:sections.footer.settings.color_scheme.options__2.label"
+        },
+        {
+          "value": "background-1",
+          "label": "t:sections.footer.settings.color_scheme.options__3.label"
+        },
+        {
+          "value": "background-2",
+          "label": "t:sections.footer.settings.color_scheme.options__4.label"
+        },
+        {
+          "value": "inverse",
+          "label": "t:sections.footer.settings.color_scheme.options__5.label"
+        }
+      ],
+      "default": "background-1",
+      "label": "t:sections.footer.settings.color_scheme.label"
+    },
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "block",
+      "name": "Block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "image",
+          "label": "Image URL",
+          "info": "Upload an SVG to the Files section of the admin and paste the url here."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Example block title"
+        },
+        {
+          "type": "textarea",
+          "id": "copy",
+          "label": "Body copy",
+          "default": "Example body copy"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "USP Icons",
+      "blocks": [
+        {
+          "type": "block"
+        },
+        {
+          "type": "block"
+        },
+        {
+          "type": "block"
+        },
+        {
+          "type": "block"
+        }
+      ]
+    }
+  ],
+  "templates": [
+    "404",
+    "article",
+    "blog",
+    "cart",
+    "collection",
+    "list-collections",
+    "customers/account",
+    "customers/activate_account",
+    "customers/addresses",
+    "customers/login",
+    "customers/order",
+    "customers/register",
+    "customers/reset_password",
+    "gift_card",
+    "index",
+    "page",
+    "password",
+    "search"
+  ]
+}
+{% endschema %}

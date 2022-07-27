@@ -1,0 +1,58 @@
+{% comment %}
+    Renders an a Firmness Rating snippet
+
+    Accepts:
+    - firmness_rating: {String} Accepting `soft`, `medium-soft`, `medium`, `medium-firm` and `firm` strings.
+
+    Usage:
+    {% render 'firmness-rating', firmness_rating: product.metafields.accentuate.mattress_firmness_rating %}
+{% endcomment %}
+
+<link rel="stylesheet" href="{{ 'section-firmness-rating.css' | asset_url }}" media="print" onload="this.media='all'">
+
+{%- liquid
+    assign firmness_rating = firmness_rating | default: false
+    assign locale_intro = 'products.product.firmness_rating.intro' | t
+    assign locale_soft = 'products.product.firmness_rating.soft' | t
+    assign locale_medium_soft = 'products.product.firmness_rating.medium_soft' | t
+    assign locale_medium = 'products.product.firmness_rating.medium' | t
+    assign locale_medium_firm = 'products.product.firmness_rating.medium_firm' | t
+    assign locale_firm = 'products.product.firmness_rating.firm' | t
+    assign locale_from = locale_soft
+    assign locale_to = locale_firm
+
+    case firmness_rating
+    when 'soft'
+        assign locale = locale_soft
+    when 'medium-soft'
+        assign locale = locale_medium_soft
+    when 'medium'
+        assign locale = locale_medium
+    when 'medium-firm'
+        assign locale = locale_medium_firm
+    when 'firm'
+        assign locale = locale_firm
+    else
+    endcase
+-%}
+
+{% if firmness_rating %}
+    <firmness-rating>
+        <div class="firmness-scale firmness-scale--{{ firmness_rating | handle }} js-firmness-scale"
+            data-label-from="{{ locale_from }}"
+            data-label-to="{{ locale_to }}">
+            <span class="firmness-scale__value">
+            <span class="firmness-scale__sun">
+                <span class="visually-hidden">
+                {{ locale_intro }}
+                </span>
+            </span>
+            <span class="firmness-scale__label">
+                {{ locale }}
+            </span>
+            </span>
+        </div>
+    </firmness-rating>
+{% endif %}
+
+<script src="{{ 'section-firmness-rating.js' | asset_url }}" defer="defer"></script>

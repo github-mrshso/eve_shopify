@@ -1,0 +1,266 @@
+<script
+  id="ometria-form-tpl"
+  type="text/x-handlebars-template">
+  {% raw %}
+    {{#unless hasSuccess}}
+      <form
+        id="{{ns}}"
+        class="form form--condensed form--ometria js-form"
+        action="https://api.ometria.com/forms/signup/ajax"
+        method="post"
+        novalidate
+        autocomplete="off">
+        <input
+          type="hidden"
+          name="__form_id"
+          value="952aff6b55861f4ac3c92997f5c90b17" />
+        <input
+          name="email"
+          type="hidden"
+          value="">
+        <div style="display: none !important;">
+          <input
+            name="__email"
+            type="email"
+            value="">
+        </div>
+        <input
+          name="@account"
+          type="hidden"
+          value="{% endraw %}{{ settings.ometria_account_id }}{% raw %}">
+        <input
+          name="@return_url"
+          type="hidden"
+          value="" />
+        <input
+          name="country_id"
+          type="hidden"
+          value="{% endraw %}{{ settings.ometria_country_id | upcase }}{% raw %}">
+        {{#if ometriaBucket}}
+          <input
+            name="@add_to_lists"
+            type="hidden"
+            value="{{ometriaBucket}}">
+        {{/if}}
+        {{#if signupSource}}
+          <input
+            name="properties.signup_source"
+            type="hidden"
+            value="{{signupSource}}">
+        {{/if}}
+        <input
+          name="@subscription_status"
+          type="hidden"
+          {{#if hasOptInField}}
+            value="{% endraw %}{{ settings.ometria_contact_unknown_status }}{% raw %}"
+          {{else}}
+            value="{% endraw %}{{ settings.ometria_contact_known_status }}{% raw %}"
+          {{/if}}>
+
+        <div
+          class="form__caption form__caption--error js-form-caption"
+          style="display: none !important;">
+        </div>
+
+        <div style="display: none !important">
+          <input
+            id="{{ns}}-email-ck"
+            name="ue-ck"
+            type="email"
+            value="">
+        </div>
+
+        {{#if isInline}}
+          <div class="form-field form-field--icon-button">
+            <label
+              class="visually-hidden"
+              for="{{ns}}-email">
+              {% endraw %}{{ 'newsletter_form.newsletter_email' | t }}{% raw %}
+            </label>
+            <div class="form-field__field">
+              <input
+                id="{{ns}}-email"
+                class="form-field__input"
+                name="ue"
+                type="email"
+                value="{{email}}"
+                placeholder="{% endraw %}{{ 'newsletter_form.newsletter_email' | t }}{% raw %}">
+              <button
+                class="form-field__icon js-btn btn btn--primary"
+                name="commit"
+                type="submit">
+                <span class="btn__loading">
+                  <span class="loader loader--dark">
+                    <span class="loader__ring"></span>
+                    <span class="loader__circle"></span>
+                  </span>
+                </span>
+                <span class="btn__icon visually-hidden">
+                  <i class="nc-icon nc-email"></i>
+                </span>
+                <span class="btn__text">
+                  {{submitCopy}}
+                </span>
+              </button>
+            </div>
+            <div class="form-field__caption" style="display: none">
+            </div>
+          </div>
+        {{else}}
+          <div class="form-field">
+            <label
+              class="form-field__label"
+              for="{{ns}}-email">
+              {% endraw %}{{ 'newsletter_form.newsletter_email' | t }}{% raw %}
+            </label>
+            <div class="form-field__field">
+              <input
+                id="{{ns}}-email"
+                class="form-field__input"
+                name="ue"
+                type="email"
+                value="{{email}}">
+            </div>
+            <div class="form-field__caption" style="display: none">
+            </div>
+          </div>
+          {{#if hasNameField}}
+            <div class="form-field">
+              <label
+                class="form-field__label"
+                for="{{ns}}-firstname">
+                {% endraw %}{{ 'newsletter_form.firstname' | t }}{% raw %}
+              </label>
+              <div class="form-field__field">
+                <input
+                  id="{{ns}}-firstname"
+                  class="form-field__input"
+                  name="firstname"
+                  type="text">
+              </div>
+              <div class="form-field__caption" style="display: none">
+              </div>
+            </div>
+            <div class="form-field">
+              <label
+                class="form-field__label"
+                for="{{ns}}-lastname">
+                {% endraw %}{{ 'newsletter_form.lastname' | t }}{% raw %}
+              </label>
+              <div class="form-field__field">
+                <input
+                  id="{{ns}}-lastname"
+                  class="form-field__input"
+                  name="lastname"
+                  type="text">
+              </div>
+              <div class="form-field__caption" style="display: none">
+              </div>
+            </div>
+          {{/if}}
+
+          {{#if hasChildField}}
+            <div class="form-field form-field--option">
+              <div class="form-field__field">
+                <label
+                  class="opt opt--checkbox"
+                  for="{{ns}}-child">
+                  <input
+                    id="{{ns}}-child"
+                    class="opt__input"
+                    name="@properties.has_child"
+                    type="checkbox"
+                    value="{% endraw %}{{ settings.ometria_contact_true }}{% raw %}">
+                  <span class="opt__proxy">&nbsp;</span>
+                  <span class="opt__label">
+                    {% endraw %}{{ 'newsletter_form.child' | t }}{% raw %}
+                  </span>
+                </label>
+              </div>
+            </div>
+          {{/if}}
+
+          {{#if hasOptInField}}
+            <div class="form-field form-field--option">
+              <div class="form-field__field">
+                <label
+                  class="opt opt--checkbox"
+                  for="{{ns}}-opt-in">
+                  <input
+                    id="{{ns}}-opt-in"
+                    class="opt__input"
+                    name="@subscription_status"
+                    type="checkbox"
+                    value="{% endraw %}{{ settings.ometria_contact_known_status }}{% raw %}"
+                    {{#if isSubscribed }}checked{{/if}}>
+                  <span class="opt__proxy">&nbsp;</span>
+                  <span class="opt__label">{{ optInCopy }}</span>
+                </label>
+              </div>
+            </div>
+          {{/if}}
+
+          <button
+            class="button button--primary button--full-width js-btn"
+            name="commit"
+            type="submit">
+            <span class="btn__loading">
+              <span class="loader loader--dark">
+                <span class="loader__ring"></span>
+                <span class="loader__circle"></span>
+              </span>
+            </span>
+            <span class="btn__text">
+              {{submitCopy}}
+            </span>
+          </button>
+
+          {{#if termsCopy}}
+            <div class="btn__caption btn__caption--left">
+              <p>
+                <small>
+                  {{termsCopy}}
+                  <a
+                    class="ln"
+                    href="{% endraw %}{{ settings.cart_terms_conditions_link }}{% raw %}"
+                    target="_blank">
+                    {% endraw %}
+                    {{ 'promotions.see_our_terms' | t }}
+                    {% raw %}
+                  </a>.
+                </small>
+              </p>
+            </div>
+          {{/if}}
+        {{/if}}
+      </form>
+    {{else}}
+      <div class="form form--condensed form--ometria form--success">
+        <div class="rte">
+          {{#if successCopyMH}}
+            <div class="medium-up--hide h2">
+              {{md successCopyMH}}
+            </div>
+          {{/if}}
+          {{#if successCopyMC}}
+            <div class="medium-up--hide">
+              {{md successCopyMC}}
+            </div>
+          {{/if}}
+          {{#if successCopy}}
+            <div class="small--hide success-copy">
+              {{md successCopy}} 
+            </div>
+          {{/if}}
+          {{#if ctaUrl }}
+            {{#if ctaText }}
+              <a href="{{ctaUrl}}" class="button button--primary button--full-width">
+                {{ctaText}}
+              </a>
+            {{/if}}
+          {{/if}}
+        </div>
+      </div>
+    {{/unless}}
+  {% endraw %}
+</script>

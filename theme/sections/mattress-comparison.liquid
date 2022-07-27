@@ -1,0 +1,911 @@
+{%- style -%}
+.section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+}
+@media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+        padding-top: {{ section.settings.padding_top }}px;
+        padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+}
+{%- endstyle -%}
+
+{{ 'section-mattress-comparison.css' | asset_url | stylesheet_tag }}
+{{ 'component-form.css' | asset_url | stylesheet_tag }}
+{{ 'component-opt.css' | asset_url | stylesheet_tag }}
+{{ 'component-buttons.css' | asset_url | stylesheet_tag }}
+
+{% comment %}
+  This is the common pattern used here. It:
+  - Picks the product handle from the section settings
+  - Picks the product from all products using the handle
+  - Ensures that the product exists
+
+  ```
+  {%- for id in section.settings -%}
+    {%- assign handle = section.settings[id] -%}
+    {%- assign product = all_products[handle] -%}
+    {%- if product != blank -%}
+      {%- render 'dump', log: product, ref: 'product:' -%}
+    {%- endif -%}
+  {%- endfor -%}
+  ```
+
+  We can easily add a count
+
+  ```
+  {%- for id in section.settings -%}
+    {%- assign handle = section.settings[id] -%}
+    {%- assign product = all_products[handle] -%}
+    {%- if product != blank -%}
+      {%- assign product_count = product_count | default: 0 | plus: 1 -%}
+    {%- endif -%}
+  {%- endfor -%}
+
+  {{ product_count }}
+  ```
+
+  We can extract the features from the blocks
+
+  ```
+  {%- for id in section.settings -%}
+    {%- assign handle = section.settings[id] -%}
+    {%- assign product = all_products[handle] -%}
+
+    {%- if product != blank -%}
+      {%- assign namespace = 'product_' | append: i -%}
+      {%- assign spec_icon_id = namespace | append: '_icon' -%}
+
+      {%- render 'dump', log: product[spec_icon_id], ref: 'prop:' -%}
+
+      {%- for block in section.blocks -%}
+        {%- render 'dump', log: block, ref: 'block:' -%}
+      {%- endfor -%}
+    {%- endif -%}
+  {%- endfor -%}
+  ```
+{% endcomment %}
+
+{% comment %}
+  These are all constants that we can set as they are independent of and loop
+  specific variables.
+{% endcomment %}
+
+{%- liquid
+  assign min_columns = 2
+  assign max_columns = 3
+  assign img_profile_width = 408
+  assign img_profile_height = 107
+  assign img_layers_width = 408
+  assign img_layers_height = 373
+  assign img_profile_dimensions = '408x107'
+  assign img_layers_dimensions = '408x373'
+  assign img_profile_aspect = 0.2622
+  assign img_layers_aspect = 0.9142
+  assign img_profile_alt_str = 'profile image'
+  assign img_layers_alt_str = 'layers image'
+  assign string_sep = '|'
+
+  comment
+    We can bulld a list of all products from which a namespace can be generated
+    which will let us pull settings at various points.
+
+    The schema setting are all namespaced with 'product_{1,4}'. This refers to
+    the product referenced in `section.settings.product_{1,4}`. By looping through
+    these products and building a list those namespaces that contain a valid
+    handle for a product we can build a single source of truth for the entire
+    page.
+  endcomment
+
+  assign product_count = 0
+
+  comment
+    Instantiate an empty 'list' to store only the number of namespaces to satisfy
+    the number visible at once i.e. equal to the max number allowed
+  endcomment
+  assign namespaces = ''
+
+  comment
+    Instantiate an empty 'list' to store ALL namespaces such that we can write a
+    context for the JavaScript to pick up.
+  endcomment
+  assign all_namespaces = ''
+
+  for id in section.settings
+    assign handle = section.settings[id]
+    assign product = all_products[handle]
+
+    if product != blank
+      assign product_count = product_count | plus: 1
+
+      comment
+        Use a deliminator to separate the namespaces so that we can split it later
+      endcomment
+      unless namespaces == ''
+        assign namespaces = namespaces | append: string_sep
+        assign all_namespaces = all_namespaces | append: string_sep
+      endunless
+
+      comment
+        Add the product to the static namespaces if there is still room
+      endcomment
+      if product_count <= max_columns
+        assign namespaces = namespaces | append: id
+      endif
+
+      comment
+        Add the namespace to the master list
+      endcomment
+      assign all_namespaces = all_namespaces | append: id
+    endif
+  endfor
+
+  comment
+    Split the string based on the deliminator, creating the arrays that we need to
+    iterate over i.e. foo|bar|bat >> [foo, bar, bat]
+  endcomment
+  assign namespaces = namespaces | split: string_sep
+  assign all_namespaces = all_namespaces | split: string_sep
+
+-%}
+
+{% comment %}
+  Now we create the various parts of the document. We need to make a static
+  version as well as a dynamic version. Each block comes in a pair. The dynamic
+  version will overwrite the static version if JS is available.
+{% endcomment %}
+
+{% capture product_compare_header_static %}
+  {%- for namespace in namespaces -%}
+    {%- assign handle = section.settings[namespace] -%}
+    {%- assign product = all_products[handle] -%}
+    <div class="product-comparison__col">
+      <h3>{{ product.title }}</h3>
+    </div>
+  {%- endfor -%}
+{% endcapture %}
+
+{% capture product_compare_header_dynamic %}
+  {% raw %}
+    {{#each products}}
+      <div class="product-comparison__col">
+        {{#unless ../hasOptions}}
+          <h3>{{title}}</h3>
+        {{else}}
+          <div class="form-field form-field--dropdown form-field--icon is-disabled">
+            <label class="form-field__label">
+              {% endraw %}
+              {{ 'products.product.select_mattress' | t }}
+              {% raw %}
+            </label>
+            <div class="form-field__field">
+              <select
+                name="product_comparison_product_{{@index}}"
+                id="product-comparison-select-{{@index}}"
+                class="form-field__input">
+                {{#each options}}
+                  <option
+                    value="{{value}}"
+                    {{#if isSelected}}selected{{/if}}>
+                    {{label}}
+                  </option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+        {{/unless}}
+      </div>
+    {{/each}}
+  {% endraw %}
+{% endcapture %}
+
+{% capture product_compare_table_head_static %}
+  <tr>
+    {%- for namespace in namespaces -%}
+      {%- assign handle = section.settings[namespace] -%}
+      {%- assign product = all_products[handle] -%}
+
+      {%- assign img_profile_id = namespace | append: '_image_profile' -%}
+      {%- assign img_profile = section.settings[img_profile_id] | image_url: width: img_profile_width -%}
+      {%- assign img_profile_alt = product.title | escape | append: img_profile_alt_str -%}
+
+      {%- assign price_min = product.price_min | money -%}
+
+      <td>
+        <img
+          class="product-comparison__img"
+          src="{{ img_profile }}"
+          alt="{{ img_profile_alt }}"
+          width="{{ img_profile_width }}"
+          height="{{ img_profile_height }}"
+          loading="lazy"
+        >
+        <small class="btn__caption btn__caption--left">
+          {{ 'products.product.price.from_price_html' | t: price: price_min }}
+        </small>
+        <a
+          href="{{ product.url }}"
+          class="btn">
+          {{ 'general.navigation.shop_now' | t }}
+        </a>
+      </td>
+    {%- endfor -%}
+  </tr>
+{% endcapture %}
+
+{% capture product_compare_table_head_dynamic %}
+  {% raw %}
+    <tr{{#unless hasOptions}} class="visually-hidden"{{/unless}}>
+      {{#each products}}
+        <th>{{title}}</th>
+      {{/each}}
+    </tr>
+    <tr>
+      {{#each products}}
+        <td>
+          <img
+            class="product-comparison__img"
+            src="{{imgProfile}}"
+            alt="{{imgProfileAlt}}"
+            {% endraw -%}
+            width="{{ img_profile_width }}"
+            height="{{ img_profile_height }}"
+            {%- raw %}
+            loading="lazy"
+          >
+          <small class="btn__caption btn__caption--left">
+            {{priceText}}
+          </small>
+          <a
+            href="{{url}}"
+            class="button button--primary">
+            {% endraw %}
+            {{ 'general.navigation.shop_now' | t }}
+            {% raw %}
+          </a>
+        </td>
+      {{/each}}
+    </tr>
+  {% endraw %}
+{% endcapture %}
+
+{% capture product_compare_table_body_static %}
+  {%- for block in section.blocks -%}
+    {% if block.type == 'feature' %}
+      {%- assign specs = block.settings -%}
+
+      <tr>
+        {%- for namespace in namespaces -%}
+          {%- assign handle = section.settings[namespace] -%}
+          {%- assign product = all_products[handle] -%}
+
+          {%- assign icon_id = namespace | append: '_icon' -%}
+          {%- assign label_id = namespace | append: '_spec' -%}
+          {%- assign icon = specs[icon_id] -%}
+          {%- assign label = specs[label_id] -%}
+
+          <td>
+            <span class="product-comparison__spec">
+              {%- if label != blank-%}
+                {%- render 'icon', ref: icon -%}
+                {{ label }}
+              {%- else -%}
+                {%- render 'icon', ref: 'nc-delete' -%}
+              {%- endif -%}
+            </span>
+          </td>
+        {%- endfor -%}
+      </tr>
+    {%- endif -%}
+  {%- endfor -%}
+{% endcapture %}
+
+{% capture product_compare_table_body_dynamic %}
+  {% raw %}
+    {{#each this}}
+      <tr>
+        {{#each this}}
+          <td>
+            <span class="product-comparison__spec">
+              {{#if label}}
+                <i class="nc-icon {{icon}}"></i>
+                {{label}}
+              {{else}}
+                <i class="nc-icon nc-delete"></i>
+              {{/if}}
+            </span>
+          </td>
+        {{/each}}
+      </tr>
+    {{/each}}
+  {% endraw %}
+{% endcapture %}
+
+{% capture product_compare_footer_static %}
+  {%- for namespace in namespaces -%}
+    {%- assign handle = section.settings[namespace] -%}
+    {%- assign product = all_products[handle] -%}
+
+    {%- assign img_layers_id = namespace | append: '_image_layers' -%}
+    {%- assign img_layers = section.settings[img_layers_id] | image_url: width: img_layers_width -%}
+    {%- assign img_layers_alt = product.title | escape | append: img_layers_alt_str -%}
+
+    <div class="product-comparison__col">
+      <img
+        class="product-comparison__img"
+        src="{{ img_layers }}"
+        alt="{{ img_layers_alt }}"
+        width="{{ img_layers_width }}"
+        height="{{ img_layers_height }}"
+        loading="lazy"
+      >
+      <a
+        href="{{ product.url }}"
+        class="button button--secondary">
+        {{ 'general.navigation.shop_now' | t }}
+      </a>
+    </div>
+  {%- endfor -%}
+{% endcapture %}
+
+{% capture product_compare_footer_dynamic %}
+  {% raw %}
+    {{#each this }}
+      <div class="product-comparison__col">
+        <img
+          class="product-comparison__img"
+          src="{{imgLayers}}"
+          alt="{{imgLayersAlt}}"
+          {% endraw -%}
+          width="{{ img_profile_width }}"
+          height="{{ img_profile_height }}"
+          {%- raw %}
+          loading="lazy"
+        >
+        <a
+          href="{{url}}"
+          class="button button--secondary">
+          {% endraw %}
+          {{ 'general.navigation.shop_now' | t }}
+          {% raw %}
+        </a>
+      </div>
+    {{/each}}
+  {% endraw %}
+{% endcapture %}
+
+{% capture product_compare_dynamic_context %}
+  {%- for namespace in all_namespaces -%}
+    {% comment %}
+      e.g. section.settings.product_1
+    {% endcomment %}
+    {%- assign handle = section.settings[namespace] -%}
+    {%- assign product = all_products[handle] -%}
+
+    {% comment %}
+      e.g. product_1_image_profile
+    {% endcomment %}
+    {%- assign img_profile_id = namespace | append: '_image_profile' -%}
+    {%- assign img_layers_id = namespace | append: '_image_layers' -%}
+
+    {% comment %}
+      e.g. section.settings.product_1_image_profile
+    {% endcomment %}
+    {%- assign img_profile = section.settings[img_profile_id] | image_url: width: img_profile_width -%}
+    {%- assign img_layers = section.settings[img_layers_id] | image_url: width: img_layers_width -%}
+
+    {%- assign img_profile_alt = product.title | escape | append: 'profile image' -%}
+    {%- assign img_layers_alt = product.title | escape | append: 'layers image' -%}
+
+    {% comment %}
+      e.g. product_1_icon
+    {% endcomment %}
+    {%- assign spec_icon_id = namespace | append: '_icon' -%}
+    {%- assign spec_label_id = namespace | append: '_spec' -%}
+
+    {%- assign price_min = product.price_min | money -%}
+
+    {
+      id: {{ product.id | json }},
+      url: {{ product.url | json }},
+      title: {{ product.title | json }},
+      titleEscaped: {{ product.title | escape | json }},
+      priceText: {{ 'products.product.price.from_price_html' | t: price: price_min | json }},
+      imgProfile: {{ img_profile | json }},
+      imgProfileAlt: {{ img_profile_alt | json }},
+      imgProfileAspect: {{ img_profile_aspect | json }},
+      imgLayers: {{ img_layers | json }},
+      imgLayersAlt: {{ img_layers_alt | json }},
+      imgLayersAspect: {{ img_layers_aspect | json }},
+      specs: [
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'feature' -%}
+            {% comment %}
+              e.g. block.settings.product_1_icon
+            {% endcomment %}
+            {%- assign icon = block.settings[spec_icon_id] -%}
+            {%- assign label = block.settings[spec_label_id] -%}
+
+            {%- if label != blank -%}
+              {
+                icon: {{ icon | json }},
+                label: {{ label | json }},
+              },
+            {%- else -%}
+              {},
+            {%- endif -%}
+          {%- endif -%}
+        {%- endfor -%}
+      ],
+    },
+  {%- endfor -%}
+{% endcapture %}
+
+<section class="template-section section-{{ section.id }}-padding">
+  <div class="template-section__inner page-width">
+    {% if all_namespaces.size >= min_columns %}
+      <div class="product-comparison js-product-comparison has-{{ namespaces.size }}-cols">
+        <div class="product-comparison__header product-comparison__cols js-product-comparison-header">
+          <div class="product-comparison__header-inner">
+            <form class="product-comparison__headings js-product-comparison-headings">
+              {{ product_compare_header_static }}
+            </form>
+          </div>
+        </div>
+        <div class="product-comparison__body js-product-comparison-body">
+          <div class="product-comparison__cols">
+            <div class="product-comparison__table js-product-comparison-table">
+              <table>
+                <thead class="js-product-comparison-table-head">
+                  {{ product_compare_table_head_static }}
+                </thead>
+                <tbody class="js-product-comparison-table-body">
+                  {{ product_compare_table_body_static }}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="product-comparison__features">
+            <header>
+              <h2>{{ 'collections.general.all.mattresses' | t }}</h2>
+            </header>
+            <ul>
+              {%- for block in section.blocks -%}
+                {%- if block.type == 'global_feature' -%}
+                  {% comment %}
+                    e.g. block.settings.icon
+                  {% endcomment %}
+                  {%- assign icon = block.settings.icon -%}
+                  {%- assign label = block.settings.spec -%}
+
+                  <li>
+                    <span class="product-comparison__spec">
+                      <i class="nc-icon {{ icon }}"></i>
+                      {{ label }}
+                    </span>
+                  </li>
+                {%- endif -%}
+              {% endfor %}
+            </ul>
+          </div>
+          <div class="product-comparison__footer product-comparison__cols js-product-comparison-footer">
+            {{ product_compare_footer_static }}
+          </div>
+          <div class="product-comparison__loader">
+            {%- include 'loader',
+              is_dark: false,
+              is_rising: true
+            -%}
+          </div>
+        </div>
+      </div>
+
+      <script
+        id="product-comparison-headings-tpl"
+        type="text/x-handlebars-template">
+        {{ product_compare_header_dynamic }}
+      </script>
+
+      <script
+        id="product-comparison-table-head-tpl"
+        type="text/x-handlebars-template">
+        {{ product_compare_table_head_dynamic }}
+      </script>
+
+      <script
+        id="product-comparison-table-body-tpl"
+        type="text/x-handlebars-template">
+        {{ product_compare_table_body_dynamic }}
+      </script>
+
+      <script
+        id="product-comparison-footer-tpl"
+        type="text/x-handlebars-template">
+        {{ product_compare_footer_dynamic }}
+      </script>
+
+      <script>
+        contextualise('productComparison', [
+          {{ product_compare_dynamic_context }}
+        ]);
+      </script>
+    {% else %}
+      <div class="text-center">
+        <p>You must select at least {{ min_columns }} products.</p>
+        <p>You have selected {{ all_namespaces.size }}.</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<script src="{{ 'section-mattress-comparison.js' | asset_url }}" defer="defer"></script>
+
+{% schema %}
+{
+  "name": "Mattress comparison",
+  "class": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    },
+    {
+      "type": "header",
+      "content": "Mattress Comparison settings"
+    },
+    {
+      "type": "paragraph",
+      "content": "It is important that all images are uploaded at the sizes stated."
+    },
+    {
+      "type": "header",
+      "content": "Product 1"
+    },
+    {
+      "type": "product",
+      "id": "product_1",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_1_image_profile",
+      "label": "Profile image",
+      "info": "width: 816px | height: 214px"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_1_image_layers",
+      "label": "Layers image",
+      "info": "width: 816px | height: 746px"
+    },
+    {
+      "type": "header",
+      "content": "Product 2"
+    },
+    {
+      "type": "product",
+      "id": "product_2",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_2_image_profile",
+      "label": "Profile image",
+      "info": "width: 816px | height: 214px"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_2_image_layers",
+      "label": "Layers image",
+      "info": "width: 816px | height: 746px"
+    },
+    {
+      "type": "header",
+      "content": "Product 3"
+    },
+    {
+      "type": "product",
+      "id": "product_3",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_3_image_profile",
+      "label": "Profile image",
+      "info": "width: 816px | height: 214px"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_3_image_layers",
+      "label": "Layers image",
+      "info": "width: 816px | height: 746px"
+    },
+    {
+      "type": "header",
+      "content": "Product 4"
+    },
+    {
+      "type": "product",
+      "id": "product_4",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_4_image_profile",
+      "label": "Profile image",
+      "info": "width: 816px | height: 214px"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_4_image_layers",
+      "label": "Layers image",
+      "info": "width: 816px | height: 746px"
+    },
+    {
+      "type": "header",
+      "content": "Product 5"
+    },
+    {
+      "type": "product",
+      "id": "product_5",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_5_image_profile",
+      "label": "Profile image",
+      "info": "width: 816px | height: 214px"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_5_image_layers",
+      "label": "Layers image",
+      "info": "width: 816px | height: 746px"
+    },
+    {
+      "type": "header",
+      "content": "Product 6"
+    },
+    {
+      "type": "product",
+      "id": "product_6",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_6_image_profile",
+      "label": "Profile image",
+      "info": "width: 816px | height: 214px"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_6_image_layers",
+      "label": "Layers image",
+      "info": "width: 816px | height: 746px"
+    },
+    {
+      "type": "header",
+      "content": "Product 7"
+    },
+    {
+      "type": "product",
+      "id": "product_7",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_7_image_profile",
+      "label": "Profile image",
+      "info": "width: 816px | height: 214px"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_7_image_layers",
+      "label": "Layers image",
+      "info": "width: 816px | height: 746px"
+    },
+    {
+      "type": "header",
+      "content": "Product 8"
+    },
+    {
+      "type": "product",
+      "id": "product_8",
+      "label": "Product"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_8_image_profile",
+      "label": "Profile image",
+      "info": "width: 816px | height: 214px"
+    },
+    {
+      "type": "image_picker",
+      "id": "product_8_image_layers",
+      "label": "Layers image",
+      "info": "width: 816px | height: 746px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "limit": 10,
+      "settings": [
+        {
+          "type": "header",
+          "content": "Product 1"
+        },
+        {
+          "type": "paragraph",
+          "content": "Icon names can be found in [Snooze](https://dev-snooze.evesleep.co.uk/docs/iconography.html)."
+        },
+        {
+          "type": "text",
+          "id": "product_1_icon",
+          "label": "Icon",
+          "default": "nc-c-question-1"
+        },
+        {
+          "type": "text",
+          "id": "product_1_spec",
+          "label": "Copy"
+        },
+        {
+          "type": "header",
+          "content": "Product 2"
+        },
+        {
+          "type": "text",
+          "id": "product_2_icon",
+          "label": "Icon",
+          "default": "nc-c-question-1"
+        },
+        {
+          "type": "text",
+          "id": "product_2_spec",
+          "label": "Copy"
+        },
+        {
+          "type": "header",
+          "content": "Product 3"
+        },
+        {
+          "type": "text",
+          "id": "product_3_icon",
+          "label": "Icon",
+          "default": "nc-c-question-1"
+        },
+        {
+          "type": "text",
+          "id": "product_3_spec",
+          "label": "Copy"
+        },
+        {
+          "type": "header",
+          "content": "Product 4"
+        },
+        {
+          "type": "text",
+          "id": "product_4_icon",
+          "label": "Icon",
+          "default": "nc-c-question-1"
+        },
+        {
+          "type": "text",
+          "id": "product_4_spec",
+          "label": "Copy"
+        },
+        {
+          "type": "header",
+          "content": "Product 5"
+        },
+        {
+          "type": "text",
+          "id": "product_5_icon",
+          "label": "Icon",
+          "default": "nc-c-question-1"
+        },
+        {
+          "type": "text",
+          "id": "product_5_spec",
+          "label": "Copy"
+        },
+        {
+          "type": "header",
+          "content": "Product 6"
+        },
+        {
+          "type": "text",
+          "id": "product_6_icon",
+          "label": "Icon",
+          "default": "nc-c-question-1"
+        },
+        {
+          "type": "text",
+          "id": "product_6_spec",
+          "label": "Copy"
+        },
+        {
+          "type": "header",
+          "content": "Product 7"
+        },
+        {
+          "type": "text",
+          "id": "product_7_icon",
+          "label": "Icon",
+          "default": "nc-c-question-1"
+        },
+        {
+          "type": "text",
+          "id": "product_7_spec",
+          "label": "Copy"
+        },
+        {
+          "type": "header",
+          "content": "Product 8"
+        },
+        {
+          "type": "text",
+          "id": "product_8_icon",
+          "label": "Icon",
+          "default": "nc-c-question-1"
+        },
+        {
+          "type": "text",
+          "id": "product_8_spec",
+          "label": "Copy"
+        }
+      ]
+    },
+    {
+      "type": "global_feature",
+      "name": "Global feature",
+      "limit": 12,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "These blocks fit into a grid so please add a grid-friendly number of them i.e. 6, 8 or 12."
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Icon",
+          "default": "nc-c-question-1"
+        },
+        {
+          "type": "text",
+          "id": "spec",
+          "label": "Copy"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mattress comparison"
+    }
+  ]
+}
+{% endschema %}

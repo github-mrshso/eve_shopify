@@ -1,0 +1,93 @@
+{% comment %}
+  Expects a string that will be prefixed to each key. This shortcuts key values
+  e.g. 'foo.bar.bat.bum_' + '1'
+{% endcomment %}
+{% assign locale_prefix = locale_prefix | default: '' %}
+
+{% comment %}
+  Expects an array of strings
+{% endcomment %}
+{% assign locale_keys = locale_keys | default: 'no|keys' | split: '|' %}
+
+{% comment %}
+  Expects a string matching one of the steps above
+{% endcomment %}
+{%- assign active_key = active_key | default: '' -%}
+
+{% comment %}
+  Defaults to selecting the first step
+{% endcomment %}
+{%- assign active_index = 0 -%}
+
+{% comment %}
+  Begin the string that will contain the translated locales
+{% endcomment %}
+{% assign steps = '' %}
+
+{% comment %}
+  Loop through the keys producing another string with all keys translated
+  - Find the active key
+  - Generate the full locale key
+  - Retrieve the locale for that key
+{% endcomment %}
+{% for key in locale_keys %}
+  {%- if key == active_key -%}
+    {%- assign active_index = forloop.index0 -%}
+  {%- endif -%}
+
+  {%- assign locale_key = locale_prefix | append: key -%}
+  {%- assign locale = locale_key | t -%}
+  {%- assign steps = steps | append: locale -%}
+  {%- unless forloop.last -%}
+    {%- assign steps = steps | append: '|' -%}
+  {%- endunless -%}
+{%- endfor -%}
+
+{% comment %}
+  Convert the translated strings back into an array
+{% endcomment %}
+{% assign steps = steps | split: '|' %}
+
+<ul class="breadcrumb ">
+  {% comment %}
+    Loop overt the steps
+  {% endcomment %}
+  {%- for step in steps -%}
+    {%- assign modifier = '' -%}
+
+    {% comment %}
+      Steps before are completed
+    {% endcomment %}
+    {%- if forloop.index0 < active_index  -%}
+      {%- assign modifier = ' breadcrumb__item--completed' -%}
+
+    {% comment %}
+      Step matching index is current
+    {% endcomment %}
+    {%- elsif forloop.index0 == active_index -%}
+      {%- assign modifier = ' breadcrumb__item--current' -%}
+
+    {% comment %}
+      Steps after are upcoming
+    {% endcomment %}
+    {%- elsif forloop.index0 > active_index -%}
+      {%- assign modifier = ' breadcrumb__item--blank' -%}
+    {%- endif -%}
+
+    <li class="breadcrumb__item{{ modifier }}">
+      <span class="breadcrumb__text">
+        {{ step }}
+      </span>
+      {%- unless forloop.last -%}
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          class="icon-svg icon-svg--color-adaptive-light icon-svg--size-10 breadcrumb__chevron-icon"
+          aria-hidden="true"
+          focusable="false">
+          <use href="#chevron-right" />
+        </svg>
+      {%- endunless -%}
+    </li>
+  {%- endfor -%}
+</ul>

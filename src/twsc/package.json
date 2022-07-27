@@ -1,0 +1,36 @@
+{
+  "name": "twsc",
+  "version": "3.21.0",
+  "description": "Vue app for eve's The Well Slept Club. Version @3.21.0 at time of lift and shift.",
+  "private": true,
+  "main": "webpack.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:thoughtandmortar/eve-sleep-shopify-theme.git"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.js"
+  },
+  "dependencies": {
+    "@bugsnag/js": "^6.5.0",
+    "@bugsnag/plugin-vue": "^7.11.0",
+    "@vueuse/core": "^7.3.0",
+    "js-logger": "^1.6.1",
+    "object-hash": "^3.0.0",
+    "scroll-restoration-polyfill": "^0.6.1",
+    "vue": "^3.2.21",
+    "vuex": "4.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.8",
+    "babel-loader": "^8.2.2",
+    "glob": "^7.1.6",
+    "js-yaml": "^4.1.0",
+    "mini-css-extract-plugin": "^2.4.6",
+    "postcss-loader": "^5.2.0",
+    "sass": "^1.49.0",
+    "sass-loader": "^12.4.0",
+    "vue-loader": "^16.8.2",
+    "webpack": "^5.35.1"
+  }
+}

@@ -1,0 +1,291 @@
+{{ 'component-promo-bar.css' | asset_url | stylesheet_tag }}
+
+{%- assign active_promo = false -%}
+{%- assign end_timestamp = '' -%}
+{%- assign now = '' -%}
+{%- assign whitelist = '' -%}
+{%- assign blacklist = '' -%}
+{%- assign blockID = '' -%}
+
+{%- for block in section.blocks -%}
+  {%- if active_promo == false and block.type == 'promo_bar' and block.settings.is_active -%}
+    {% comment %}
+      Alias the block.settings now that we know that:
+      - no other valid promo-bars have been found yet
+      - it is a promo-bar
+      - it is active
+    {% endcomment %}
+    {%- assign promo = block.settings -%}
+
+    {%- assign blockID = block.id -%}
+
+    {% comment %}
+      Create The Ultimate Flag! Each test will affect this flag. If the test
+      doesn't pass this flag is set to false which will prevent the promo from
+      initialising.
+    {% endcomment %}
+    {%- assign is_valid = true -%}
+
+    {% comment %}
+      Instantiate an error string that we can explode later.
+    {% endcomment %}
+    {%- assign errors = '' -%}
+    {%- assign warnings = '' -%}
+
+    {% comment %}
+      Test timestamps
+    {% endcomment %}
+    {%- assign now = 'now' | date: '%s' -%}
+    {%- assign start_date = promo.start_date_year | append: '/' | append: promo.start_date_month | append: '/' | append: promo.start_date_day -%}
+    {%- assign start_time = promo.start_time_hour | append: ':' | append: promo.start_time_min -%}
+    {%- assign start_datetime = start_date | append: ' ' | append: start_time -%}
+    {%- assign start_timestamp = start_datetime | date: '%s' -%}
+    {%- assign end_date = promo.end_date_year | append: '/' | append: promo.end_date_month | append: '/' | append: promo.end_date_day -%}
+    {%- assign end_time = promo.end_time_hour | append: ':' | append: promo.end_time_min -%}
+    {%- assign end_datetime = end_date | append: ' ' | append: end_time -%}
+    {%- assign end_timestamp = end_datetime | date: '%s' -%}
+
+    {%- if start_timestamp > end_timestamp -%}
+      {%- assign is_valid = false -%}
+      {%- assign errors = errors | append: 'Promo start time is after end time|' -%}
+    {%- endif -%}
+
+    {%- if now < start_timestamp -%}
+      {%- assign is_valid = false -%}
+    {%- endif -%}
+
+    {%- if now > end_timestamp -%}
+      {%- assign is_valid = false -%}
+    {%- endif -%}
+
+    {% comment %}
+      Emit any errors/warnings if there are any.
+    {% endcomment %}
+    {%- assign errors = errors | split: '|' -%}
+
+    {%- if warnings.size > 0 -%}
+      <script>
+        {% comment %} Bugsnag.notify('Warnings in promo bar config', function (err) {
+          err.addMetadata('diagnostic', {
+            {%- for warning in warnings -%}
+              warning_{{ forloop.index }}: {{ warning | json }}
+              {%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          });
+        }); {% endcomment %}
+      </script>
+    {%- endif -%}
+
+    {%- if errors.size > 0 -%}
+      <script>
+        {% comment %} Bugsnag.notify('Errors in promo bar config', function (err) {
+          err.addMetadata('diagnostic', {
+            {%- for error in errors -%}
+              error_{{ forloop.index }}: {{ error | json }}
+              {%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          });
+        }); {% endcomment %}
+      </script>
+    {%- endif -%}
+
+    {% comment %}
+      Store active promo if all the tests pass
+    {% endcomment %}
+    {%- if is_valid -%}
+      {%- assign active_promo = block.settings -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{% comment %}
+  We have already done all of the tests and so we should know whether there is
+  an valid active promo.
+{% endcomment %}
+{%- if active_promo -%}
+{%- assign modal_img = active_promo.modal_img | image_url -%}
+
+{% comment %}
+  If the code is present at all then it should be considered 'enabled'
+{% endcomment %}
+{%- assign code_enabled = false -%}
+{%- if active_promo.code != blank -%}
+  {%- assign code_enabled = true -%}
+{%- endif -%}
+
+{% comment %}
+  Convert the UX-friendly select option to a JS-friendly flag
+{% endcomment %}
+{%- assign modal_copy_above = false -%}
+{%- if active_promo.modal_copy_position == 'above' -%}
+  {%- assign modal_copy_above = true -%}
+{%- endif -%}
+
+{% comment %}
+  Convert the whitelist/blacklist to arrays
+{% endcomment %}
+{%- assign whitelist = promo.whitelist | newline_to_br | strip_newlines | split: '<br />' -%}
+{%- assign blacklist = promo.blacklist | newline_to_br | strip_newlines | split: '<br />' -%}
+
+{% comment %}
+  We begin from a default state of:
+  - promo bar visible
+  - modal manually triggered
+{% endcomment %}
+{%- assign bar_auto_open = true -%}
+{%- assign modal_auto_open = false -%}
+
+{% comment %}
+  Check request path against blacklist. As we cannot check query params until
+  the browser, we disable the promo if any are detected i.e. they contain a '='
+{% endcomment %}
+{%- if blacklist.size > 0 -%}
+  {%- for item in blacklist -%}
+    {%- if request.path contains item or item contains '=' -%}
+      {%- assign bar_auto_open = false -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{% comment %}
+  If there is a whitelist then everything is inverted and we should only be
+  enabling the promo when the whitelist contains the request path. There is no
+  point in checking for query params because this done by the JS in the browser
+  as part of the promo bar init
+{% endcomment %}
+{%- if whitelist.size > 0 -%}
+  {%- assign bar_auto_open = false -%}
+  {%- for item in whitelist -%}
+    {%- if request.path contains item -%}
+      {%- assign bar_auto_open = true -%}
+    {%- endif -%}
+  {%- endfor -%}
+{%- endif -%}
+
+{% comment %}
+  If
+  - the modal is enabled
+  - there is a zero or positive delay
+  - the URL of the CTA has matches the current page or it has not been set
+{% endcomment %}
+{%- if active_promo.modal_enabled -%}
+  {%- if active_promo.modal_scroll_delay > -10 -%}
+    {%- if active_promo.cta_url == blank or active_promo.cta_url == request.path -%}
+      {%- assign modal_auto_open = true -%}
+    {%- endif -%}
+  {%- endif -%}
+{%- endif -%}
+
+{%- if bar_auto_open -%}
+  {%- assign bar_visibility_class = 'is-shown' -%}
+{% else %}
+  {%- assign bar_visibility_class = 'is-hidden' -%}
+{%- endif -%}
+
+{%- if active_promo.countdown_enabled -%}
+  {%- assign bar_countdown_class = 'promo-bar--countdown' -%}
+{%- endif -%}
+
+{%- capture text -%}
+  <div class="promo-bar__text">
+    <div class="promo-bar__text-inner">
+      {{ active_promo.title | newline_to_br }}
+
+      {%- if active_promo.cta_url != blank and active_promo.cta_url != request.path  -%}
+        <a
+          class="ln promo-bar__cta"
+          href="{{ active_promo.cta_url }}">
+          {{ active_promo.cta_text }}
+        </a>
+      {%- elsif active_promo.modal_enabled -%}
+        <button class="ln promo-bar__cta js-cta">
+          {{ active_promo.cta_text }}
+        </button>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endcapture -%}
+
+{%- capture code -%}
+  {%- if active_promo.code != blank -%}
+    <button
+      class="promo-bar__code js-promo-code"
+      data-clipboard-text="{{ active_promo.code }}">
+      <span class="promo-bar__code-content">
+        {{ 'general.promotions.use_code' | t }}
+        <span>{{ active_promo.code }}</span>
+      </span>
+    </button>
+  {%- else -%}
+     <div class="promo-bar__code">
+    </div>
+  {%- endif -%}
+{%- endcapture -%}
+
+{%- capture countdown -%}
+  {%- if active_promo.countdown_enabled -%}
+    <div class="promo-bar__countdown">
+      {% render 'countdown', js_class: 'js-promo-countdown', is_small: true %}
+    </div>
+  {%- endif -%}
+{%- endcapture -%}
+
+<div class="promo-bar js-promo-bar {{ bar_visibility_class }} {{ bar_countdown_class }}">
+  <div class="promo-bar__copy">
+    {%- if active_promo.countdown_enabled -%}
+      {{ text }}
+      {{ code }}
+      {{ countdown }}
+    {%- else -%}
+      {{ text }}
+    {%- endif -%}
+  </div>
+  {{ code }}
+
+  <div class="stars">
+    {%- for i in (1..40) -%}
+      <div class="star-container">
+        <div class="star"></div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <script>
+    contextualise('activePromo', {
+      nowTimestamp: {{ now | json }},
+      endTimestamp: {{ end_timestamp | json }},
+      hasCountdown: {{ active_promo.countdown_enabled | json }},
+      hasCode: {{ code_enabled | json }},
+      hasModal: {{ active_promo.modal_enabled | json }},
+      hasForm: {{ active_promo.form_enabled | json }},
+      {%- if whitelist.size > 0 %}
+        whitelist: {{ whitelist | json }},
+      {%- endif -%}
+      {%- if blacklist.size > 0 %}
+        blacklist: {{ blacklist | json }},
+      {%- endif -%}
+      {%- if code_enabled %}
+        code: {{ active_promo.code | json }},
+      {%- endif -%}
+      {%- if active_promo.modal_enabled %}
+        modalAutoOpen: {{ modal_auto_open | json }},
+        modalAutoOpenDelay: {{ active_promo.modal_scroll_delay | json }},
+        img: {{ modal_img | json }},
+        title: {{ active_promo.modal_title | json }},
+        copy: {{ active_promo.modal_copy | json }},
+        copyAbove: {{ modal_copy_above | json }},
+        smallPrint: {{ active_promo.modal_small_print | json }},
+        ctaText: {{ active_promo.modal_cta_text | json }},
+        ctaUrl: {{ active_promo.modal_cta_url | json }},
+      {%- endif -%}
+      {%- if active_promo.form_enabled %}
+        formUID: {{ blockID | json }},
+        ometriaBucket: {{ active_promo.form_ometria_bucket | json }},
+        formCopy: {{ active_promo.form_copy | json }},
+        optInCopy: {{ active_promo.form_opt_in_copy | json }},
+        submitCopy: {{ active_promo.form_submit_copy | json }},
+      {%- endif %}
+    });
+  </script>
+</div>
+{%- endif -%}

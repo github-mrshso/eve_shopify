@@ -1,0 +1,119 @@
+@mixin theme-link(
+  $color: $color-link-color,
+  $border-color: $color-link-border,
+  $hover-color: $color-link-hover-color,
+) {
+  color: $color;
+
+  &,
+  .ln__text {
+    border-bottom-color: $color-border;
+
+    &::after {
+      background-color: $color-border;
+    }
+  }
+
+  &:hover,
+  &:hover:focus {
+    color: $hover-color;
+
+    &,
+    .ln__text {
+      border-bottom-color: transparent;
+    }
+  }
+
+  &:focus {
+    &,
+    .ln__text {
+      border-bottom-color: $hover-color;
+
+      &::after {
+        background-color: $hover-color;
+      }
+    }
+  }
+}
+
+@mixin make-link(
+  $color: $color-link-color,
+  $border-color: $color-link-border,
+  $hover-color: $color-link-hover-color,
+) {
+  // @include font('caption-01');
+  @include theme-link(
+    $color: $color-link-color,
+    $border-color: $color-link-border,
+    $hover-color: $color-link-hover-color,
+  );
+
+  display: inline-block;
+  text-decoration: none;
+  margin: 0;
+  transition: $transition-speed $transition-ease;
+  transition-property: color, border-color;
+
+  &,
+  .ln__text {
+    position: relative;
+    border-bottom: {
+      width: 1px;
+      style: solid;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      opacity: 0;
+      transition: opacity $transition-speed $transition-ease;
+    }
+  }
+
+  .ln__text {
+    transition: border-color $transition-speed $transition-ease;
+  }
+
+  &:hover,
+  &:hover:focus {
+    &,
+    .ln__text {
+      &::after {
+        opacity: 0;
+      }
+    }
+  }
+
+  &:focus {
+    &,
+    .ln__text {
+      &::after {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+@mixin make-link-join-in {
+  color: inherit;
+
+  &,
+  &:hover,
+  &:hover:focus {
+    font-size: inherit;
+    line-height: normal;
+    letter-spacing: inherit;
+  }
+}
+
+@mixin make-link-inverse {
+  @include theme-link(
+    $color: $color-link-inverse-color,
+    $border-color: $color-link-inverse-border,
+    $hover-color: $color-link-inverse-hover-color,
+  );
+}

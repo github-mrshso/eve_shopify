@@ -1,0 +1,7 @@
+/**
+ * This is a compiled CSS file.
+ * Changes here could be overwritten. 
+ * Contact your Shopify developers if changes need to be made.
+ */
+
+.twsc-signpost{text-align:center;position:relative;margin:0 auto}.twsc-signpost__img{margin:0 auto}.twsc-signpost__img svg{position:relative;z-index:2;display:block;margin:0 auto;max-width:100%}.twsc-signpost__img--sm{display:block;margin-bottom:-1rem}.twsc-signpost__img--sm svg{width:379px;height:250px}@media screen and (min-width: 750px){.twsc-signpost__img--sm{display:none}}.twsc-signpost__img--lg{display:none;max-width:488px}.twsc-signpost__img--lg svg{width:285px;height:189px}@media screen and (min-width: 750px){.twsc-signpost__img--lg{display:block}}.twsc-signpost__zeds svg{position:absolute;top:50%;z-index:1;transform:translateY(-50%);width:292px;height:262px}.twsc-signpost__zeds svg:first-child{left:0}.twsc-signpost__zeds svg:last-child{right:0}.twsc-signpost__body{position:relative;z-index:3;margin:0 auto;max-width:488px}@media screen and (min-width: 750px){.twsc-signpost__body{margin-top:2rem}}.twsc-signpost__footer{margin-top:2.5rem}

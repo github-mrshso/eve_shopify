@@ -1,0 +1,56 @@
+@import '../partials/_variables';
+
+.accordions {
+    position: relative;
+    z-index: 0;
+
+    &__header {
+        word-break: break-word;
+    }
+
+    &__heading {
+        margin: 0;
+    }
+
+    &__title {
+        font-family: $type_base_stack;
+        margin: 0;
+    }
+
+    &__group:not(:last-child) {
+        margin-bottom: 7rem;
+    }
+
+    &__content {
+        margin-bottom: 1.5rem;
+        word-break: break-word;
+        overflow-x: auto;
+        padding: 0 2.4rem;
+    }
+
+    &__content img {
+        max-width: 100%;
+        display: inline-block;
+        margin: 2rem 0;
+    }
+
+    .accordion summary {
+        padding: 2.4rem;
+    }
+
+    /* check for flexbox gap in older Safari versions */
+    @supports not (inset: 10px) {
+        @media screen and (min-width: 750px) {
+            &__grid .grid__item:last-child {
+                padding-left: 5rem;
+                padding-right: 0;
+            }
+        }
+
+        @media screen and (min-width: 990px) {
+            &__grid .grid__item:last-child {
+                padding-left: 7rem;
+            }
+        }
+    }
+}

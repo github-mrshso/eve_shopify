@@ -1,0 +1,23 @@
+<fieldset class="js product-form__input product-colour-swatches">
+    <legend class="form__label">{{ option.name }}</legend>
+    {%- for value in option.values -%}
+        {%- liquid
+            assign swatch_handle = value | handle
+            assign swatch_path = swatch_handle | prepend: 'swatch-' | append: '.png' | asset_url
+        -%}
+        <input type="radio" id="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+                name="{{ option.name }}"
+                value="{{ value | escape }}"
+                form="{{ product_form_id }}"
+                {% if option.selected_value == value %}checked{% endif %}
+        >
+        <label
+            for="{{ section.id }}-{{ option.position }}-{{ forloop.index0 }}"
+            style="background-image: url({{ swatch_path }})"
+            class="product-colour-swatches__swatch colour-swatch"
+            title="{{ value }}"
+        >
+        <span class="visually-hidden">{{ value | strip }}</span>
+        </label>
+    {%- endfor -%}
+  </fieldset>

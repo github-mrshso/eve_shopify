@@ -1,0 +1,45 @@
+{% if settings.mention_me_enabled and settings.mention_me_partner_code != blank %}
+
+  {%- assign selector = selector_class | default: 'undefined' -%}
+
+  {%- assign situation = tag_position | default: 'eveSite' -%}
+
+  <script id="mentionMe">
+    (function() {
+      if (window.MentionMeFiredTags != undefined && window.MentionMeFiredTags != '')
+        {
+          var situation = 'cart';
+          var implementation = 'link';
+
+          if (window.MentionMeFiredTags[implementation + situation]==true) {
+              delete window.MentionMeFiredTags[implementation + situation]
+          }
+        }
+
+      var situation = '{{ situation }}';
+      var selector = '{{ selector }}';
+
+      var target = document.querySelector(selector)
+
+      if (target) {
+        if (situation !== 'cart') {
+          // if we aren't in the cart create the mention-me wrapper required
+          var el = document.createElement('div');
+          el.id = "mmWrapper"
+          el.classList.add('checkout-mm', 'checkout-mm--link')
+
+          target.appendChild(el)
+        }
+
+        var mentionme = document.createElement('script');
+        var s = document.getElementsByTagName('script')[0];
+
+        mentionme.type = 'text/javascript';
+        mentionme.src = 'https://tag.mention-me.com/api/v2/refereefind/{{ settings.mention_me_partner_code }}?implementation=link&situation={{situation}}&locale={{ settings.mention_me_locale }}'
+        s.parentNode.insertBefore(mentionme, s);
+      } else {
+        Bugsnag.notify('Mention-Me target element not found');
+      }
+    })();
+  </script>
+{% endif %}

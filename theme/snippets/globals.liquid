@@ -1,0 +1,7 @@
+{% if shop.permanent_domain contains 'evesleep-ie' or shop.name contains 'evesleep-ie' %}
+  {%- assign global_region = 'ie' -%}
+{% elsif shop.permanent_domain contains 'evesleep-uk' or shop.name contains 'evesleep-uk' %}
+  {%- assign global_region = 'uk' -%}
+{% elsif shop.permanent_domain contains 'evesleep-fr' or shop.name contains 'evesleep-fr' %}
+  {%- assign global_region = 'fr' -%}
+{% endif %}

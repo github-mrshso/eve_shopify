@@ -1,0 +1,202 @@
+{{ 'component-article-related.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign ns = ns | default: ''
+  assign match = match | default: ''
+  assign tag_base = ns | append: ':' | append: match
+  assign limit = limit | default: 4
+  assign sort = sort | default: 'chronological'
+  assign as = as | default: ''
+  assign slider = slider | default: false
+  assign tags = article.tags
+  assign related_articles = ''
+
+  for tag in tags
+    if tag contains tag_base
+      assign parts = tag | split: ':'
+      assign tag_full = tag
+      assign tag_ns = parts[0]
+      assign tag_name = parts[1]
+      assign tag_value = parts[2]
+      break
+    endif
+  endfor
+
+  if sort == 'chronological'
+    assign sorted_articles = blog.articles | sort: 'published_at' | map: 'handle'
+
+    for handle in sorted_articles
+      unless handle == article.handle
+        if articles[handle].tags contains tag_full
+          assign related_articles = related_articles | append: handle | append: '|'
+        endif
+      endunless
+    endfor
+
+    assign related_articles = related_articles | split: '|'
+  endif
+
+  if sort == 'phase'
+    assign article_journey = tag_value
+    assign journey_tag_base = ns | append: ':' | append: 'journey'
+    assign phase_tag_base = ns | append: ':' | append: 'phase'
+    assign sort_refs = ''
+
+    comment
+      'Extract the phase for the article being related to'
+    endcomment
+
+    for tag in tags
+      if tag contains 'twsc:phase'
+        assign parts = tag | split: ':'
+        assign article_phase = parts[2]
+        break
+      endif
+    endfor
+
+    comment
+      '''
+      Create a sortable value from the journey and phase
+      e.g. 00009a, 00009b, 00010a, 00010b, 00010c etc
+      '''
+    endcomment
+
+    assign article_sort_id = article_journey | append: article_phase
+
+    comment
+      '''
+      Loop through the articles in the blog and create sortable indexes for
+      each of them.
+      '''
+    endcomment
+
+    paginate blog.articles by blog.articles_count
+      for article in blog.articles
+
+        comment
+          'Extract the journey and phase tags from the article'
+        endcomment
+
+        for tag in article.tags
+          if tag contains journey_tag_base
+            assign parts = tag | split: ':'
+            assign journey_tag_value = parts[2]
+            continue
+          endif
+          if tag contains phase_tag_base
+            assign parts = tag | split: ':'
+            assign phase_tag_value = parts[2]
+            continue
+          endif
+        endfor
+
+        comment
+          'If the article is not part of the same journey then bail'
+          'NB. in order to recommend articles from other journeys then you can'
+          'simply remove this step'
+        endcomment
+
+        if journey_tag_value != article_journey
+          continue
+        endif
+
+        comment
+          'Construct a string of sortable values and handles with a'
+          'deliminiator so that we can split it and sort it later'
+          'e.g. 00009a:handle/one|00009c:handle/three'
+        endcomment
+
+        if journey_tag_value and phase_tag_value
+          assign sort_id = journey_tag_value | append: phase_tag_value
+          assign sort_ref = sort_id | append: ':' | append: article.handle
+          assign sort_refs = sort_refs | append: sort_ref | append: '|'
+        endif
+
+        assign journey_tag_value = false
+        assign phase_tag_value = false
+      endfor
+    endpaginate
+
+    comment
+      'Create an array from the string of values and sort them'
+    endcomment
+
+    assign sorted_refs = sort_refs | split: '|' | sort
+    assign current_index = false
+
+    comment
+      '''
+      Loop through the sorted refs to find the location of the current
+      article. It is from this location that we suggest the next articles
+
+      This bit will support choosing the next articles across journeys but has
+      been commented out because we are only interested in articles within the
+      same journey.
+      '''
+
+      '''
+      for ref in sorted_refs
+        assign parts = ref | split: ':'
+        assign sort_id = parts[0]
+
+        if sort_id == article_sort_id
+          assign current_index = forloop.index0
+          break
+        endif
+      endfor
+
+      assign article_from = current_index | plus: 1
+      assign article_until = article_from | plus: limit | minus: 1
+
+      for ref in (article_from..article_until)
+        assign ref = sorted_refs[ref]
+        assign parts = sorted_refs[ref] | split: ':'
+        assign handle = parts[1]
+        assign related_articles = related_articles | append: handle | append: '|'
+      endfor
+      '''
+    endcomment
+
+    for ref in sorted_refs
+      assign parts = ref | split: ':'
+      assign sort_id = parts[0]
+      assign handle = parts[1]
+
+      if sort_id == article_sort_id
+        continue
+      endif
+
+      assign related_articles = related_articles | append: handle | append: '|'
+    endfor
+
+    assign related_articles = related_articles | split: '|'
+  endif
+-%}
+
+{%- assign count = 0 -%}
+
+{% capture items %}
+  {% comment %}
+    TODO: handle instance where related articles has run out
+  {% endcomment %}
+  {% for handle in related_articles %}
+    {%- unless handle == article.handle -%}
+      {%- assign related_article = articles[handle] -%}
+      <div class="article-related__item">
+        {%- render 'article-related-item',
+          article: related_article
+        -%}
+        {%- assign count = count | plus: 1 -%}
+      </div>
+      {%- if count >= limit -%}
+        {%- break -%}
+      {%- endif -%}
+    {% endunless %}
+  {% endfor %}
+{% endcapture %}
+
+{%- if count > 0 -%}
+  <div class="article-related">
+    {{ items }}
+  </div>
+{%- endif -%}

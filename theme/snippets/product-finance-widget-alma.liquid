@@ -1,0 +1,96 @@
+{% comment %}
+This works in conjunction with an async JS piece. Be careful when modifying to
+ensure that this works with both JS and no-JS
+{% endcomment %}
+
+{%- assign price = product.price | divided_by: 100.00 -%}
+{%- assign threshold = settings.finance_threshold | plus: 0 -%}
+{%- assign instalments = 10 -%}
+{%- assign deliminator = '.' -%}
+{%- assign instalment_price = price | divided_by: instalments | round: 2 -%}
+
+{% comment %}
+  Break the price into its integer-part (dollar) and its fractional-part (cents)
+  e.g. 234.10 => [234,1]
+{% endcomment %}
+{%- assign parts = instalment_price | split: deliminator -%}
+{%- assign dollar = parts[0] -%}
+{%- assign cents = parts[1] -%}
+
+{% comment %}
+  If the cents is only 1 integer long then we pad it out to two
+{% endcomment %}
+{%- if cents.size == 1 -%}
+  {%- assign cents = cents | append: '0' -%}
+{%- endif -%}
+
+{% comment %}
+  As long as it is not a round dollar value then we prepend a deliminator,
+  otherwise we just remove the cents value altogether.
+{% endcomment %}
+{%- if cents != '00' and cents != blank-%}
+  {%- assign cents = deliminator | append: cents -%}
+{% else %}
+  {%- assign cents = '' -%}
+{%- endif -%}
+
+{% comment %}
+  Reconstruct the price by joining the dollar value with the cents (either a
+  formatted value or an empty string)
+{% endcomment %}
+{%- assign instalment_price = dollar | append: cents -%}
+
+{% comment %}
+  Generate the static version of the widget. This will cover displaying on page
+  load as well as the cases where JS is not available.
+{% endcomment %}
+{%- capture static -%}
+  ou {{ instalments }} paiements de
+  <strong>{{ 'products.product.money_raw' | t: amount_no_round_decimals: instalment_price }}</strong>
+  avec
+  {% render 'svg-from-sprite',
+    id: 'svg-alma-logo'
+    width: '44',
+    height: '24',
+  %}
+{%- endcapture -%}
+
+{% comment %}
+  Generate the dynamic version here. This is a Handlebars template and will be
+  rendered into the static container when the variant is changed
+{% endcomment %}
+{%- capture dynamic -%}
+  {%- raw -%}
+  ou {{ instalments }} paiements de
+  <strong>{{ price }}</strong>
+  avec
+  {%- endraw -%}
+  {% render 'svg-from-sprite',
+    id: 'svg-alma-logo'
+    width: '44',
+    height: '24',
+  %}
+{%- endcapture -%}
+
+{% comment %}
+ Always render the wrapper with the static version within. This will be
+ overwritten when the JS does its thing
+{% endcomment %}
+<div
+  data-instalments="{{ instalments }}"
+  data-threshold="{{ threshold }}"
+  id="alma-widget">
+  {%- if price >= threshold -%}
+    {{ static }}
+  {%- endif -%}
+</div>
+
+{% comment %}
+  Add the dynamic version to a template script such that it can be used
+  asynchronously
+{% endcomment %}
+<script
+  id="alma-widget-tpl"
+  type="text/x-handlebars-template">
+  {{ dynamic }}
+</script>

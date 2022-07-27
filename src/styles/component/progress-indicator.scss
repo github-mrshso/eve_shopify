@@ -1,0 +1,203 @@
+@use 'sass:math';
+
+@import '../partials/variables';
+@import '../partials/mixins';
+
+// Progress Indicator
+// Lifted and adapted from legacy theme
+// Built on top of the .breadcrumb selector
+
+// stylelint-disable max-line-length
+$progress-indicator-line-width: 65px;
+$progress-indicator-step-bottom-spacing: 0.25rem;
+$progress-indicator-step-height: 3rem;
+$progress-indicator-step-width: 3rem;
+$progress-indicator-step-line-height: 3rem;
+$progress-indicator-step-spacing: 3px;
+$color-progress-indicator-complete-background: $color-base-white;
+$progress-indicator-step-top-margin: 1rem;
+$progress-indicator-step-list: breadcrumb-steps;
+$progress-indicator-margin-top: $padding-s;
+$progress-indicator-margin-bottom: $padding-l;
+$progress-indicator-steps: 5;
+$progress-indicator-dynamic-steps: 4;
+$progress-indicator-breadcrumb-width: math.div(100%, $progress-indicator-steps);
+$progress-indiactor-static-steps: $progress-indicator-steps - $progress-indicator-dynamic-steps;
+// stylelint-enable max-line-length
+
+@mixin progress-indicator($state) {
+  @if $state == complete {
+    .breadcrumb__item--completed {
+      .breadcrumb__link,
+      .breadcrumb__text {
+        &::before {
+          @content;
+        }
+      }
+    }
+  }
+
+  @if $state == active {
+    .breadcrumb__item--current {
+      .breadcrumb__link,
+      .breadcrumb__text {
+        &::before {
+          @content;
+        }
+      }
+    }
+  }
+
+  @if $state == upcoming {
+    li::before {
+      @content;
+    }
+  }
+}
+
+.breadcrumb__wrapper {
+  // stylelint-disable-next-line max-line-length
+  @include custom-list-style('.breadcrumb__link, .breadcrumb__text', $list: $progress-indicator-step-list, $format: decimal);
+
+  display: flex;
+  margin: $progress-indicator-margin-top 0 $progress-indicator-margin-bottom;
+
+  nav {
+    // stylelint-disable-next-line max-line-length
+    width: $progress-indicator-breadcrumb-width * $progress-indicator-dynamic-steps;
+    display: flex;
+  }
+}
+
+.breadcrumb {
+  position: relative;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  // stylelint-disable-next-line declaration-no-important
+  margin-top: 0 !important;
+  font-family: var(--font-body-family);
+
+  &::after {
+    content: '';
+    @extend %breadcrumb-after;
+  }
+
+  .breadcrumb__chevron-icon {
+    display: none;
+  }
+}
+
+.breadcrumb__item {
+  // stylelint-disable-next-line declaration-no-important
+  display: block !important;
+
+  // hiding the cart step
+  &:first-child {
+    // stylelint-disable-next-line declaration-no-important
+    display: none !important;
+  }
+}
+
+.breadcrumb__link,
+.breadcrumb__text {
+  // @include font('helper-01');
+
+  display: block;
+  margin: 0 auto;
+  white-space: nowrap;
+  text-transform: lowercase;
+  color: $colorTextBody;
+
+  &::before {
+    @extend %breadcrumb-before;
+  }
+}
+
+.breadcrumb__link {
+  &::before {
+    cursor: pointer;
+  }
+
+  &:hover {
+    color: $colorTextBody;
+  }
+}
+
+@include progress-indicator('complete') {
+  content: $nc-check-sm;
+  font-family: $icon-font;
+  font-size: 1.6rem;
+  border: 2px solid $colorBtnPrimary;
+  padding: 0;
+}
+
+@include progress-indicator('active') {
+  // @include font('helper-01');
+
+  color: $colorTextBody;
+  border: 2px solid $colorBtnPrimary;
+  background: $colorBtnPrimary;
+  padding: 0;
+}
+
+.breadcrumb__done {
+  width: $progress-indicator-breadcrumb-width;
+  flex: 0;
+  display: inline-block;
+  margin-right: 0;
+
+  &::before {
+    @extend %breadcrumb-before;
+
+    content: counter($progress-indicator-step-list, decimal);
+  };
+
+  &::after {
+    content: '';
+    @extend %breadcrumb-after;
+    @extend %breadcrumb-after-done;
+  };
+}
+
+%breadcrumb-before {
+  // @include font('helper-01');
+
+  position: relative;
+  z-index: 2;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto $progress-indicator-step-bottom-spacing;
+  width: $progress-indicator-step-width;
+  height: $progress-indicator-step-height;
+  // stylelint-disable-next-line declaration-no-important
+  line-height: $progress-indicator-step-line-height !important;
+  text-align: center;
+  box: {
+    shadow: 0 0 0 $progress-indicator-step-spacing $colorBody;
+    sizing: content-box;
+  };
+
+  transition: background-color $transition-speed $transition-ease;
+  background: $colorBody;
+  border: 1px solid $colorBorder;
+  padding: 1px; // Take up the space lost in the border width
+}
+
+%breadcrumb-after {
+  position: absolute;
+  top: calc(#{math.div($progress-indicator-step-height, 2)} + 2px);
+  left: #{math.div($progress-indicator-line-width, 2)};
+  right: #{math.div($progress-indicator-line-width, 2)};
+  z-index: 1;
+  display: block;
+  height: 1px;
+  background-color: $colorBorder;
+}
+
+%breadcrumb-after-done {
+  left: -#{$progress-indicator-line-width * 2};
+}

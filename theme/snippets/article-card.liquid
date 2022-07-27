@@ -1,0 +1,204 @@
+{% comment %}
+    Renders an article card for a given blog with settings to either show the image or not.
+
+    Accepts:
+    - blog: {Object} Blog object
+    - article: {Object} Article object
+    - media_aspect_ratio: {String} The setting changes the aspect ratio of the article image, if shown
+    - media_height: {String} The setting changes the height of the article image. Overrides media_aspect_ratio.
+    - show_image: {String} The setting either show the article image or not. If it's not included it will show the image by default
+    - show_date: {String} The setting either show the article date or not. If it's not included it will not show the image by default
+    - show_author: {String} The setting either show the article author or not. If it's not included it will not show the author by default
+    - show_badge: {String} The setting either show the blog badge or not.
+    - lazy_load: {Boolean} Image should be lazy loaded. Default: true (optional)
+
+    Usage:
+    {% render 'article-card' blog: blog, article: article, show_image: section.settings.show_image %}
+{% endcomment %}
+
+{{ 'component-icons.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign as = as | default: false
+  assign format = format | default: false
+  assign sizes = sizes | default: false
+  assign index = index | default: false
+-%}
+
+{% comment %}
+  Extract type tag value e.g. foo from twsc:type:foo
+{% endcomment %}
+
+{%- capture article_type -%}
+  {%- render 'article-tags',
+    tags: article.tags,
+    ns: 'twsc',
+    name: 'type',
+    as: 'raw',
+    limit: 1
+  -%}
+{%- endcapture -%}
+{%- assign article_type = article_type | strip -%}
+{%- assign type_class = 'card--' | append: article_type -%}
+
+{% comment %}
+  Create a badge from the pillar tag e.g. foo from twsc:pillar:foo
+{% endcomment %}
+
+{%- capture article_tags -%}
+  {%- render 'article-tags',
+    tags: article.tags,
+    ns: 'twsc',
+    name: 'pillar',
+    as: 'badge',
+    limit: 1
+  -%}
+{%- endcapture -%}
+{%- assign article_tags = article_tags | strip -%}
+
+{% comment %}
+  Define whether the card should be displayed in it's promo form
+{% endcomment %}
+
+{%- liquid
+  case as
+    when 'promo'
+      assign style_class = 'card--promo'
+    when 'feature'
+      assign style_class = 'card--feature'
+    else
+      assign style_class = ''
+  endcase
+-%}
+
+{% comment %}
+  Define the card image requirements. These must be accompanied by some CSS to
+  modify the style.
+
+  This is filthy but currently all that my brain can muster.
+  Forgive me, for I have sinned.
+{% endcomment %}
+
+{%- liquid
+  if as == 'feature'
+    assign card_img_size = '830:feed-full-height,default:feed-hero'
+  elsif as == 'promo' or article_type == 'tool'
+    assign card_img_size = 'default:feed-full-height'
+  else
+    assign card_img_size = 'default:article-hero-small'
+  endif
+
+  case sizes
+    when '2:2'
+      assign format_class = 'card--format-2-2'
+      assign card_img_size = '830:article-hero-small,1220:article-hero-large,default:article-hero-small'
+    when '2:2,3:1'
+      assign format_class = 'card--format-2-2 card--format-3-1'
+      assign card_img_size = '830:article-hero-small,1220:article-hero-large,default:article-hero-small'
+    when '2:2,3:2'
+      assign format_class = 'card--format-2-2 card--format-3-2'
+      assign card_img_size = '830:article-hero-small,1220:article-hero-large,default:article-hero-large'
+    when '3:2'
+      assign format_class = 'card--format-3-2'
+      assign card_img_size = '1220:article-hero-small,default:article-hero-large'
+    when '3:3'
+      assign format_class = 'card--format-3-3'
+      assign card_img_size = '1220:article-hero-small,default:feed-full-width'
+  endcase
+-%}
+
+{%- if article and article != empty -%}
+  {%- liquid
+    assign ratio = 1
+    if media_aspect_ratio != nil
+      assign ratio = media_aspect_ratio
+    endif
+  -%}
+  {% comment %} <article aria-labelledby="Article-{{ article.id }}"> {% endcomment %}
+  <div class="card card--article
+    card--card
+    card__image--medium
+    card--media
+    color-background-2 gradient
+    {{ type_class }} {{ style_class }} {{ format_class }}
+    "
+  >
+    <a href="{{ article.url }}" class="card__link full-unstyled-link">
+      <div class="card__inner {% if settings.card_style == 'standard' %} color-{{ settings.card_color_scheme }} gradient{% endif %}{% if article.image and show_image or settings.card_style == 'standard' %} ratio{% endif %}">
+        {%- if show_image == true and article.image -%}
+          <div class="card__media">
+            {%- render 'article-img',
+              id: article.id,
+              sizes: card_img_size
+              alt: article.image.alt
+              loading: 'lazy'
+            -%}
+          </div>
+        {%- endif -%}
+      </div>
+      <div class="card__content">
+        <div class="card__information">
+          {% capture article_type %}
+            {% for tag in article.tags %}
+              {% if tag contains 'twsc:type:' %}
+                {{ tag | remove: 'twsc:type:'}}
+              {% endif %}
+            {% endfor %}
+          {% endcapture %}
+          {% assign article_type = article_type | strip %}
+            {% case article_type %}
+              {% when 'article' %}
+                <span class="card__icon">
+                  <i class="nc-icon nc-page-24"></i>
+                </span>
+              {% when 'resource' %}
+                <span class="card__icon">
+                  <i class="nc-icon nc-box-24"></i>
+                </span>
+              {% when 'video' %}
+                <span class="card__icon">
+                  <i class="nc-icon nc-play-24"></i>
+                </span>
+            {% endcase %}
+          <h2 class="card__heading{% if show_excerpt %} h2{% endif %}">
+            {{ article.title | replace: '*', '' }}
+          </h2>
+          <div class="card__meta">
+            {%- if show_date -%}
+              <span class="circle-divider">{{ article.published_at | time_tag: format: 'date' }}</span>
+            {%- endif -%}
+            {%- if show_author -%}
+              <span>{{ article.author }}</span>
+            {%- endif -%}
+          </div>
+          {%- if show_excerpt -%}
+            {%- if article.excerpt.size > 0 or article.content.size > 0 -%}
+              <p class="card__excerpt rte-width">
+                {%- if article.excerpt.size > 0 -%}
+                  {{ article.excerpt | strip_html | truncatewords: 30 }}
+                {%- else -%}
+                  {{ article.content | strip_html | truncatewords: 30 }}
+                {%- endif -%}
+              </p>
+            {%- endif -%}
+            <div class="card__footer">
+              {%- if article.comments_count > 0 and blog.comments_enabled? -%}
+                <span>{{ 'blogs.article.comments' | t: count: article.comments_count }}</span>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        </div>
+        {%- if show_badge -%}
+          <div class="card__badge">
+            {% render 'article-tags',
+              tags: article.tags,
+              ns: 'twsc',
+              name: 'pillar'
+              as: 'badge'
+            %}
+          </div>
+        {%- endif -%}  
+      </div>
+    </a>
+  </div>
+{%- endif -%}

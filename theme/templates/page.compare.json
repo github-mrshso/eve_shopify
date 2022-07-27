@@ -1,0 +1,245 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "narrow_width": false,
+        "center_header": true,
+        "hide_header": false,
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "1650542064c637efd7": {
+      "type": "mattress-comparison",
+      "blocks": {
+        "316d5722-a3da-4f34-a4f5-9aa4b8e265c8": {
+          "type": "feature",
+          "settings": {
+            "product_1_icon": "nc-premium-hybrid-layers-number",
+            "product_1_spec": "5 foam layers + 1500 pocket springs",
+            "product_2_icon": "nc-original-hybrid-layers-number",
+            "product_2_spec": "4 foam layer + 800 pocket springs",
+            "product_3_icon": "nc-original-layers-number",
+            "product_3_spec": "3 foam layers",
+            "product_4_icon": "nc-light-hybrid-layers-number",
+            "product_4_spec": "3 foam layers + 650 pocket springs",
+            "product_5_icon": "nc-premium-layers-number",
+            "product_5_spec": "4 foam layers",
+            "product_6_icon": "nc-light-layers-number",
+            "product_6_spec": "2 foam layers",
+            "product_7_icon": "nc-c-question-1",
+            "product_7_spec": "",
+            "product_8_icon": "nc-c-question-1",
+            "product_8_spec": ""
+          }
+        },
+        "b24e51ba-d440-459c-a04c-2515d992bc33": {
+          "type": "feature",
+          "settings": {
+            "product_1_icon": "nc-measure-02",
+            "product_1_spec": "28cm thick",
+            "product_2_icon": "nc-measure-02",
+            "product_2_spec": "25cm thick",
+            "product_3_icon": "nc-measure-02",
+            "product_3_spec": "24cm thick",
+            "product_4_icon": "nc-measure-02",
+            "product_4_spec": "20cm thick",
+            "product_5_icon": "nc-measure-02",
+            "product_5_spec": "28cm thick",
+            "product_6_icon": "nc-measure-02",
+            "product_6_spec": "20cm thick",
+            "product_7_icon": "nc-c-question-1",
+            "product_7_spec": "",
+            "product_8_icon": "nc-c-question-1",
+            "product_8_spec": ""
+          }
+        },
+        "7d58c21e-2c42-4dde-905b-4c5a17ca2e8e": {
+          "type": "feature",
+          "settings": {
+            "product_1_icon": "nc-pressure-relief-2",
+            "product_1_spec": "advanced pressure relieving top layer",
+            "product_2_icon": "",
+            "product_2_spec": "-",
+            "product_3_icon": "",
+            "product_3_spec": "-",
+            "product_4_icon": "",
+            "product_4_spec": "-",
+            "product_5_icon": "nc-pressure-relief-2",
+            "product_5_spec": "advanced pressure relieving top layer",
+            "product_6_icon": "",
+            "product_6_spec": "-",
+            "product_7_icon": "nc-c-question-1",
+            "product_7_spec": "",
+            "product_8_icon": "nc-c-question-1",
+            "product_8_spec": ""
+          }
+        },
+        "63faaeb8-f087-4ca3-9eca-938ee910c9ec": {
+          "type": "feature",
+          "settings": {
+            "product_1_icon": "nc-zoned-support",
+            "product_1_spec": "7-zoned support technology to relieve pressure on your shoulders and hips",
+            "product_2_icon": "nc-zoned-support",
+            "product_2_spec": "7-zoned support technology to relieve pressure on your shoulders and hips",
+            "product_3_icon": "nc-zoned-support",
+            "product_3_spec": "7-zoned support technology to relieve pressure on your shoulders and hips",
+            "product_4_icon": "nc-zoned-support",
+            "product_4_spec": "5-zoned support technology for pressure relief on your shoulders",
+            "product_5_icon": "nc-zoned-support",
+            "product_5_spec": "7-zoned support technology to relieve pressure on your shoulders and hips",
+            "product_6_icon": "nc-zoned-support",
+            "product_6_spec": "5-zoned support technology for pressure relief on your shoulders",
+            "product_7_icon": "nc-c-question-1",
+            "product_7_spec": "",
+            "product_8_icon": "nc-c-question-1",
+            "product_8_spec": ""
+          }
+        },
+        "bc11f436-7fcd-4e6f-b71e-f223a8caaab2": {
+          "type": "feature",
+          "settings": {
+            "product_1_icon": "nc-temperature-2",
+            "product_1_spec": "advanced temperature regulation",
+            "product_2_icon": "",
+            "product_2_spec": "-",
+            "product_3_icon": "",
+            "product_3_spec": "-",
+            "product_4_icon": "",
+            "product_4_spec": "-",
+            "product_5_icon": "nc-temperature-2",
+            "product_5_spec": "advanced temperature regulation",
+            "product_6_icon": "",
+            "product_6_spec": "-",
+            "product_7_icon": "nc-c-question-1",
+            "product_7_spec": "",
+            "product_8_icon": "nc-c-question-1",
+            "product_8_spec": ""
+          }
+        },
+        "cf3cab49-ddc4-409a-87c2-b65d90619dc7": {
+          "type": "feature",
+          "settings": {
+            "product_1_icon": "nc-edit-brightness-1",
+            "product_1_spec": "antibacterial and antimicrobial",
+            "product_2_icon": "",
+            "product_2_spec": "-",
+            "product_3_icon": "",
+            "product_3_spec": "-",
+            "product_4_icon": "",
+            "product_4_spec": "-",
+            "product_5_icon": "nc-edit-brightness-1",
+            "product_5_spec": "antibacterial and antimicrobial",
+            "product_6_icon": "",
+            "product_6_spec": "-",
+            "product_7_icon": "nc-c-question-1",
+            "product_7_spec": "",
+            "product_8_icon": "nc-c-question-1",
+            "product_8_spec": ""
+          }
+        },
+        "839b98a5-944d-46a5-9e88-74955c0e0f99": {
+          "type": "global_feature",
+          "settings": {
+            "icon": "nc-medium-firm",
+            "spec": "medium-firm support"
+          }
+        },
+        "920145d3-a318-4864-acad-725de2bac73e": {
+          "type": "global_feature",
+          "settings": {
+            "icon": "nc-sleep",
+            "spec": "suitable for all sleeping positions"
+          }
+        },
+        "c85ada3d-98c7-4ee9-9b1e-c20083323c9f": {
+          "type": "global_feature",
+          "settings": {
+            "icon": "nc-wind",
+            "spec": "breathable foam"
+          }
+        },
+        "72405562-e32a-47cb-bfb6-f7204c6c6f1b": {
+          "type": "global_feature",
+          "settings": {
+            "icon": "nc-pressure-relief",
+            "spec": "pressure relief"
+          }
+        },
+        "caf9c62d-5241-4c23-9d71-5385535fefaa": {
+          "type": "global_feature",
+          "settings": {
+            "icon": "nc-no-motion-transfer",
+            "spec": "no motion transfer"
+          }
+        },
+        "6a04d515-545c-4dcf-876d-adbe31b1ec5e": {
+          "type": "global_feature",
+          "settings": {
+            "icon": "nc-alignement",
+            "spec": "spine-alignment"
+          }
+        },
+        "9b4103be-218e-4f5a-a2b8-308ece49b3b1": {
+          "type": "global_feature",
+          "settings": {
+            "icon": "nc-no-sinking",
+            "spec": "stop the ‘sinking feeling’ associated with traditional memory foam"
+          }
+        },
+        "7d504fd4-af58-41f4-aa69-7c4d5bca40a2": {
+          "type": "global_feature",
+          "settings": {
+            "icon": "nc-wash",
+            "spec": "the top cover can be unzipped and washed at 40°C"
+          }
+        }
+      },
+      "block_order": [
+        "316d5722-a3da-4f34-a4f5-9aa4b8e265c8",
+        "b24e51ba-d440-459c-a04c-2515d992bc33",
+        "7d58c21e-2c42-4dde-905b-4c5a17ca2e8e",
+        "63faaeb8-f087-4ca3-9eca-938ee910c9ec",
+        "bc11f436-7fcd-4e6f-b71e-f223a8caaab2",
+        "cf3cab49-ddc4-409a-87c2-b65d90619dc7",
+        "839b98a5-944d-46a5-9e88-74955c0e0f99",
+        "920145d3-a318-4864-acad-725de2bac73e",
+        "c85ada3d-98c7-4ee9-9b1e-c20083323c9f",
+        "72405562-e32a-47cb-bfb6-f7204c6c6f1b",
+        "caf9c62d-5241-4c23-9d71-5385535fefaa",
+        "6a04d515-545c-4dcf-876d-adbe31b1ec5e",
+        "9b4103be-218e-4f5a-a2b8-308ece49b3b1",
+        "7d504fd4-af58-41f4-aa69-7c4d5bca40a2"
+      ],
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36,
+        "product_1": "the-premium-hybrid-mattress",
+        "product_1_image_profile": "shopify:\/\/shop_images\/mattress-side-premium_hybrid.jpg",
+        "product_1_image_layers": "shopify:\/\/shop_images\/mattress-layers-premium-hybrid.jpg",
+        "product_2": "the-original-hybrid-mattress",
+        "product_2_image_profile": "shopify:\/\/shop_images\/eve-sleep-original-hybrid-UK-mattress-layers-side-diagram_256x256_2ca42ff5-dfda-4ee6-abb6-f2bf7a05105b.webp",
+        "product_2_image_layers": "shopify:\/\/shop_images\/eve-sleep-original-hybrid-UK-mattress-layers-diagram_big.webp",
+        "product_3": "the-original-foam-mattress",
+        "product_3_image_profile": "shopify:\/\/shop_images\/mattress-side-eve-zoned.jpg",
+        "product_3_image_layers": "shopify:\/\/shop_images\/mattress-layers-eve-zoned.jpg",
+        "product_4": "the-lighter-hybrid-mattress",
+        "product_4_image_profile": "shopify:\/\/shop_images\/mattress-side-hybrid.jpg",
+        "product_4_image_layers": "shopify:\/\/shop_images\/mattress-layers-hybrid.jpg",
+        "product_5": "the-premium-foam-mattress",
+        "product_5_image_profile": "shopify:\/\/shop_images\/PREMIUM_WATERFALL_MATTRESS_LAYERS_small_b2f64453-e6b1-4364-b598-1b2c6e4e2653.webp",
+        "product_5_image_layers": "shopify:\/\/shop_images\/PREMIUM_WATERFALL_MATTRESS_LAYERS_big.webp",
+        "product_6": "the-light-foam-mattress",
+        "product_6_image_profile": "shopify:\/\/shop_images\/eve-sleep-light-foam-mattress-layers-side-diagram.jpg",
+        "product_6_image_layers": "shopify:\/\/shop_images\/eve-sleep-light-foam-mattress-layers-diagram.jpg",
+        "product_7": "",
+        "product_8": ""
+      }
+    }
+  },
+  "order": [
+    "main",
+    "1650542064c637efd7"
+  ]
+}

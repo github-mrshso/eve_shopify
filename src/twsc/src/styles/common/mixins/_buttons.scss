@@ -1,0 +1,259 @@
+// Reset button – https://gist.github.com/MoOx/9137295
+@mixin reset-button {
+  // stylelint-disable property-no-vendor-prefix
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+  outline: none;
+  background-color: transparent;
+
+  // inherit font & color from ancestor
+  color: inherit;
+  font: inherit;
+
+  // Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+.
+  line-height: normal;
+
+  // Corrects font smoothing for webkit
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+
+  // Corrects inability to style clickable `input` types in iOS
+  -webkit-appearance: none;
+
+  // Remove excess padding and border in Firefox 4+
+  &::-moz-focus-inner {
+    border: 0;
+    padding: 0;
+  }
+
+  &:disabled {
+    pointer-events: none;
+  }
+  // stylelint-enable property-no-vendor-prefix
+}
+
+@mixin button-state($state) {
+  // stylelint-disable selector-max-specificity
+  @if $state == disabled {
+    &:disabled,
+    &[disabled],
+    &.disabled {
+      &:not(.loading) {
+        &,
+        &:hover,
+        &:active,
+        &:focus {
+          @content;
+        }
+      }
+    }
+  }
+
+  @if $state == hover {
+    &:hover {
+      @content;
+    }
+  }
+
+  @if $state == active {
+    &:active,
+    &.is-active {
+      @content;
+    }
+  }
+
+  @if $state == focus {
+    &:focus {
+      &:not(:active) {
+        &:not(:hover) {
+          @content;
+        }
+      }
+    }
+  }
+
+  @if $state == loading {
+    &.is-loading {
+      &,
+      &:hover,
+      &:active,
+      &:focus,
+      &:disabled,
+      &[disabled],
+      &.disabled {
+        @content;
+      }
+    }
+  }
+  // stylelint-enable selector-max-specificity
+}
+
+@mixin make-button {
+  @include font('button-01');
+
+  position: relative;
+  display: inline-block;
+  appearance: none;
+  border: {
+    width: 2px;
+    style: solid;
+    radius: $button-radius;
+  }
+  text: {
+    align: center;
+    overflow: ellipsis;
+    decoration: none;
+    transform: uppercase;
+  }
+
+  cursor: pointer;
+  white-space: nowrap;
+  // stylelint-disable-next-line declaration-no-important
+  outline: none !important;
+  transition: $transition-speed $transition-ease;
+  transition-property: background-color, box-shadow, border-color;
+  padding: 0 $button-padding-x;
+  overflow: hidden;
+  height: $button-height;
+  min-width: $button-min-width;
+  vertical-align: middle;
+  line-height: calc(#{$button-height} - #{$button-border-width * 2});
+  // stylelint-disable property-no-vendor-prefix
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  // stylelint-enable property-no-vendor-prefix
+  user-select: none;
+
+  .nc-icon {
+    vertical-align: -0.125em;
+  }
+
+  @include button-state(disabled) {
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+
+  @include button-state(loading) {
+    cursor: default;
+    pointer-events: none;
+
+    .btn__loading {
+      opacity: 1;
+    }
+
+    .btn__text {
+      opacity: 0;
+    }
+  }
+}
+
+@mixin make-button-small {
+  @include font(button-02);
+
+  height: $button-small-height;
+  line-height: calc(#{$button-small-height} - #{$button-border-width * 2});
+}
+
+@mixin make-button-primary {
+  @include elevation(raised);
+
+  background-color: $color-button-bg;
+  border-color: $color-button-bg;
+
+  @include button-state(disabled) {
+    @include elevation(flat);
+
+    color: $color-button-disabled-color;
+    background-color: $color-button-disabled-bg;
+    border-color: $color-button-disabled-bg;
+  }
+
+  @include button-state(hover) {
+    @include elevation(raised-hover);
+
+    background-color: $color-button-hover-bg;
+    border-color: $color-button-hover-bg;
+  }
+
+  // stylelint-disable-next-line scss/media-feature-value-dollar-variable
+  @media (hover: none) {
+    @include button-state(hover) {
+      @include elevation(raised);
+
+      background-color: $color-button-hover-bg;
+      border-color: $color-button-hover-bg;
+    }
+  }
+
+  @include button-state(active) {
+    @include elevation(flat);
+  }
+
+  @include button-state(focus) {
+    @include elevation(raised-hover);
+
+    html.tab-outline & {
+      border-color: $color-button-focus-border;
+    }
+  }
+
+  @include button-state(loading) {
+    @include elevation(flat);
+
+    background-color: $color-button-hover-bg;
+    border-color: $color-button-hover-bg;
+  }
+}
+
+@mixin make-button-outline {
+  background-color: $color-button-outline-bg;
+  box-shadow: none;
+  border: {
+    color: $color-button-outline-border;
+    width: 1px;
+  }
+
+  @include button-state(disabled) {
+    color: $color-button-disabled-color;
+    border-color: $color-button-outline-disabled-border;
+  }
+
+  @include button-state(hover) {
+    border-color: $color-button-outline-hover-border;
+  }
+
+  // stylelint-disable-next-line scss/media-feature-value-dollar-variable
+  @media (hover: none) {
+    @include button-state(hover) {
+      border-color: $color-button-outline-border;
+    }
+  }
+
+  @include button-state(active) {
+    background-color: $color-button-outline-active-bg;
+  }
+
+  @include button-state(focus) {
+    html.tab-outline & {
+      box-shadow: inset 0 0 0 1px $color-button-outline-focus-border;
+    }
+  }
+
+  @include button-state(loading) {
+    background-color: $color-button-outline-active-bg;
+  }
+}
+
+@mixin make-button-full-width {
+  width: 100%;
+  display: block;
+}
+
+@mixin make-button-auto-width {
+  width: auto;
+  display: inline-block;
+}

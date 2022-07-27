@@ -1,0 +1,13 @@
+{%- liquid
+  assign width = width | default: ''
+  assign height = height | default: ''
+  assign id = id | default: ''
+-%}
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  {% if width != '' %}width="{{ width }}"{% endif %}
+  {% if height != '' %}height="{{ height }}"{% endif %}>
+  <use href="#{{ id }}" />
+</svg>

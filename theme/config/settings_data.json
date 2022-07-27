@@ -1,0 +1,443 @@
+{
+  "current": {
+    "colors_solid_button_labels": "#333333",
+    "colors_accent_1": "#ffce00",
+    "colors_accent_2": "#ffce00",
+    "colors_text": "#333333",
+    "colors_outline_button_labels": "#333333",
+    "colors_background_1": "#FFFFFF",
+    "colors_background_2": "#F3F3F3",
+    "type_header_font": "lora_n7",
+    "type_body_font": "poppins_n4",
+    "page_width": 1500,
+    "buttons_border_thickness": 1,
+    "buttons_border_opacity": 100,
+    "buttons_radius": 0,
+    "buttons_shadow_opacity": 20,
+    "buttons_shadow_horizontal_offset": 0,
+    "buttons_shadow_vertical_offset": 4,
+    "buttons_shadow_blur": 5,
+    "variant_pills_border_opacity": 25,
+    "variant_pills_radius": 40,
+    "inputs_border_opacity": 25,
+    "inputs_radius": 0,
+    "card_style": "standard",
+    "card_corner_radius": 12,
+    "card_swatches": true,
+    "sale_badge_as_percentage": true,
+    "sale_badge_color": "#fff",
+    "sale_badge_background": "#e22120",
+    "oos_badge_color": "#333333",
+    "oos_badge_background": "#ffffff",
+    "custom_badge_color_scheme": "background-1",
+    "custom_badge_corner_radius": 40,
+    "custom_badges_syntax": "eve:badge:",
+    "accent_icons": "text",
+    "social_twitter_link": "https:\/\/twitter.com\/eve_sleep",
+    "social_facebook_link": "https:\/\/www.facebook.com\/evesleepuk\/",
+    "social_pinterest_link": "https:\/\/www.pinterest.co.uk\/evesleep\/",
+    "social_instagram_link": "https:\/\/www.instagram.com\/evesleep\/?hl=en",
+    "social_youtube_link": "https:\/\/www.youtube.com\/channel\/UCSoXCy4xDZuzUeUEnGyEX_g",
+    "favicon": "shopify:\/\/shop_images\/favicon2_32x32_2b554621-c964-4125-8e34-7abe9b313cbd.webp",
+    "currency_code_enabled": false,
+    "delivery_gfs_day_definite_name": "named day delivery",
+    "delivery_gfs_description_1_id": "DD",
+    "delivery_gfs_description_1_content": "- Pick a day for delivery that suits you\n-  And if you select 'mattress removal', we’ll also take your old mattress away at the same time to be recycled. No need to stuff it in a box or lug it to the door - we’ll come get it from the room of your choice\n- On the day of delivery, you’ll get a text so you can make sure you’re home",
+    "delivery_gfs_description_2_id": "DDMR",
+    "delivery_gfs_description_2_content": "- We'll collect your old mattress to be recycled when we deliver your new one. No need to stuff your old mattress in a box or lug it to the door - we'll come get it from the room of your choice.\n\n- On the day of delivery, you'll get a text so you can make sure you're home.",
+    "gtm_container_id": "GTM-PH5B3NK",
+    "finance_enabled": true,
+    "finance_provider": "divido",
+    "finance_threshold": "250",
+    "ometria_country_id": "GB",
+    "ometria_account_id": "a6e1f170f844e7a5",
+    "reviews_provider_token": "54f46d0b0000ff00057dc5eb",
+    "abt_enabled": true,
+    "twsc_enabled": true,
+    "ajax_cart_enabled": true,
+    "cart_terms_conditions_enable": false,
+    "cart_terms_conditions_link": "shopify:\/\/pages\/terms",
+    "cart_returns_conditions_link": "shopify:\/\/pages\/refunds-returns",
+    "hreflang_value": "en-gb",
+    "sale_badges_as_percentage": true,
+    "badge_position": "bottom left",
+    "badge_corner_radius": 20,
+    "sections": {
+      "header": {
+        "type": "header",
+        "blocks": {
+          "7d3bb3aa-dc03-468d-8e27-ac90990e762c": {
+            "type": "promo_bar",
+            "settings": {
+              "is_active": true,
+              "countdown_enabled": false,
+              "modal_enabled": true,
+              "form_enabled": false,
+              "title": "up to 50% off summer sale",
+              "cta_text": "learn more",
+              "cta_url": "",
+              "code": "",
+              "blacklist": "pages\/privacy-policy",
+              "whitelist": "",
+              "start_date_year": "2022",
+              "start_date_month": "07",
+              "start_date_day": "06",
+              "start_time_hour": "08",
+              "start_time_min": "00",
+              "end_date_year": "2022",
+              "end_date_month": "08",
+              "end_date_day": "19",
+              "end_time_hour": "23",
+              "end_time_min": "59",
+              "modal_scroll_delay": 500,
+              "modal_img": "shopify:\/\/shop_images\/Pop_up_Summer_Sale_2022.jpg",
+              "modal_title": "up to 50% off in our summer sale",
+              "modal_copy_position": "below",
+              "modal_copy": "With up to 50% off mattresses and 25% off toppers, our summer sale’s not one to be missed. The discounts are already applied, so just take your pick and the job’s a good'un.",
+              "modal_cta_text": "Shop now",
+              "modal_cta_url": "shopify:\/\/collections\/mattresses",
+              "modal_small_print": "Offer ends 19\/08\/22. Whilst stocks last",
+              "form_ometria_bucket": "",
+              "form_copy": "",
+              "form_opt_in_copy": "",
+              "form_submit_copy": ""
+            }
+          }
+        },
+        "block_order": [
+          "7d3bb3aa-dc03-468d-8e27-ac90990e762c"
+        ],
+        "settings": {
+          "color_scheme": "background-1",
+          "menu": "main-menu-new",
+          "show_line_separator": true,
+          "margin_bottom": 0,
+          "toolbar_menu": "",
+          "toolbar_social": false
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "blocks": {
+          "footer-1": {
+            "type": "link_list",
+            "settings": {
+              "heading": "Support",
+              "menu": "footer-menu-2"
+            }
+          },
+          "footer-0": {
+            "type": "link_list",
+            "settings": {
+              "heading": "Services",
+              "menu": "footer"
+            }
+          },
+          "16e5af03-fe55-4160-a313-a37e142f42f1": {
+            "type": "link_list",
+            "settings": {
+              "heading": "About eve sleep",
+              "menu": "about-eve-sleep"
+            }
+          },
+          "e92d24b3-689e-474d-8eb9-c6ed72d22941": {
+            "type": "link_list",
+            "settings": {
+              "heading": "Change Country",
+              "menu": "change-country"
+            }
+          }
+        },
+        "block_order": [
+          "footer-1",
+          "footer-0",
+          "16e5af03-fe55-4160-a313-a37e142f42f1",
+          "e92d24b3-689e-474d-8eb9-c6ed72d22941"
+        ],
+        "settings": {
+          "color_scheme": "background-2",
+          "newsletter_enable": false,
+          "newsletter_heading": "",
+          "show_social": true,
+          "enable_country_selector": false,
+          "enable_language_selector": false,
+          "payment_enable": true,
+          "margin_top": 0,
+          "padding_top": 72,
+          "padding_bottom": 68
+        }
+      },
+      "main-password-header": {
+        "type": "main-password-header",
+        "settings": {
+        }
+      },
+      "main-password-footer": {
+        "type": "main-password-footer",
+        "settings": {
+        }
+      },
+      "usp-banner": {
+        "type": "usp-banner",
+        "blocks": {
+          "d8676bed-e6aa-436a-9a5c-ace9e3a3a3d7": {
+            "type": "usp_block",
+            "settings": {
+              "heading": "free delivery",
+              "icon": "nc-van-16"
+            }
+          },
+          "ec51632f-cd7b-477a-b258-297c4cdb9d2f": {
+            "type": "usp_block",
+            "settings": {
+              "heading": "1 year trial",
+              "icon": "nc-zeds-16"
+            }
+          },
+          "4bdabca1-1697-4704-8484-3603aabcc200": {
+            "type": "usp_block",
+            "settings": {
+              "heading": "finance available",
+              "icon": "nc-coin-pound-16"
+            }
+          }
+        },
+        "block_order": [
+          "d8676bed-e6aa-436a-9a5c-ace9e3a3a3d7",
+          "ec51632f-cd7b-477a-b258-297c4cdb9d2f",
+          "4bdabca1-1697-4704-8484-3603aabcc200"
+        ],
+        "settings": {
+          "enable": true,
+          "homepage_only": true,
+          "color_scheme": "background-1",
+          "heading_size": "h5",
+          "padding_top": 8,
+          "padding_bottom": 8
+        }
+      },
+      "warning-banner": {
+        "type": "warning-banner",
+        "settings": {
+          "enable": false,
+          "homepage_only": false,
+          "icon": "none",
+          "header": "",
+          "message": "",
+          "color_scheme": "background-1",
+          "modal_style": false,
+          "padding_top": 36,
+          "padding_bottom": 36
+        }
+      },
+      "breadcrumb": {
+        "type": "breadcrumb",
+        "settings": {
+          "enable": true,
+          "color_scheme": "background-1",
+          "padding_top": 24,
+          "padding_bottom": 12,
+          "whitelisted_collections": "mattresses, bed-frames, bedding, bed-linen, pillows, baby-and-child, bedroom-furniture, sleepovers, sleep-away, extra-mattress-covers, rescue-remedy, sleep-gifts, mattress-protectors",
+          "breadcrumb_product": true,
+          "breadcrumb_collection": true,
+          "breadcrumb_page": false,
+          "breadcrumb_blog": false,
+          "breadcrumb_article": false
+        }
+      },
+      "details-modal": {
+        "type": "details-modal",
+        "settings": {
+          "enable": false,
+          "markup": "",
+          "delay": 0
+        }
+      },
+      "announcement-bar": {
+        "type": "announcement-bar",
+        "blocks": {
+          "b1ddad8f-3123-4ba5-b5c1-41ef9e459820": {
+            "type": "promo_bar",
+            "settings": {
+              "is_active": true,
+              "countdown_enabled": false,
+              "modal_enabled": true,
+              "form_enabled": false,
+              "title": "up to 50% off summer sale",
+              "cta_text": "learn more",
+              "cta_url": "",
+              "code": "",
+              "blacklist": "pages\/privacy-policy",
+              "whitelist": "",
+              "start_date_year": "2022",
+              "start_date_month": "07",
+              "start_date_day": "06",
+              "start_time_hour": "08",
+              "start_time_min": "00",
+              "end_date_year": "2022",
+              "end_date_month": "08",
+              "end_date_day": "16",
+              "end_time_hour": "23",
+              "end_time_min": "59",
+              "modal_scroll_delay": 500,
+              "modal_img": "shopify:\/\/shop_images\/Pop_up_Summer_Sale_2022_1.jpg",
+              "modal_title": "up to 50% off in our summer sale",
+              "modal_copy_position": "below",
+              "modal_copy": "With up to 50% off mattresses and 25% off toppers, our summer sale’s not one to be missed. The discounts are already applied, so just take your pick and the job’s a good'un.",
+              "modal_cta_text": "SHOP NOW",
+              "modal_cta_url": "shopify:\/\/collections\/mattresses",
+              "modal_small_print": "Offer ends 16\/08\/22. Whilst stocks last.",
+              "form_ometria_bucket": "",
+              "form_copy": "",
+              "form_opt_in_copy": "I'd like advice, exclusive offers and product ideas to help me sleep like a dream.",
+              "form_submit_copy": "sign up"
+            }
+          }
+        },
+        "block_order": [
+          "b1ddad8f-3123-4ba5-b5c1-41ef9e459820"
+        ],
+        "settings": {
+          "announcement_or_promo_bar": "promo",
+          "announcement_compact": true,
+          "announcement_above_header": true
+        }
+      },
+      "twsc": {
+        "type": "twsc",
+        "blocks": {
+          "3dc4ea24-e1b2-49f1-9d78-79a87c20439c": {
+            "type": "promo_product",
+            "settings": {
+              "product": "the-original-hybrid-mattress",
+              "tagline": "crank your sleep game up a notch",
+              "smallprint": "the original hybrid mattress from"
+            }
+          },
+          "d4e321a4-c818-40be-b39a-cf9d46abc8fa": {
+            "type": "promo_product",
+            "settings": {
+              "product": "the-microfibre-pillow",
+              "tagline": "your perfect sleep companion",
+              "smallprint": "the microfibre shaper pillow"
+            }
+          },
+          "f1d8bb24-81c9-4f87-8951-6a912970171b": {
+            "type": "promo_product",
+            "settings": {
+              "product": "the-cbd-oil-camomile-and-passionflower",
+              "tagline": "get a blissful night's sleep",
+              "smallprint": "the CBD oil - camomile and passionflower"
+            }
+          },
+          "835c083e-926f-4841-bcbc-bcffffde5d28": {
+            "type": "loading",
+            "settings": {
+              "image": "svg-flying-mattress",
+              "text": "<p><strong>Almost 70%<\/strong> of adults say they sometimes toss and turn at night because of busy brains and worries over work.<\/p>"
+            }
+          },
+          "d66134cd-f5c6-4d47-808c-47c3cbedfee7": {
+            "type": "loading",
+            "settings": {
+              "image": "svg-brain",
+              "text": "<p>On average, Brits get a mere <strong>5 hours and 36 minutes<\/strong> of uninterrupted sleep each night.<\/p>"
+            }
+          },
+          "fea91467-6df3-49c2-bad6-b75d1cea22c1": {
+            "type": "decoration",
+            "settings": {
+              "svg_id": "svg-flying-mattress-stack"
+            }
+          }
+        },
+        "block_order": [
+          "3dc4ea24-e1b2-49f1-9d78-79a87c20439c",
+          "d4e321a4-c818-40be-b39a-cf9d46abc8fa",
+          "f1d8bb24-81c9-4f87-8951-6a912970171b",
+          "835c083e-926f-4841-bcbc-bcffffde5d28",
+          "d66134cd-f5c6-4d47-808c-47c3cbedfee7",
+          "fea91467-6df3-49c2-bad6-b75d1cea22c1"
+        ],
+        "settings": {
+          "initialisation_timout": 8,
+          "base_img": "shopify:\/\/shop_images\/eve-logo_256x256_0abe4f58-9b5e-4caf-9079-0df13ead69f3.png",
+          "quiz_landing_content": "<p><strong>Sleep. We all do it (or try to), right? But good sleep ain’t always easy and there’s oodles of sleep info out there. And how do you know what’s right for you?<\/strong><\/p><p>Well, answer a few questions and we’ll give you exactly what you need. Tailored tips. Expert advice. And a few nifty tools to help you sleep (and feel) better. <\/p><p>It’s a one-stop shop for sleeping well, so you’ll get the sleep you need to rise and shine. Every. Single. Morning. <\/p><p><strong>So plump up a pillow, get comfy and tap below to start.<\/strong><\/p>",
+          "prioritisation_threshold": 10,
+          "enable_featured_article": true,
+          "featured_quiz": false,
+          "featured_article": "the-well-slept-club\/start-your-day-with-this-5-minute-yoga-routine",
+          "intro_enabled": true,
+          "intro_title": "sleep tips and tricks, just for you",
+          "intro_content": "We’ve put together these anything-but-snoozy articles just for you. Just click ‘like’ on your faves so we can give you even more useful info. \n\nRemember, we’re here to help you get the sleep you need to rise and shine. Every. Single. Morning."
+        }
+      },
+      "newsletter": {
+        "type": "newsletter",
+        "settings": {
+          "title": "fancy 5% off?",
+          "text": "<p>Course you do. Subscribe to our newsletter and get a code sent straight to your inbox. By subscribing you agree to our <a href=\"https:\/\/www.evesleep.co.uk\/pages\/terms\" title=\"Terms & conditions\">T&Cs<\/a>, <a href=\"https:\/\/www.evesleep.co.uk\/pages\/privacy-policy\" title=\"Privacy Policy\">privacy<\/a> and <a href=\"https:\/\/www.evesleep.co.uk\/pages\/cookies-policy\" title=\"Cookies policy\">cookie policies<\/a> and all that jazz.<\/p>",
+          "select_style": "style-2",
+          "ometria_bucket": "560"
+        }
+      }
+    },
+    "content_for_index": [
+
+    ]
+  },
+  "presets": {
+    "Default": {
+      "sections": {
+        "header": {
+          "type": "header",
+          "settings": {
+          }
+        },
+        "footer": {
+          "type": "footer",
+          "blocks": {
+            "footer-0": {
+              "type": "link_list",
+              "settings": {
+              }
+            },
+            "footer-1": {
+              "type": "link_list",
+              "settings": {
+                "heading": "Info"
+              }
+            },
+            "footer-2": {
+              "type": "text",
+              "settings": {
+                "heading": "Our mission"
+              }
+            }
+          },
+          "block_order": [
+            "footer-0",
+            "footer-1",
+            "footer-2"
+          ],
+          "settings": {
+            "show_social": true,
+            "enable_country_selector": false,
+            "enable_language_selector": false,
+            "margin_top": 48
+          }
+        },
+        "main-password-header": {
+          "type": "main-password-header",
+          "settings": {
+          }
+        },
+        "main-password-footer": {
+          "type": "main-password-footer",
+          "settings": {
+          }
+        }
+      }
+    }
+  }
+}
