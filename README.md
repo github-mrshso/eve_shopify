@@ -1,7 +1,7 @@
 # eve Sleep Shopify Theme
 Built upon Dawn 3.0
 
-## Dev
+## Devlop
 ### Setup
 - [Node](https://www.npmjs.com/get-npm). Check `package.json` for recommended version.
 - Node v14.12.0 is required. We encourage using `nvm` and running `nvm use` to ensure you're running the correct version of Node.
