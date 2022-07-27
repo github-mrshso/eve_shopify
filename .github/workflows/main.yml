@@ -26,9 +26,10 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
-      - uses: actions/setup-node@v3
+        uses: actions/setup-node@v3
         if: success()
         with:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
@@ -48,6 +49,7 @@ jobs:
       - run: sudo apt install git curl autoconf bison build-essential
       - run: sudo gem install shopify-cli
       - run: shopify version
+      - run: npm run serve
       - run: shopify login --store evesleep-uk.myshopify.com
       - run: shopify whoami
       - run: npm run push-new-theme:uk
