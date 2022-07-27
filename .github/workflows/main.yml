@@ -48,8 +48,6 @@ jobs:
       - run: sudo apt install git curl autoconf bison build-essential
       - run: sudo gem install shopify-cli
       - run: shopify version
-      - name: Deploy theme
-      - uses: bravetheskies/shopify-rapid-deploy-action@v1
       - run: shopify login --store evesleep-uk.myshopify.com
       - run: shopify whoami
       - run: npm run push-new-theme:uk
