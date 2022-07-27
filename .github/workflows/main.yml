@@ -37,6 +37,8 @@ jobs:
           cache: 'npm'
       - run: git branch
       - run: npm ci
+      - run: npm install
+      - run: apt install zsh 
       - name: Print github
         env:
             GITHUB_CONTEXT: ${{ toJson(github) }}
