@@ -48,6 +48,13 @@ jobs:
       - run: sudo apt install git curl autoconf bison build-essential
       - run: sudo gem install shopify-cli
       - run: shopify version
+      - name: Deploy theme
+      - uses: bravetheskies/shopify-rapid-deploy-action@v1
+        env:
+          SHOPIFY_APP_API_PASSWORD: ${{ secrets.SHOPIFY_APP_API_PASSWORD }}
+          SHOPIFY_STORE_URL: ${{ secrets.SHOPIFY_STORE_URL }}
+          SHOPIFY_THEME_ID: ${{ secrets.SHOPIFY_THEME_ID }}
+          THEME_PATH: ${{ secrets.SHOPIFY_THEME_PATH }}
       - run: shopify login --store evesleep-uk.myshopify.com
       - run: shopify whoami
       - run: npm run push-new-theme:uk
