@@ -11,16 +11,20 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
     name: Building Code
+    
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     
     strategy:
       matrix:
         node-version: [16.x]
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
@@ -38,13 +42,13 @@ jobs:
       - run: sudo apt install build-essential curl file git
       - run: sudo apt install zsh
       - name: Print github
-      - run: echo "$GITHUB_CONTEXT" && echo "$JOB_CONTEXT"
+        run: echo "$GITHUB_CONTEXT" && echo "$JOB_CONTEXT"
       - run: npm run build --if-present
       - run: sudo apt install ruby-full
       - run: ruby --version
       - run: sudo apt install git curl autoconf bison build-essential
       - run: sudo gem install shopify-cli
       - run: shopify version
-      - run: shopify theme list
-      - run: shopify whoami
-      - run: echo ${{ env.SHOPIFY_PASSWORD }} ${{ env.SHOPIFY_STORE_URL }}
+      #- run: shopify login --store evesleep-uk.myshopify.com
+      #- run: shopify whoami
+      #- run: npm run push-new-theme:uk
