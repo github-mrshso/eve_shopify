@@ -59,6 +59,6 @@ jobs:
       - run: theme download templates/*.json config/* locales/* -p=${{ env.SHOPIFY_PASSWORD }} -s="${{ env.SHOPIFY_STORE_URL }}" --live
       - run: theme new -p=${{ env.SHOPIFY_PASSWORD }} -s="${{ env.SHOPIFY_STORE_URL }}" --name=${{ env.SHOPIFY_NEW_THENE_NAME }}
       - run: theme configure -p=${{ env.SHOPIFY_PASSWORD }} -s="${{ env.SHOPIFY_STORE_URL }}"
-      - run: theme deploy -p=${{ env.SHOPIFY_PASSWORD }} -s="${{ env.SHOPIFY_STORE_URL }}" --dir=./theme/ -v
+      - run: theme deploy -p=${{ env.SHOPIFY_PASSWORD }} -s="${{ env.SHOPIFY_STORE_URL }}" --dir=./theme/ -n -a -v
       #- run: theme watch -p=${{ env.SHOPIFY_PASSWORD }} -s="${{ env.SHOPIFY_STORE_URL }}"
       #- run: shopify whoami
