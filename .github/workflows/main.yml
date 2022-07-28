@@ -45,9 +45,6 @@ jobs:
       - run: sudo apt install git curl autoconf bison build-essential
       - run: sudo gem install shopify-cli
       - run: shopify version
-      #- run: curl -s https://shopify.dev/themekit.py | sudo python
       - run: shopify theme list
       - run: shopify whoami
       - run: echo ${{ env.SHOPIFY_PASSWORD }} ${{ env.SHOPIFY_STORE_URL }}
-      #- run: shopify login --store dev039.myshopify.com
-      #- run: npm run push-new-theme:uk
