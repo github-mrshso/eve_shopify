@@ -13,6 +13,7 @@ on:
 env:
   SHOPIFY_PASSWORD: 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
   SHOPIFY_STORE_URL: dev039.myshopify.com
+  SHOPIFY_NEW_THENE_NAME: theme_from_git
   
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -48,13 +49,12 @@ jobs:
       - name: Print github
         run: echo "$GITHUB_CONTEXT" && echo "$JOB_CONTEXT"
       - run: npm run build --if-present
-      - run: sudo apt install ruby-full
-      - run: ruby --version
-      - run: sudo apt install git curl autoconf bison build-essential
-      - run: sudo gem install shopify-cli
-      - run: shopify version
+      #- run: sudo apt install ruby-full
+      #- run: ruby --version
+      #- run: sudo apt install git curl autoconf bison build-essential
+      #- run: sudo gem install shopify-cli
+      #- run: shopify version
       - run: curl -s https://shopify.dev/themekit.py | sudo python
-      - run: theme get --list --password=${{ env.SHOPIFY_PASSWORD }} --store=${{ env.SHOPIFY_STORE_URL }}
-      #- run: shopify login --store evesleep-uk.myshopify.com
+      - run: theme get --list --password=${{ env.SHOPIFY_PASSWORD }} --store="${{ env.SHOPIFY_STORE_URL }}"
+      - run: theme new --password=${{ env.SHOPIFY_PASSWORD }} --store="${{ env.SHOPIFY_STORE_URL }}" --name=${{ env.SHOPIFY_NEW_THENE_NAME }}
       - run: shopify whoami
-      #- run: npm run push-new-theme:uk
