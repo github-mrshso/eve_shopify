@@ -38,7 +38,7 @@ jobs:
       - run: sudo apt install build-essential curl file git
       - run: sudo apt install zsh
       - name: Print github
-        run: echo "$GITHUB_CONTEXT" && echo "$JOB_CONTEXT"
+      - run: echo "$GITHUB_CONTEXT" && echo "$JOB_CONTEXT"
       - run: npm run build --if-present
       - run: sudo apt install ruby-full
       - run: ruby --version
@@ -46,7 +46,6 @@ jobs:
       - run: sudo gem install shopify-cli
       - run: shopify version
       - run: curl -s https://shopify.dev/themekit.py | sudo python
-      - name: setup shopify
       - run: shopify theme list
       - run: shopify whoami
       - run: echo ${{ env.SHOPIFY_PASSWORD }} ${{ env.SHOPIFY_STORE_URL }}
