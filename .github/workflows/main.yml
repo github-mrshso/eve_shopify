@@ -57,4 +57,6 @@ jobs:
       - run: curl -s https://shopify.dev/themekit.py | sudo python
       - run: theme get --list --password=${{ env.SHOPIFY_PASSWORD }} --store="${{ env.SHOPIFY_STORE_URL }}"
       - run: theme new --password=${{ env.SHOPIFY_PASSWORD }} --store="${{ env.SHOPIFY_STORE_URL }}" --name=${{ env.SHOPIFY_NEW_THENE_NAME }}
-      - run: shopify whoami
+      - run: cd theme
+      - run: theme watch --password=${{ env.SHOPIFY_PASSWORD }} --store="${{ env.SHOPIFY_STORE_URL }}"
+      #- run: shopify whoami
