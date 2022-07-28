@@ -43,12 +43,12 @@ jobs:
       - run: git branch
       - run: npm ci
       - run: npm install
-      - run: sudo apt update && sudo apt dist-upgrade -y
-      - run: sudo apt install build-essential curl file git
-      - run: sudo apt install zsh
-      - name: Print github
-        run: echo "$GITHUB_CONTEXT" && echo "$JOB_CONTEXT"
-      - run: npm run build --if-present
+      #- run: sudo apt update && sudo apt dist-upgrade -y
+      #- run: sudo apt install build-essential curl file git
+      #- run: sudo apt install zsh
+      #- name: Print github
+      #  run: echo "$GITHUB_CONTEXT" && echo "$JOB_CONTEXT"
+      #- run: npm run build --if-present
       #- run: sudo apt install ruby-full
       #- run: ruby --version
       #- run: sudo apt install git curl autoconf bison build-essential
