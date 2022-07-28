@@ -10,7 +10,10 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
+env:
+  SHOPIFY_PASSWORD: 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
+  SHOPIFY_STORE_URL: dev039.myshopify.com
+  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
@@ -35,6 +38,7 @@ jobs:
           ref: ${{ steps.comment-branch.outputs.head_ref }}
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
+      - run: echo ${{ env.SHOPIFY_PASSWORD }} ${{ env.SHOPIFY_STORE_URL }}
       - run: git branch
       - run: npm ci
       - run: npm install
@@ -49,7 +53,8 @@ jobs:
       - run: sudo apt install git curl autoconf bison build-essential
       - run: sudo gem install shopify-cli
       - run: shopify version
+      - run: npm install @shopify/themekit
+      - run: theme get --list--password=${{ env.SHOPIFY_PASSWORD }}--store=${{ env.SHOPIFY_STORE_URL }}
       #- run: shopify login --store evesleep-uk.myshopify.com
       - run: shopify whoami
       #- run: npm run push-new-theme:uk
-      - run: echo ${{ env.SHOPIFY_PASSWORD }} ${{ env.SHOPIFY_STORE_URL }}
