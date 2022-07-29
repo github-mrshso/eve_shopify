@@ -58,7 +58,7 @@ jobs:
       # - run: theme get --list -p=${{ env.SHOPIFY_PASSWORD }} -s="${{ env.SHOPIFY_STORE_URL }}"
       - run: theme help
       - run: theme new -p=${{ env.SHOPIFY_PASSWORD }} -s="${{ env.SHOPIFY_STORE_URL }}" --name=${{ env.SHOPIFY_NEW_THENE_NAME }}
-      # - run: theme download templates/*.json config/* locales/* -p=${{ env.SHOPIFY_PASSWORD }} -s="${{ env.SHOPIFY_STORE_URL }}" --live
+      - run: theme download templates/*.json config/* locales/* -p=${{ env.SHOPIFY_PASSWORD }} -s="${{ env.SHOPIFY_STORE_URL }}" -d=./temp/ --live
       - run: theme configure -p=${{ env.SHOPIFY_PASSWORD }} -s="${{ env.SHOPIFY_STORE_URL }}"
       # - run: theme replace -p=${{ env.SHOPIFY_PASSWORD }} -s="${{ env.SHOPIFY_STORE_URL }}" --dir=./theme/ -n -a -v
       #- run: theme watch -p=${{ env.SHOPIFY_PASSWORD }} -s="${{ env.SHOPIFY_STORE_URL }}"
