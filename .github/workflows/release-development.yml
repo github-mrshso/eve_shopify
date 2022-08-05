@@ -110,7 +110,7 @@ jobs:
           BRANCH: ${GITHUB_REF}
         run: |
           STORE="$(cut -d':' -f2 <<<"${BODY}")"
-          echo $STORE
+          env.STORE =  $STORE
           if [[ ! -z "${STORES// }" ]] && [[ ! -z "${TAG// }" ]]; then
             # Loop over the store names and generate the JSON required for the
             # matrix input of the build step
