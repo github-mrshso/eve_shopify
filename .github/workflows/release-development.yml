@@ -103,7 +103,8 @@ jobs:
           TAG: ${GITHUB_REF_NAME}
           BRANCH: ${GITHUB_REF}
         run: |
-          IFS=':' ;for i in `echo ${BODY}`; do echo $i; done
+          STORE="$(cut -d':' -f2 <<<"${BODY}")"
+          echo $STORE
           if [[ ! -z "${STORES// }" ]] && [[ ! -z "${TAG// }" ]]; then
             # Loop over the store names and generate the JSON required for the
             # matrix input of the build step
