@@ -33,7 +33,7 @@ jobs:
       # only in the instance that the workflow is being triggered by a comment
       # i.e. needs a repo in order to checkout the PR branch
       - uses: actions/checkout@v2
-      - run: echo "inputs.store -- ${{ github.event.inputs.store }}"
+      - run: echo "inputs.store -- ${github.event}"
       # If this event was triggered manually then set the trigger values as ENV
       # vars
       - name: Process dispatch
@@ -90,7 +90,6 @@ jobs:
 
           branch=$(hub pr show --format %H "${ISSUE_NUMBER}")
 
-          echo "STORE=${regex}" >> $GITHUB_ENV
           echo "STORES=${stores[@]}" >> $GITHUB_ENV
           echo "TAG=${tag}" >> $GITHUB_ENV
           echo "BRANCH=${branch}" >> $GITHUB_ENV
