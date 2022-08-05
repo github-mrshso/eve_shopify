@@ -78,14 +78,14 @@ jobs:
       # and locales from the current published theme. Rather than pull them
       # straight into the theme files we store them alongside and move them in
       # carefully. You'll see why in the later steps
-      - name: install shopify themekit
-      - run: curl -s https://shopify.dev/themekit.py | sudo python
+     
       - name: Pull live config and locales
         env:
           PASSWORD: "${{ secrets[env.PASSWORD_REF] }}"
           # STORE_URL: "evesleep-${{ matrix.store }}.myshopify.com"
           STORE_URL: "${{ matrix.store }}.myshopify.com"
         run: |
+          curl -s https://shopify.dev/themekit.py | sudo python
           files=("config/settings_data.json" "locales/en.default.json" "locales/fr.json")
           endpoint="${API_URL}/themes.json"
           themes=$(curl -H "X-Shopify-Access-Token: ${PASSWORD}" "${endpoint}")
