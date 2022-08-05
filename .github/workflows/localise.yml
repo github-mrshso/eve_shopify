@@ -69,7 +69,7 @@ jobs:
           store_name="${STORE}"
           store_url="${store_name}.myshopify.com"
           api_url="https://${store_url}/admin/api/2022-01"
-
+          echo ${api_url}
           echo "STORE_NAME=${store_name}" >> $GITHUB_ENV
           echo "STORE_URL=${store_url}" >> $GITHUB_ENV
           echo "API_URL=${api_url}" >> $GITHUB_ENV
