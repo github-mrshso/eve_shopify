@@ -33,7 +33,7 @@ jobs:
       # only in the instance that the workflow is being triggered by a comment
       # i.e. needs a repo in order to checkout the PR branch
       - uses: actions/checkout@v2
-      - run: echo "inputs.store -- ${github.event}"
+      - run: echo "inputs.store -- ${{ fromJson(github.event) }}"
       # If this event was triggered manually then set the trigger values as ENV
       # vars
       - name: Process dispatch
