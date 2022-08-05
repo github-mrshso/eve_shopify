@@ -114,7 +114,6 @@ jobs:
     with:
       stores: '${{ needs.define-matrix.outputs.stores }}'
     secrets:
-      dev039_password: "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" #${{ secrets.SHOPIFY_DEV039_API_PASSWORD }}
       uk_password: ${{ secrets.SHOPIFY_UK_API_PASSWORD }}
       ie_password: ${{ secrets.SHOPIFY_IE_API_PASSWORD }}
       fr_password: ${{ secrets.SHOPIFY_FR_API_PASSWORD }}
