@@ -36,7 +36,7 @@ jobs:
       # If this event was triggered manually then set the trigger values as ENV
       # vars
       - name: Process dispatch
-        if: github.event_name == 'workflow_dispatch'
+        if: github.event_name == 'issue_comment' #'workflow_dispatch'
         env:
           STORE: "${{ github.event.inputs.store }}"
         run: |
