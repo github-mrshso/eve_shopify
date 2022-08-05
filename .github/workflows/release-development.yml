@@ -91,7 +91,7 @@ jobs:
 
           branch=$(hub pr show --format %H "${ISSUE_NUMBER}")
 
-          echo "STORES=${stores[@]}" >> $GITHUB_ENV
+          echo "STORES=${stores}" >> $GITHUB_ENV
           echo "TAG=${tag}" >> $GITHUB_ENV
           echo "BRANCH=${branch}" >> $GITHUB_ENV
 
