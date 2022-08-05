@@ -86,7 +86,7 @@ jobs:
       # admin API. see here https://shopify.dev/api/admin-rest/2022-01/resources/asset#put-themes-theme-id-assets
       - name: Add robots.txt to post-deployment actions
         env:
-          FILENAME: "./src/liquid/templates/robots.txt.liquid"
+          FILENAME: "./theme/liquid/templates/robots.txt.liquid"
           TEMP_FILENAME: "tmp.json"
         run: |
           # Start with the base payload for creating an asset in Shopify
@@ -104,7 +104,7 @@ jobs:
       # BugSnag
       - name: Create env.liquid
         env:
-          FILENAME: "./src/liquid/snippets/env.liquid"
+          FILENAME: "./theme/liquid/snippets/env.liquid"
           RELEASE_STAGE: "${{ inputs.release_stage }}"
         run: |
           > "${FILENAME}"
@@ -116,7 +116,7 @@ jobs:
       # page below the name of the theme
       - name: Bump version in config
         env:
-          FILENAME: "./src/config/settings_schema.json"
+          FILENAME: "./theme/config/settings_schema.json"
           TEMP_FILENAME: "tmp.json"
         run: |
           jq --arg version "${TAG}" '.[0].theme_version = $version' ${FILENAME} > ${TEMP_FILENAME}
