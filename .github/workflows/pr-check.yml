@@ -1,0 +1,56 @@
+name: PR check
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # TODO: replace with reusable workflow
+  # Bug. see https://github.com/github/feedback/discussions/10679
+  # call-lint:
+  #   uses: evesleep/shopify-impulse/.github/workflows/lint.yml
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        if: success()
+        with:
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm install
+      # - run: npm run lint -quiet
+
+  call-build:
+    uses: ./.github/workflows/build.yml
+    needs: lint
+    with:
+      release_stage: test
+      tag: ${{ github.head_ref }}
+      prefix: pr-check
+
+  call-deploy:
+    uses: ./.github/workflows/deploy.yml
+    needs: call-build
+    # if: needs.define-matrix.outputs.tag
+    with:
+      ngrok_token: "2Cw1XghNwLXTifup7OhxF0MHhju_6rvNMxEfQgkM5omPmqoid"
+      # tag: "${{ needs.define-matrix.outputs.tag }}"
+      # prefix: test
+      # branch: "${{ needs.define-matrix.outputs.branch }}"
+
+  clean-up:
+    runs-on: ubuntu-latest
+    needs: call-deploy
+    steps:
+      - name: Delete base theme
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: base-theme
+          failOnError: false
