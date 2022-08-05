@@ -118,13 +118,13 @@ jobs:
             echo "Missing stores or tag"
           fi
 
-  call-lint:
-    uses: ./.github/workflows/lint.yml
-    needs: define-matrix
+  # call-lint:
+  #   uses: ./.github/workflows/lint.yml
+  #   needs: define-matrix
 
   call-build:
     uses: ./.github/workflows/build.yml
-    needs: [define-matrix, call-lint]
+    needs: define-matrix
     if: needs.define-matrix.outputs.tag
     with:
       release_stage: development
