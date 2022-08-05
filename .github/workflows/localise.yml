@@ -93,7 +93,7 @@ jobs:
           # echo ${live_theme_id} -- ${themes}
           echo ${files[@]} -- ${PASSWORD} -- ${STORE_URL} -- ${live_theme_id}  --live
           mkdir live
-          theme download ${files[@]} -d ./live -p ${PASSWORD} -s ${STORE_URL} -t ${live_theme_id}  --live
+          theme download ${files[@]} -d=./live -p=${PASSWORD} -s=${STORE_URL} --live
           
       # Settings are simple to apply, we just copy them into the right place in
       # the new theme
