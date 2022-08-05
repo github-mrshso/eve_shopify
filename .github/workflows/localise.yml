@@ -99,7 +99,7 @@ jobs:
       # Settings are simple to apply, we just copy them into the right place in
       # the new theme
       - name: Apply live config
-        run: mv "./live/config/settings_data.json" "./dist/config/"
+        run: mv "./live/config/settings_data.json" "./theme/config/"
 
       # Locales are a bit more tricky. It is not valid to store any file other
       # than the agreed locales in the ./dist/locales directory. Therefore we
@@ -111,7 +111,7 @@ jobs:
 
           for locale in ./live/locales/*.json; do
             basename=$(basename -- "${locale}" .json)
-            mv "${locale}" "./dist/assets/${basename}.archive-${date}.json"
+            mv "${locale}" "./theme/assets/${basename}.archive-${date}.json"
           done
 
       # As with the theme, we start with a generic deployment config and then
@@ -153,7 +153,7 @@ jobs:
           echo $(jq '.' ${BASE_CONF_FILENAME} | jq "${props[@]}" "${query}") > "${CONF_FILENAME}"
 
       - name: Zip theme bundle
-        run: zip -r "${OUTPUT_FILENAME}" dist/*
+        run: zip -r "${OUTPUT_FILENAME}" theme/*
 
       - name: Upload artefacts
         uses: actions/upload-artifact@v2
