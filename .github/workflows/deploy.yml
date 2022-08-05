@@ -1,0 +1,232 @@
+name: Deploy
+on:
+  workflow_call:
+    secrets:
+      uk_password:
+        required: false
+      ie_password:
+        required: false
+      fr_password:
+        required: false
+      ie_staging_password:
+        required: false
+      ngrok_token:
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    concurrency: deployment
+    # See the explanation in localise.yml for the reason behind these ENV vars
+    env:
+      UK_PASSWORD: "${{ secrets.uk_password }}"
+      IE_PASSWORD: "${{ secrets.ie_password }}"
+      FR_PASSWORD: "${{ secrets.fr_password }}"
+      IE_STAGING_PASSWORD: "${{ secrets.ie_staging_password }}"
+    steps:
+      - name: Download artefacts
+        uses: actions/download-artifact@v2
+        with:
+          name: builds
+
+      # Shopify requires a publicly available URL from which to download the
+      # theme.zip from. Instead of uploading it somewhere we simple open up
+      # an ngrok tunnel from here
+      - name: Establish ngrok tunnel
+        env:
+          NGROK_TOKEN: "${{ secrets.ngrok_token }}"
+        run: |
+          echo "Downloading ngrok"
+          wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
+          unzip -qq ngrok-stable-linux-amd64.zip
+          chmod +x ./ngrok
+
+          echo "Configuring ngrok"
+          ./ngrok authtoken ${NGROK_TOKEN}
+
+          echo "Starting ngrok"
+          ./ngrok http "file://$(pwd)/"  > /dev/null &
+
+          echo "Waiting for ngrok to register urls"
+          sleep 5
+
+      # Once the tunnel is open we need to retrieve the URL. We do this by
+      # calling to the local API and then extracting the URL from the response
+      # the response looks something like this:
+      # {
+      #   "tunnels": [
+      #     {
+      #       "name": "command_line",
+      #       "public_url": "https://2191-212-132-218-212.ngrok.io",
+      #       "proto": "https",
+      #       ...
+      #     },
+      #     {
+      #       "name": "command_line (http)",
+      #       "public_url": "http://2191-212-132-218-212.ngrok.io",
+      #       "proto": "http",
+      #       ...
+      #     }
+      #   ],
+      #   ...
+      # }
+      - name: Test ngrok public URL
+        run: |
+          ngrok_tunnels=$(curl -s 'http://localhost:4040/api/tunnels')
+          ngrok_url=$(jq -r '.tunnels[] | select(.public_url | contains("https")) | .public_url' <<< ${ngrok_tunnels})
+
+          if [ -z ${ngrok_url} ]
+          then
+            echo "ngrok failed due to missing secure public url"
+            echo "${ngrok_tunnels}"
+            exit 1
+          fi
+
+          echo "NGROK_URL=${ngrok_url}" >> ${GITHUB_ENV}
+          echo "NGROK_PID=$(pgrep ngrok)" >> ${GITHUB_ENV}
+
+      # The only files that exist in this directory are the zipped builds
+      # and the configuration JSON files that we created during the build
+      # workflow. We therefore need only to loop over any *.json files and
+      # deploy based on their contents
+      - name: Deploy artifacts
+        run: |
+          for conf_filename in *.json; do
+            # Parse the file contents
+            conf=$(jq -r '.' "${conf_filename}")
+
+            # Extract the base variables required for the endpoint and payload
+            password_ref=$(jq -r .password_ref <<< ${conf})
+            api_url=$(jq -r .api_url <<< ${conf})
+            theme_name=$(jq -r .theme_name <<< ${conf})
+            src=$(jq -r .src <<< ${conf})
+
+            # Munge them all together
+            password=${!password_ref}
+            endpoint="${api_url}/themes.json"
+            src_url="${NGROK_URL}/${src}"
+
+            # Create the payload for the Shopify API with the ngrok url interpolated
+            payload="{\"theme\":{\"name\":\"${theme_name}\", \"src\":\"${src_url}\",\"role\":\"unpublished\"}}"
+
+            echo "Posting payload to ${endpoint}"
+            theme=$(curl -X POST \
+              -H "X-Shopify-Access-Token: ${password}" \
+              -H "Content-Type: application/json" \
+              -d "${payload}" \
+              "${endpoint}"\
+            )
+
+            # Extract the ID for the newly created theme from the API response
+            theme_ID=$(jq -r '.theme.id' <<< ${theme})
+
+            # Any errors? Then die
+            if [ ${theme_ID} == "null" ]; then
+              echo "theme creation failed: $(jq -r '.errors' <<< ${theme})"
+              exit 2
+            fi
+
+            # Add the theme ID to the config json. we will need it later
+            echo $(jq --arg theme_id "${theme_ID}" '.theme_id = $theme_id' <<< "${conf}") > "${conf_filename}"
+          done
+
+      # We have posted to the Shopify API but we do not yet know whether the
+      # theme has finished uploading. Until it does we must keep the ngrok
+      # tunnel open. We therefore poll the Shopify API until we have
+      # confirmation from all of the themes that we uploaded
+      - name: Verify artifacts
+        run: |
+          # Instantiate an array for holding configs. This means we don't have
+          # to keep parsing the config json and gives us a mutable list of
+          # outstanding themes to verify
+          themes=()
+
+          # Again. loop over the config files
+          for conf_filename in *.json; do
+            # Parse the file contents
+            conf=$(jq '.' ${conf_filename})
+
+            # Extract the base variables required for the endpoint and payload
+            password_ref=$(jq -r .password_ref <<< ${conf})
+            api_url=$(jq -r .api_url <<< ${conf})
+            theme_id=$(jq -r .theme_id <<< ${conf})
+
+            # Munge them all together
+            endpoint="${api_url}/themes/${theme_id}.json"
+            password=${!password_ref}
+
+            # Create a simple tuplet that can easily be mutated and add it to
+            # the array we created at the beginning of this step
+            themes+=("${password}=${endpoint}")
+          done
+
+          echo "waiting for themes to be uploaded"
+
+          # Loop over the theme tuplets for as long as there are any. Once a
+          # success message is received from the Shopify API the tuplet is
+          # removed from the array
+          until [ ${#themes[@]} -eq 0 ]; do
+            echo "..."
+
+            for i in "${!themes[@]}"; do
+              theme=${themes[i]}
+
+              # Extract the base variables required for the endpoint and payload
+              password=${theme%=*}
+              endpoint=${theme#*=}
+
+              # Extract the store name from the endpoint URL. This is lazy...
+              store=$(sed 's/https*:\/\///; s/\..*//;' <<< ${endpoint})
+
+              # Call the theme's endpoint
+              response=$(curl -s -H "X-Shopify-Access-Token: ${password}" "${endpoint}")
+
+              # If the theme responds that it is previewable then echo a success
+              # and remove the tuplet from the array
+              if [[ $(jq -r '.theme.previewable' <<< ${response}) == 'true' ]]; then
+                echo "${store} uploaded"
+                unset themes[i]
+
+                # TODO: add a Slack notification for individual themes here?
+              fi
+            done
+
+            # Don't hammer the API
+            sleep 5;
+          done
+
+          echo "All themes uploaded"
+
+      # TODO: add a Slack notification for all themes here?
+
+      - name: Kill ngrok
+        run: kill -9 ${NGROK_PID}
+
+      - name: Post deploy
+        run: |
+          for conf_filename in *.json; do
+            # Parse the file contents
+            conf=$(jq '.' ${conf_filename})
+
+            # Extract the base variables required for the endpoint and payload
+            password_ref=$(jq -r .password_ref <<< ${conf})
+            api_url=$(jq -r .api_url <<< ${conf})
+            theme_id=$(jq -r .theme_id <<< ${conf})
+            actions=("$(jq -rc '.post_deploy | map(tostring) | .[]' <<< ${conf})")
+
+            if [[ ${#actions[@]} ]]; then
+              # Munge them all together
+              endpoint="${api_url}/themes/${theme_id}/assets.json"
+              password=${!password_ref}
+
+              for action in "${actions[@]}"; do
+                curl -X PUT \
+                  -H "X-Shopify-Access-Token: ${password}" \
+                  -H "Content-Type: application/json" \
+                  -d "${action}" \
+                  "${endpoint}"
+              done
+            else
+              echo "No post deployment actions"
+            fi
+          done

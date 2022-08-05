@@ -1,0 +1,150 @@
+name: Build
+on:
+  workflow_call:
+    inputs:
+      release_stage:
+        required: true
+        type: string
+      tag:
+        required: true
+        type: string
+      prefix:
+        required: true
+        type: string
+      branch:
+        required: false
+        type: string
+        default: ''
+
+jobs:
+  # At this stage of the build we can create a base theme from which all themes
+  # are then created. This is a generic build with no store-specific settings
+  # included. Do this saves us having to run the build task for each store,
+  # instead we take this base-theme, drop in the localisations and then deploy.
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Generic theme bundle and deployment config files that can be used as
+      # templates from which to build and deploy themes for each of the stores
+      OUTPUT_FILENAME: base.zip
+      CONF_FILENAME: base.json
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ inputs.branch || github.ref }}
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+
+      # The theme name is always the same across all stores. If this workflow is
+      # called using the correct syntax for the tag name i.e. DPT-123/... then
+      # the Jira ticket number will be extracted and interpolated.
+      - name: Generate theme name
+        env:
+          PREFIX: "${{ inputs.prefix }}"
+          TAG: "${{ inputs.tag }}"
+        run: |
+          # Given a $TAG in the form DPT-123/foo-bar, the ticket number is
+          # extracted. In all cases the provided $tag will be truncated to
+          # 10 chars
+          tag=$(echo "${TAG}" | cut -d '/' -f 1 | cut -c -10)
+
+          # Setup build time
+          tz=GMT
+          date=$(date +"%Y/%m/%d %T")
+
+          # Stitch together the components
+          name="${PREFIX} | ${tag} | ${date}"
+
+          echo "TAG=${tag}" >> $GITHUB_ENV
+          echo "NAME=${name}" >> $GITHUB_ENV
+
+      # To save the hassle of passing complex variables along the workflow
+      # chain we create a deployment config file. A config file will be
+      # created for each deployment target and bundle i.e. uk, ie, fr ...
+      # At this stage of the build process the config file is generic as it
+      # only contains details that are common across all themes
+      - name: Generate base deployment config
+        run: |
+          props=()
+          query="."
+
+          props+=(--arg theme_tag "${TAG}")
+          query+=' | .theme_tag = $theme_tag'
+          props+=(--arg theme_name "${NAME}")
+          query+=' | .theme_name = $theme_name'
+
+          # Instantiate an array for any post-deployment actions
+          query+=' | .post_deploy = []'
+
+          echo $(jq "${props[@]}" "${query}" <<< '{}') > "${CONF_FILENAME}"
+
+      # Robots.txt.liquid is not deployed as part of the initial deplouyment
+      # see here https://help.shopify.com/en/manual/promoting-marketing/seo/editing-robots-txt#edit-robots-txt-liquid
+      # and so we need to create an asset deployment payload for the Shopify
+      # admin API. see here https://shopify.dev/api/admin-rest/2022-01/resources/asset#put-themes-theme-id-assets
+      - name: Add robots.txt to post-deployment actions
+        env:
+          FILENAME: "./src/liquid/templates/robots.txt.liquid"
+          TEMP_FILENAME: "tmp.json"
+        run: |
+          # Start with the base payload for creating an asset in Shopify
+          payload='{"asset": {"key": "templates/robots.txt.liquid"}}'
+
+          # Stringify the liquid file and update the payload
+          payload=$(jq -r --rawfile robots ${FILENAME} '.asset.value = ($robots | tostring)' <<< ${payload})
+
+          # Add the payload to the config file
+          jq --arg robots "${payload}" '.post_deploy += [$robots]' "${CONF_FILENAME}" > tmp.json
+          mv tmp.json ${CONF_FILENAME}
+
+      # Themes ship with the theme info embedded in a liquid snippet. This
+      # allows for build info to be passed through to front-end services such as
+      # BugSnag
+      - name: Create env.liquid
+        env:
+          FILENAME: "./src/liquid/snippets/env.liquid"
+          RELEASE_STAGE: "${{ inputs.release_stage }}"
+        run: |
+          > "${FILENAME}"
+          echo "{% assign env_build_number = \"${TAG}\" %}" >> "${FILENAME}"
+          echo "{% assign env_release_stage = \"${RELEASE_STAGE}\" %}" >> "${FILENAME}"
+
+      # In order to report the theme details correctly to Shopify we inject
+      # the tag into the settings schema. This is surfaced in the Shopify admin
+      # page below the name of the theme
+      - name: Bump version in config
+        env:
+          FILENAME: "./src/config/settings_schema.json"
+          TEMP_FILENAME: "tmp.json"
+        run: |
+          jq --arg version "${TAG}" '.[0].theme_version = $version' ${FILENAME} > ${TEMP_FILENAME}
+          mv "${TEMP_FILENAME}" "${FILENAME}"
+
+      - name: Bootstrap
+        run: npm ci
+
+      # This is the costly command as it takes a while. By pulling this out into
+      # this workflow and not performing it for every store we can both
+      # guarantee that the build is as close to the same for each store and also
+      # save considerable build time as we can parallelise the localisation
+      # workflow
+      - name: Build theme
+        run: npm run build
+
+      # Zipping the bundle up saves quite a bit of time when downloading in the
+      # localisation workflow as there seems to be significant overheads for the
+      # number of files.
+      - name: Zip theme bundle
+        run: zip -r "${OUTPUT_FILENAME}" dist/*
+
+      # The build workflow creates a base theme bundle and a base config file.
+      # This is then available as an artifact for later workflows.
+      - name: Upload base theme
+        uses: actions/upload-artifact@v2
+        with:
+          name: base-theme
+          path: |
+            ${{ env.OUTPUT_FILENAME }}
+            ${{ env.CONF_FILENAME }}

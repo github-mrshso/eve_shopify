@@ -1,0 +1,160 @@
+name: Localise
+on:
+  workflow_call:
+    inputs:
+      stores:
+        required: true
+        type: string
+    secrets:
+      uk_password:
+        required: false
+      ie_password:
+        required: false
+      fr_password:
+        required: false
+      ie_staging_password:
+        required: false
+jobs:
+  localise:
+    runs-on: ubuntu-latest
+    # In order to simplify the process of generating themes for multiple stores
+    # we take a base theme and then using that we clone it, augment it, create a
+    # deployment config and then upload it. We can do all of this by leveraging
+    # the matrix strategy which essentially performs this job for each item
+    # in the provided collection. We are able to generate a store specific theme
+    # using only the id e.g. uk, fr, ie etc. By passing in the collection as a
+    # JSON array of strings e.g. ["uk", "fr", "ie"], we can then convert this
+    # into a collection and essentially loop over each item which gets exposed
+    # as ${{ matrix.store }}.
+    strategy:
+      matrix:
+        store: ${{ fromJson(inputs.stores) }}
+    env:
+      OUTPUT_FILENAME: "${{ matrix.store }}.zip"
+      CONF_FILENAME: "${{ matrix.store }}.json"
+    steps:
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+
+      - name: Download base theme
+        uses: actions/download-artifact@v2
+        with:
+          name: base-theme
+
+      - name: Unzip base theme
+        run: |
+          unzip base.zip
+
+      # The key to this whole process is that the actual secrets are not passed
+      # between workflows, instead the reference to the secrets are passed i.e.
+      # instead of API password, we pass the string "UK_PASSWORD" and then we
+      # simply us ${{ secrets[UK_PASSWORD] }} to retrieve it. This means that we
+      # can write the references to the config files without fear of exposing
+      # secrets to the world. This being the case, we need to make the secrets
+      # available within the workflows but assigning them to ENV vars matching
+      # the reference.
+      - name: Generate password reference
+        env:
+          STORE: "${{ matrix.store }}"
+        run: |
+          password_ref=$(echo "${STORE}_PASSWORD" | tr [:lower:] [:upper:] | tr '-' '_')
+          echo "PASSWORD_REF=${password_ref}" >> $GITHUB_ENV
+
+      - name: Generate urls
+        env:
+          STORE: "${{ matrix.store }}"
+        run: |
+          store_name="evesleep-${STORE}"
+          store_url="${store_name}.myshopify.com"
+          api_url="https://${store_url}/admin/api/2022-01"
+
+          echo "STORE_NAME=${store_name}" >> $GITHUB_ENV
+          echo "STORE_URL=${store_url}" >> $GITHUB_ENV
+          echo "API_URL=${api_url}" >> $GITHUB_ENV
+
+      # Each theme is born from the last and so we pull down the live settings
+      # and locales from the current published theme. Rather than pull them
+      # straight into the theme files we store them alongside and move them in
+      # carefully. You'll see why in the later steps
+      - name: Pull live config and locales
+        env:
+          PASSWORD: "${{ secrets[env.PASSWORD_REF] }}"
+          STORE_URL: "evesleep-${{ matrix.store }}.myshopify.com"
+        run: |
+          files=("config/settings_data.json" "locales/en.default.json" "locales/fr.json")
+          endpoint="${API_URL}/themes.json"
+          themes=$(curl -H "X-Shopify-Access-Token: ${PASSWORD}" "${endpoint}")
+          live_theme_id=$(jq -r '.themes[] | select(.role=="main").id' <<< ${themes})
+
+          mkdir live
+
+          npx shopify-themekit download ${files[@]} -d ./live -p ${PASSWORD} -s ${STORE_URL} -t ${live_theme_id}
+
+      # Settings are simple to apply, we just copy them into the right place in
+      # the new theme
+      - name: Apply live config
+        run: mv "./live/config/settings_data.json" "./dist/config/"
+
+      # Locales are a bit more tricky. It is not valid to store any file other
+      # than the agreed locales in the ./dist/locales directory. Therefore we
+      # move the current live locales into ./dist/assets and tag them with the
+      # current date leaving the committed locales to replace them on deployment
+      - name: Archive live locales
+        run: |
+          date=$(date +"%d-%m-%y_%H-%M-%S")
+
+          for locale in ./live/locales/*.json; do
+            basename=$(basename -- "${locale}" .json)
+            mv "${locale}" "./dist/assets/${basename}.archive-${date}.json"
+          done
+
+      # As with the theme, we start with a generic deployment config and then
+      # augment it for the store to which this theme will be deployed. The final
+      # file will look something like this, once we're done:
+      # {
+      #   "theme_tag": "v1.2.3",
+      #   "theme_name": "eve | v1.2.3 | YYYY-MM-DD",
+      #   "store": "uk",
+      #   "store_name": "evesleep-uk",
+      #   "store_url": "evesleep-uk.myshopify.com",
+      #   "api_url": "https://evesleep-uk.myshopify.com/admin/api/2022-01",
+      #   "password_ref": "UK_PASSWORD",
+      #   "src ": "uk.zip"
+      # }
+      - name: Update theme deployment config
+        env:
+          BASE_CONF_FILENAME: base.json
+        run: |
+          # Using the base config that was created for the base-theme we add in
+          # the config for this specific build
+
+          props=()
+          query="."
+
+          props+=(--arg store "${STORE}")
+          query+=' | .store = $store'
+          props+=(--arg store_name "${STORE_NAME}")
+          query+=' | .store_name = $store_name'
+          props+=(--arg store_url "${STORE_URL}")
+          query+=' | .store_url = $store_url'
+          props+=(--arg api_url "${API_URL}")
+          query+=' | .api_url = $api_url'
+          props+=(--arg password_ref "${PASSWORD_REF}")
+          query+=' | .password_ref = $password_ref'
+          props+=(--arg src "${OUTPUT_FILENAME}")
+          query+=' | .src = $src'
+
+          echo $(jq '.' ${BASE_CONF_FILENAME} | jq "${props[@]}" "${query}") > "${CONF_FILENAME}"
+
+      - name: Zip theme bundle
+        run: zip -r "${OUTPUT_FILENAME}" dist/*
+
+      - name: Upload artefacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: builds
+          path: |
+            ${{ env.OUTPUT_FILENAME }}
+            ${{ env.CONF_FILENAME }}
+
