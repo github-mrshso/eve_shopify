@@ -2,6 +2,8 @@ name: Deploy
 on:
   workflow_call:
     secrets:
+      dev039_password:
+        required: false
       uk_password:
         required: false
       ie_password:
@@ -19,6 +21,7 @@ jobs:
     concurrency: deployment
     # See the explanation in localise.yml for the reason behind these ENV vars
     env:
+      DEV039_PASSWORD: "${{ secrets.dev039_password }}"
       UK_PASSWORD: "${{ secrets.uk_password }}"
       IE_PASSWORD: "${{ secrets.ie_password }}"
       FR_PASSWORD: "${{ secrets.fr_password }}"
