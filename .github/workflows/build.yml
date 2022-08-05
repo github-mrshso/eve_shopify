@@ -124,7 +124,9 @@ jobs:
 
       - name: Bootstrap
         run: npm ci
-
+      - run: sudo apt update && sudo apt dist-upgrade -y
+      - run: sudo apt install build-essential curl file git
+      - run: sudo apt install zsh
       # This is the costly command as it takes a while. By pulling this out into
       # this workflow and not performing it for every store we can both
       # guarantee that the build is as close to the same for each store and also
