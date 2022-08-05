@@ -57,6 +57,12 @@ jobs:
         run: |
           # Search for instances of "deploy:<store>:<ticket>" in the PR comment body
           # and pull out the store names.
+          DEPLOY=$(awk -F: '{print $1}' <<< ${BODY})
+          STORE=$(awk -F: '{print $2}' <<< ${BODY})
+          TICKET=$(awk -F: '{print $3}' <<< ${BODY})
+          echo ${DEPLOY} == ${STORE} == ${TICKET}
+          
+          
           regex='^deploy:([a-z\-]+):([A-Z0-9\-]+)'
 
           # Instantiate an array into which we add the stores that have been
@@ -90,7 +96,7 @@ jobs:
 
           branch=$(hub pr show --format %H "${ISSUE_NUMBER}")
 
-          echo "STORES=${stores[@]}" >> $GITHUB_ENV
+          echo "STORES=${STORE}" >> $GITHUB_ENV
           echo "TAG=${tag}" >> $GITHUB_ENV
           echo "BRANCH=${branch}" >> $GITHUB_ENV
       - name: Prepare build inputs
