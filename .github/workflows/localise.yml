@@ -92,7 +92,8 @@ jobs:
           live_theme_id=$(jq -r '.themes[] | select(.role=="main").id' <<< ${themes})
           echo ${live_theme_id}
           mkdir live
-          theme download ${files[@]} -d ./live -p ${PASSWORD} -s ${STORE_URL} -t ${live_theme_id}  --live
+          # theme download ${files[@]} -d ./live -p ${PASSWORD} -s ${STORE_URL} -t ${live_theme_id}  --live
+          echo ${files[@]} -- ${PASSWORD} -- ${STORE_URL} -- ${live_theme_id}  --live
 
       # Settings are simple to apply, we just copy them into the right place in
       # the new theme
