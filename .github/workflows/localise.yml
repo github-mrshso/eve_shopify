@@ -78,14 +78,14 @@ jobs:
       # and locales from the current published theme. Rather than pull them
       # straight into the theme files we store them alongside and move them in
       # carefully. You'll see why in the later steps
+      - name: install shopify themekit
+      - run: curl -s https://shopify.dev/themekit.py | sudo python
       - name: Pull live config and locales
         env:
-          PASSWORD: "${{ secrets.DEV039_PASSWORD }}" #"${{ secrets[env.PASSWORD_REF] }}"
+          PASSWORD: "${{ secrets[env.PASSWORD_REF] }}"
           # STORE_URL: "evesleep-${{ matrix.store }}.myshopify.com"
           STORE_URL: "${{ matrix.store }}.myshopify.com"
         run: |
-          echo ${{ secrets[env.PASSWORD_REF] }} -- ${PASSWORD} -- ${PASSWORD_REF} -- check
-          echo ${files[@]} -- ${PASSWORD} -- ${STORE_URL} -- ${live_theme_id}
           files=("config/settings_data.json" "locales/en.default.json" "locales/fr.json")
           endpoint="${API_URL}/themes.json"
           themes=$(curl -H "X-Shopify-Access-Token: ${PASSWORD}" "${endpoint}")
@@ -93,7 +93,7 @@ jobs:
           echo ${live_theme_id}
           mkdir live
           
-          npx shopify-themekit download ${files[@]} -d ./live -p ${PASSWORD} -s ${STORE_URL} -t ${live_theme_id}
+          npx theme download ${files[@]} -d ./live -p ${PASSWORD} -s ${STORE_URL} -t ${live_theme_id}  --live
 
       # Settings are simple to apply, we just copy them into the right place in
       # the new theme
