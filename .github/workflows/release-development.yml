@@ -100,8 +100,8 @@ jobs:
           ISSUE_NUMBER: "${{ github.event.issue.number }}"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           STORES: ${{ steps.prepare.outputs.stores }}
-          TAG: ${{ steps.prepare.outputs.tag }}
-          BRANCH: ${{ steps.prepare.outputs.branch }}
+          TAG: ${GITHUB_REF_NAME}
+          BRANCH: ${GITHUB_REF}
         run: |
           if [[ ! -z "${STORES// }" ]] && [[ ! -z "${TAG// }" ]]; then
             # Loop over the store names and generate the JSON required for the
