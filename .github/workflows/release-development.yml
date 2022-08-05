@@ -95,7 +95,6 @@ jobs:
           echo "BRANCH=${branch}" >> $GITHUB_ENV
           echo ${TAG} -- ${STORES} -- ${BRANCH} -- ${BODY}
         - run: echo ${TAG} -- ${STORES} -- ${BRANCH} -- ${BODY}
-
       - name: Prepare build inputs
         id: prepare
         run: |
