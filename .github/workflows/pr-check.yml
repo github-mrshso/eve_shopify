@@ -38,12 +38,12 @@ jobs:
   call-deploy:
     uses: ./.github/workflows/deploy.yml
     needs: call-build
-    if: needs.define-matrix.outputs.tag
+    # if: needs.define-matrix.outputs.tag
     with:
       # release_stage: development
-      tag: "${{ needs.define-matrix.outputs.tag }}"
+      # tag: "${{ needs.define-matrix.outputs.tag }}"
       prefix: test
-      branch: "${{ needs.define-matrix.outputs.branch }}"
+      # branch: "${{ needs.define-matrix.outputs.branch }}"
 
   clean-up:
     runs-on: ubuntu-latest
