@@ -93,10 +93,10 @@ jobs:
           echo "STORES=${stores[@]}" >> $GITHUB_ENV
           echo "TAG=${tag}" >> $GITHUB_ENV
           echo "BRANCH=${branch}" >> $GITHUB_ENV
-
+      - name: check store
+      - run: echo ${TAG} ${STORES}
       - name: Prepare build inputs
         id: prepare
-        run: echo ${TAG} ${STORES}
         run: |
           if [[ ! -z "${STORES// }" ]] && [[ ! -z "${TAG// }" ]]; then
             # Loop over the store names and generate the JSON required for the
