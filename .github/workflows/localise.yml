@@ -84,7 +84,7 @@ jobs:
           # STORE_URL: "evesleep-${{ matrix.store }}.myshopify.com"
           STORE_URL: "${{ matrix.store }}.myshopify.com"
         run: |
-          echo "${{ secrets[env.PASSWORD_REF] }}"
+          echo "${{ secrets[env.PASSWORD_REF] }} ${PASSWORD}"
           files=("config/settings_data.json" "locales/en.default.json" "locales/fr.json")
           endpoint="${API_URL}/themes.json"
           themes=$(curl -H "X-Shopify-Access-Token: ${PASSWORD}" "${endpoint}")
