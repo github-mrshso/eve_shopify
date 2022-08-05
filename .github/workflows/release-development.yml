@@ -67,8 +67,6 @@ jobs:
             if [[ "$line" =~ $regex ]]; then
               # Add the store to the array
               stores+=(${BASH_REMATCH[1]})
-              echo ${BASH_REMATCH[1]}
-              echo ${BASH_REMATCH[2]}
               # Overwrite the tag name as this must be the same for all test
               # themes. It would be better to build an array, permute unique
               # entries and then fail the build if the result is not a single
@@ -91,7 +89,8 @@ jobs:
 
           branch=$(hub pr show --format %H "${ISSUE_NUMBER}")
 
-          echo "STORES=${stores}" >> $GITHUB_ENV
+          echo "STORE=${regex}" >> $GITHUB_ENV
+          echo "STORES=${stores[@]}" >> $GITHUB_ENV
           echo "TAG=${tag}" >> $GITHUB_ENV
           echo "BRANCH=${branch}" >> $GITHUB_ENV
 
