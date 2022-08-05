@@ -15,7 +15,6 @@ on:
         required: false
         type: string
         default: ''
-
 jobs:
   # At this stage of the build we can create a base theme from which all themes
   # are then created. This is a generic build with no store-specific settings
