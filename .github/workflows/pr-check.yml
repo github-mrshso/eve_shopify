@@ -20,6 +20,7 @@ jobs:
         with:
           node-version: '12'
       - run: npm ci
+      - run: npm install
       - run: npm run lint:quiet
 
   call-build:
