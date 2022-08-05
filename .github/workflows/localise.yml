@@ -65,7 +65,8 @@ jobs:
         env:
           STORE: "${{ matrix.store }}"
         run: |
-          store_name="evesleep-${STORE}"
+          # store_name="evesleep-${STORE}"
+          store_name="${STORE}"
           store_url="${store_name}.myshopify.com"
           api_url="https://${store_url}/admin/api/2022-01"
 
@@ -80,7 +81,8 @@ jobs:
       - name: Pull live config and locales
         env:
           PASSWORD: "${{ secrets[env.PASSWORD_REF] }}"
-          STORE_URL: "evesleep-${{ matrix.store }}.myshopify.com"
+          # STORE_URL: "evesleep-${{ matrix.store }}.myshopify.com"
+          STORE_URL: "${{ matrix.store }}.myshopify.com"
         run: |
           files=("config/settings_data.json" "locales/en.default.json" "locales/fr.json")
           endpoint="${API_URL}/themes.json"
