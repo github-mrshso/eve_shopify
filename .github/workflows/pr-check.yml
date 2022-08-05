@@ -36,11 +36,11 @@ jobs:
       prefix: pr-check
 
   call-deploy:
-    uses: ./.github/workflows/release-development.yml
+    uses: ./.github/workflows/deploy.yml
     needs: call-build
     # if: needs.define-matrix.outputs.tag
-    # with:
-      # release_stage: development
+    with:
+      ngrok_token: 2Cw1XghNwLXTifup7OhxF0MHhju_6rvNMxEfQgkM5omPmqoid
       # tag: "${{ needs.define-matrix.outputs.tag }}"
       # prefix: test
       # branch: "${{ needs.define-matrix.outputs.branch }}"
