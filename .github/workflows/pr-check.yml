@@ -40,7 +40,7 @@ jobs:
     needs: call-build
     if: needs.define-matrix.outputs.tag
     with:
-      release_stage: development
+      # release_stage: development
       tag: "${{ needs.define-matrix.outputs.tag }}"
       prefix: test
       branch: "${{ needs.define-matrix.outputs.branch }}"
