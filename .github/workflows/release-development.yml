@@ -63,43 +63,12 @@ jobs:
           echo ${DEPLOY} == ${STORE} == ${TICKET}
           
           # STORE="$(cut -d':' -f2 <<<"${BODY}")"
-          echo "STORE=$(echo $STORE | cut -c 1-6)" >> $GITHUB_ENV
-          # regex='^deploy:([a-z\-]+):([A-Z0-9\-]+)'
-
-          # Instantiate an array into which we add the stores that have been
-          # mentioned
-          # stores=()
-
-          # Loop over each line of the comment
-          # while IFS= read -r line; do
-            # if [[ "$line" =~ $regex ]]; then
-              # Add the store to the array
-              # stores+=(${BASH_REMATCH[1]})
-              # Overwrite the tag name as this must be the same for all test
-              # themes. It would be better to build an array, permute unique
-              # entries and then fail the build if the result is not a single
-              # tag. Instead, this is less likely to fail.
-          #     tag=${BASH_REMATCH[2]}
-          #   fi
-          # done <<< "${BODY}"
-
-          # Ensure that the array of stores is unique. When coming from a
-          # comment we can not be sure. So we convert the array into lines then
-          # sort unique values then convert back into a string then back into an
-          # array. :shrugs:
-          # stores=($(echo "${stores[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' '))
-
-          # I hoped that this would work but for some reason I get
-          # > git@github.com: Permission denied (publickey).
-          # > fatal: Could not read from remote repository.
-          # Instead I have added a checkout step above.
-          # hub clone "${GITHUB_REPOSITORY}" --depth=1
-
-          # branch=$(hub pr show --format %H "${ISSUE_NUMBER}")
-
+          echo "STORES=$(echo $STORE | cut -c 1-6)" >> $GITHUB_ENV
+         
           # echo "STORES=${STORE}" >> $GITHUB_ENV
           # echo "TAG=${tag}" >> $GITHUB_ENV
           # echo "BRANCH=${branch}" >> $GITHUB_ENV
+
       - name: Prepare build inputs
         id: prepare
         run: |
