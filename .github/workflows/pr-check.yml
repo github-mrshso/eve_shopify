@@ -36,7 +36,7 @@ jobs:
       prefix: pr-check
 
   call-deploy:
-    uses: ./.github/workflows/deploy.yml
+    uses: ./.github/workflows/release-development.yml
     needs: call-build
     # if: needs.define-matrix.outputs.tag
     # with:
