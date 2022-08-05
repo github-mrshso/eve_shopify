@@ -34,6 +34,7 @@ jobs:
       # i.e. needs a repo in order to checkout the PR branch
       - uses: actions/checkout@v2
       - run: objdump -i -s "${{ github.event }}"
+      - run: cat "${{ github.event }}"
       # If this event was triggered manually then set the trigger values as ENV
       # vars
       - name: Process dispatch
