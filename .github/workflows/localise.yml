@@ -88,13 +88,13 @@ jobs:
           curl -s https://shopify.dev/themekit.py | sudo python
           files=("config/settings_data.json" "locales/en.default.json" "locales/fr.json")
           endpoint="${API_URL}/themes.json"
-          themes=$(curl -H "X-Shopify-Access-Token: ${PASSWORD}" "${endpoint}")
-          live_theme_id=$(jq -r '.themes[] | select(.role=="main").id' <<< ${themes})
-          echo ${live_theme_id} -- ${themes}
-          # mkdir live
-          # theme download ${files[@]} -d ./live -p ${PASSWORD} -s ${STORE_URL} -t ${live_theme_id}  --live
+          # themes=$(curl -H "X-Shopify-Access-Token: ${PASSWORD}" "${endpoint}")
+          # live_theme_id=$(jq -r '.themes[] | select(.role=="main").id' <<< ${themes})
+          # echo ${live_theme_id} -- ${themes}
           echo ${files[@]} -- ${PASSWORD} -- ${STORE_URL} -- ${live_theme_id}  --live
-
+          mkdir live
+          theme download ${files[@]} -d ./live -p ${PASSWORD} -s ${STORE_URL} -t ${live_theme_id}  --live
+          
       # Settings are simple to apply, we just copy them into the right place in
       # the new theme
       - name: Apply live config
