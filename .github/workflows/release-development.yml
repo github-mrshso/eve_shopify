@@ -4,7 +4,7 @@ on:
     inputs:
       store:
         required: true
-        default: ie-staging
+        default: dev039
         type: choice
         options:
           - uk
