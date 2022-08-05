@@ -39,10 +39,10 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     needs: call-build
     # if: needs.define-matrix.outputs.tag
-    with:
+    # with:
       # release_stage: development
       # tag: "${{ needs.define-matrix.outputs.tag }}"
-      prefix: test
+      # prefix: test
       # branch: "${{ needs.define-matrix.outputs.branch }}"
 
   clean-up:
