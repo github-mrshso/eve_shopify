@@ -93,7 +93,8 @@ jobs:
           echo "STORES=${stores[@]}" >> $GITHUB_ENV
           echo "TAG=${tag}" >> $GITHUB_ENV
           echo "BRANCH=${branch}" >> $GITHUB_ENV
-      - run: echo ${TAG} -- ${STORES} --${branch}
+          echo ${TAG} -- ${STORES} -- ${BRANCH} -- ${BODY}
+        - run: echo ${TAG} -- ${STORES} -- ${BRANCH} -- ${BODY}
 
       - name: Prepare build inputs
         id: prepare
