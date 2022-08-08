@@ -39,11 +39,14 @@ jobs:
       - name: Process dispatch
         if: github.event_name == 'issue_comment' #'workflow_dispatch'
         env:
+          PASSWORD_REF: 'DEV039_PASSWORD'
           STORE: "${{ github.event.inputs.store }}"
         run: |
+          echo ${{ env.PASSWORD_REF }}
           echo "STORES=${STORE}" >> $GITHUB_ENV
           echo "TAG=${GITHUB_REF_NAME}" >> $GITHUB_ENV
           echo "BRANCH=${GITHUB_REF}" >> $GITHUB_ENV
+          fi
 
       # If this event was triggered via a PR comment then we need to extract the
       # instructions and set the ENV vars in the same way as if it were a manual
