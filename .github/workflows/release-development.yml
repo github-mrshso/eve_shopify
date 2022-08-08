@@ -54,6 +54,7 @@ jobs:
           BODY: "${{ github.event.comment.body }}"
           ISSUE_NUMBER: "${{ github.event.issue.number }}"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PASSWORD: "${{ secrets[env.PASSWORD_REF] }}"
         run: |
           # Search for instances of "deploy:<store>:<ticket>" in the PR comment body
           # and pull out the store names.
@@ -61,12 +62,10 @@ jobs:
           STORE=$(awk -F: '{print $2}' <<< ${BODY})
           TICKET=$(awk -F: '{print $3}' <<< ${BODY})
           echo ${DEPLOY} == ${STORE} == ${TICKET}
-
-          PASSWORD_REF="${STORE}_PASSWORD"
-          echo ${PASSWORD_REF}
-          echo ${{ secrets[PASSWORD_REF] }} | sed 's/./& /g'
-          
-          # STORE="$(cut -d':' -f2 <<<"${BODY}")"
+          password_ref=$(echo "${STORE}_PASSWORD" | tr [:lower:] [:upper:] | tr '-' '_')
+          echo "PASSWORD_REF=${password_ref}" >> $GITHUB_ENV
+                    
+                    
           echo "STORES=$(echo $STORE | cut -c 1-6)" >> $GITHUB_ENV
           echo "TICKET=$(echo $TICKET | cut -c 1-6)" >> $GITHUB_ENV
          
