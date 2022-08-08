@@ -76,6 +76,7 @@ jobs:
       - name: Test ngrok public URL
         run: |
           ngrok_tunnels=$(curl -s 'http://localhost:4040/api/tunnels')
+          echo ${ngrok_tunnels}
           ngrok_url=$(jq -r '.tunnels[] | select(.public_url | contains("https")) | .public_url' <<< ${ngrok_tunnels})
 
           if [ -z ${ngrok_url} ]
