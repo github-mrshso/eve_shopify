@@ -122,18 +122,18 @@ jobs:
           jq --arg version "${TAG}" '.[0].theme_version = $version' ${FILENAME} > ${TEMP_FILENAME}
           mv "${TEMP_FILENAME}" "${FILENAME}"
 
-      - name: Bootstrap
-        run: npm ci
-      - run: sudo apt update && sudo apt dist-upgrade -y
-      - run: sudo apt install build-essential curl file git
-      - run: sudo apt install zsh
+      # - name: Bootstrap
+      #   run: npm ci
+      # - run: sudo apt update && sudo apt dist-upgrade -y
+      # - run: sudo apt install build-essential curl file git
+      # - run: sudo apt install zsh
       # This is the costly command as it takes a while. By pulling this out into
       # this workflow and not performing it for every store we can both
       # guarantee that the build is as close to the same for each store and also
       # save considerable build time as we can parallelise the localisation
       # workflow
-      - name: Build theme
-        run: npm run build
+      # - name: Build theme
+      #   run: npm run build
 
       # Zipping the bundle up saves quite a bit of time when downloading in the
       # localisation workflow as there seems to be significant overheads for the

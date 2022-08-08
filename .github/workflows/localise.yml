@@ -90,7 +90,8 @@ jobs:
           endpoint="${API_URL}/themes.json"
           # themes=$(curl -H "X-Shopify-Access-Token: ${PASSWORD}" "${endpoint}")
           # live_theme_id=$(jq -r '.themes[] | select(.role=="main").id' <<< ${themes})
-          # echo ${live_theme_id} -- ${themes}
+          STORE_RED_PASS = ${STORE}_PASSWORD
+          echo ${{ secrets[env.PASSWORD_REF] }} -- ${STORE_RED_PASS} -- ${{ secrets[STORE_RED_PASS] }}
           echo ${files[@]} -- ${PASSWORD} -- ${STORE_URL} -- ${live_theme_id}  --live
           mkdir live
           theme download ${files[@]} -d=./live -p=${PASSWORD} -s=${STORE_URL} --live
