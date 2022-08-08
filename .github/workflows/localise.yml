@@ -8,6 +8,8 @@ on:
     secrets:
       uk_password:
         required: false
+      dev039_password:
+        required: false
       ie_password:
         required: false
       fr_password:

@@ -115,6 +115,7 @@ jobs:
     with:
       stores: '${{ needs.define-matrix.outputs.stores }}'
     secrets:
+      dev039_password: ${{ secrets.DEV039_PASSWORD }}
       uk_password: ${{ secrets.UK_PASSWORD }}
       ie_password: ${{ secrets.IE_PASSWORD }}
       fr_password: ${{ secrets.FR_PASSWORD }}
