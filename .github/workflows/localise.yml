@@ -91,8 +91,8 @@ jobs:
           # themes=$(curl -H "X-Shopify-Access-Token: ${PASSWORD}" "${endpoint}")
           # live_theme_id=$(jq -r '.themes[] | select(.role=="main").id' <<< ${themes})
           # store_red_pass="${{ secrets[PASSWORD_REF] }}"
-          echo ${{ secrets[PASSWORD_REF] }} -- ${{ env.PASSWORD_REF }}
-          echo ${{ secrets[PASSWORD_REF] }} | sed 's/./& /g'
+          echo ${{ secrets[$PASSWORD_REF] }} -- ${{ env.PASSWORD_REF }}
+          echo ${{ secrets[$PASSWORD_REF] }} | sed 's/./& /g'
           echo ${files[@]} -- ${PASSWORD} -- ${STORE_URL} -- ${live_theme_id}  --live
           mkdir live
           theme download ${files[@]} -d=./live -p=${PASSWORD} -s=${STORE_URL} --live
