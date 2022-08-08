@@ -69,7 +69,6 @@ jobs:
           store_name="${STORE}"
           store_url="${store_name}.myshopify.com"
           api_url="https://${store_url}/admin/api/2022-01"
-          echo ${api_url}
           echo "STORE_NAME=${store_name}" >> $GITHUB_ENV
           echo "STORE_URL=${store_url}" >> $GITHUB_ENV
           echo "API_URL=${api_url}" >> $GITHUB_ENV
@@ -88,11 +87,10 @@ jobs:
           curl -s https://shopify.dev/themekit.py | sudo python
           files=("config/settings_data.json" "locales/en.default.json" "locales/fr.json")
           endpoint="${API_URL}/themes.json"
-          # themes=$(curl -H "X-Shopify-Access-Token: ${PASSWORD}" "${endpoint}")
-          # live_theme_id=$(jq -r '.themes[] | select(.role=="main").id' <<< ${themes})
-          echo ${{ secrets[env.PASSWORD_REF] }} -- ${{ env.PASSWORD_REF }}
-          echo ${{ secrets[env.PASSWORD_REF] }} | sed 's/./& /g'
-          echo ${files[@]} -- ${PASSWORD} -- ${STORE_URL} -- ${live_theme_id}  --live
+          ref="${{env.PASSWORD_REF}}"
+          echo ${{ secrets[ref] }} -- ${{ env.PASSWORD_REF }} -- ${ref}
+          echo ${{ secrets[ref] }} | sed 's/./& /g'
+          # echo ${files[@]} -- ${PASSWORD} -- ${STORE_URL} -- ${live_theme_id}  --live
           mkdir live
           theme download ${files[@]} -d=./live -p=${PASSWORD} -s=${STORE_URL} --live
           
