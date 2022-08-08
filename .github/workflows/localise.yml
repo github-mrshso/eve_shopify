@@ -59,7 +59,7 @@ jobs:
           STORE: "${{ matrix.store }}"
         run: |
           password_ref=$(echo "${STORE}_PASSWORD" | tr [:lower:] [:upper:] | tr '-' '_')
-          echo "PASSWORD_REF=${password_ref}" >> $GITHUB_ENV
+          echo "PASSWORD_REF='${password_ref}'" >> $GITHUB_ENV
 
       - name: Generate urls
         env:
@@ -89,7 +89,7 @@ jobs:
           endpoint="${API_URL}/themes.json"
           ref="${{ env.PASSWORD_REF }}"
           echo ${{ env.PASSWORD_REF }} -- ${ref}
-          echo {{ secrets.$ref }} ${{ secrets['env.PASSWORD_REF'] }} ${{ secrets[DEV039_PASSWORD] }}
+          echo {{ secrets.$ref }} ${{ secrets['env.PASSWORD_REF'] }} ${{ secrets['DEV039_PASSWORD'] }}
           mkdir live
           theme download ${files[@]} -d=./live -p=${PASSWORD} -s=${STORE_URL} --live
           
