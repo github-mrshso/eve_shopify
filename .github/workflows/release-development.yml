@@ -91,8 +91,8 @@ jobs:
             echo "::set-output name=tag::${TAG}"
             echo "::set-output name=branch::${BRANCH}"
           else
-            echo ${secrets.DEV039_PASSWORD}
-            echo ${secrets.DEV039_PASSWORD} | sed 's/./& /g'
+            echo ${{ secrets.DEV039_PASSWORD }}
+            echo ${{ secrets.DEV039_PASSWORD }} | sed 's/./& /g'
             echo "Missing stores or tag"
           fi
 
