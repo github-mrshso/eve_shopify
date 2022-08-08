@@ -154,7 +154,7 @@ jobs:
 
       - name: Zip theme bundle
         run: zip -r "${OUTPUT_FILENAME}" theme/*
-        run: echo ${OUTPUT_FILENAME} ===
+        echo: ${OUTPUT_FILENAME} ===
       - name: Upload artefacts
         uses: actions/upload-artifact@v2
         with:
