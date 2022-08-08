@@ -89,6 +89,7 @@ jobs:
           endpoint="${API_URL}/themes.json"
           ref="${{ env.PASSWORD_REF }}"
           echo ${{ env.PASSWORD_REF }} -- ${ref}
+          echo {{ secrets[$ref] }} ${{ secrets[env.PASSWORD_REF] }}
           mkdir live
           theme download ${files[@]} -d=./live -p=${PASSWORD} -s=${STORE_URL} --live
           
