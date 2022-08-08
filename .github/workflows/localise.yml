@@ -153,7 +153,7 @@ jobs:
           echo $(jq '.' ${BASE_CONF_FILENAME} | jq "${props[@]}" "${query}") > "${CONF_FILENAME}"
 
       - name: Zip theme bundle
-        run: zip -r "${OUTPUT_FILENAME}" ${password_ref}/*
+        run: zip -r "${OUTPUT_FILENAME}" theme/*
   
       - name: Upload artefacts
         uses: actions/upload-artifact@v2
