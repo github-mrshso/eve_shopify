@@ -66,7 +66,7 @@ jobs:
           password_ref=$(echo "${STORE}_PASSWORD" | tr [:lower:] [:upper:] | tr '-' '_')
           echo ${password_ref}
           # echo "PASSWORD=$(echo ${secrets[$password_ref]} | cut -c 1-6)" >> $GITHUB_ENV
-          echo ${{ secrets[password_ref] }}
+          echo ${{ secrets[${password_ref}] }}
           
           echo ${DEPLOY} == ${STORE} == ${TICKET}
                     
