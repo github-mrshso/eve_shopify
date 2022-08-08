@@ -81,8 +81,7 @@ jobs:
      
       - name: Pull live config and locales
         env:
-          PASSWORD: "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"
-          # PASSWORD: "${{ secrets[env.PASSWORD_REF] }}"
+          PASSWORD: "${{ secrets[env.PASSWORD_REF] }}"
           # STORE_URL: "evesleep-${{ matrix.store }}.myshopify.com"
           STORE_URL: "${{ matrix.store }}.myshopify.com"
         run: |

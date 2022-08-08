@@ -73,7 +73,7 @@ jobs:
       - name: Prepare build inputs
         id: prepare
         run: |
-          if [[ ! -z "${STORES// }" ]] && [[ ! -z "${TAGS// }" ]]; then
+          if [[ ! -z "${STORES// }" ]] && [[ ! -z "${TAG// }" ]]; then
             # Loop over the store names and generate the JSON required for the
             # matrix input of the build step
 
@@ -91,8 +91,6 @@ jobs:
             echo "::set-output name=tag::${TAG}"
             echo "::set-output name=branch::${BRANCH}"
           else
-            echo ${{ secrets.DEV039_PASSWORD }}
-            echo ${{ secrets.DEV039_PASSWORD }} | sed 's/./& /g'
             echo "Missing stores or tag"
           fi
 
@@ -107,7 +105,7 @@ jobs:
     with:
       release_stage: development
       tag: "${{ needs.define-matrix.outputs.tag }}"
-      prefix: test
+      prefix: ${{ env.TICKET }}
       branch: "${{ needs.define-matrix.outputs.branch }}"
 
   call-localise:
@@ -117,21 +115,21 @@ jobs:
     with:
       stores: '${{ needs.define-matrix.outputs.stores }}'
     secrets:
-      uk_password: ${{ secrets.SHOPIFY_UK_API_PASSWORD }}
-      ie_password: ${{ secrets.SHOPIFY_IE_API_PASSWORD }}
-      fr_password: ${{ secrets.SHOPIFY_FR_API_PASSWORD }}
-      ie_staging_password: ${{ secrets.SHOPIFY_IE_STAGING_API_PASSWORD }}
+      uk_password: ${{ secrets.UK_PASSWORD }}
+      ie_password: ${{ secrets.IE_PASSWORD }}
+      fr_password: ${{ secrets.FR_PASSWORD }}
+      ie_staging_password: ${{ secrets.IE_STAGING_PASSWORD }}
 
   call-deploy:
     uses: ./.github/workflows/deploy.yml
     needs: call-localise
     secrets:
-      dev039_password: "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" #${{ secrets.SHOPIFY_DEV039_API_PASSWORD }}
-      uk_password: ${{ secrets.SHOPIFY_UK_API_PASSWORD }}
-      ie_password: ${{ secrets.SHOPIFY_IE_API_PASSWORD }}
-      fr_password: ${{ secrets.SHOPIFY_FR_API_PASSWORD }}
-      ie_staging_password: ${{ secrets.SHOPIFY_IE_STAGING_API_PASSWORD }}
-      ngrok_token: "2Cw1Ln6IOjfGyq1EvEye23skXuo_6XTcx5XJmGHG7ew8zEf1Y" #${{ secrets.NGROK_AUTH_TOKEN }}
+      dev039_password: ${{ secrets.DEV039_PASSWORD }}
+      uk_password: ${{ secrets.UK_PASSWORD }}
+      ie_password: ${{ secrets.IE_PASSWORD }}
+      fr_password: ${{ secrets.FR_PASSWORD }}
+      ie_staging_password: ${{ secrets.IE_STAGING_PASSWORD }}
+      ngrok_token: ${{ secrets.NGROK_AUTH_TOKEN }}
 
   clean-up:
     runs-on: ubuntu-latest
