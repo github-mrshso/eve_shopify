@@ -40,10 +40,14 @@ jobs:
         if: github.event_name == 'issue_comment' #'workflow_dispatch'
         env:
           STORE: "${{ github.event.inputs.store }}"
+          PASSWORD_REF: ""
         run: |
           echo "STORES=${STORE}" >> $GITHUB_ENV
           echo "TAG=${GITHUB_REF_NAME}" >> $GITHUB_ENV
           echo "BRANCH=${GITHUB_REF}" >> $GITHUB_ENV
+          password_ref=$(echo "${STORE}_PASSWORD" | tr [:lower:] [:upper:] | tr '-' '_')
+          echo ${password_ref}
+          echo "PASSWORD_REF=$(echo $password_ref | cut -c 1-6)" >> $GITHUB_ENV
 
       # If this event was triggered via a PR comment then we need to extract the
       # instructions and set the ENV vars in the same way as if it were a manual
@@ -62,9 +66,8 @@ jobs:
           STORE=$(awk -F: '{print $2}' <<< ${BODY})
           TICKET=$(awk -F: '{print $3}' <<< ${BODY})
           
-          password_ref=$(echo "${STORE}_PASSWORD" | tr [:lower:] [:upper:] | tr '-' '_')
-          echo ${password_ref}
-          echo ${DEPLOY} == ${STORE} == ${TICKET} ==  ${env.PASSWORD}
+          
+          echo ${DEPLOY} == ${STORE} == ${TICKET}
                     
           echo "STORES=$(echo $STORE | cut -c 1-6)" >> $GITHUB_ENV
           echo "TICKET=$(echo $TICKET | cut -c 1-6)" >> $GITHUB_ENV
