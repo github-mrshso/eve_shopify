@@ -73,8 +73,7 @@ jobs:
       - name: Prepare build inputs
         id: prepare
         run: |
-          # if [[ ! -z "${STORES// }" ]] && [[ ! -z "${TAG// }" ]]; then
-          if [[ ! -z "${STORES// }" ]] && [[ ! -z "${DATA// }" ]]; then
+          if [[ ! -z "${STORES// }" ]] && [[ ! -z "${TAGS// }" ]]; then
             # Loop over the store names and generate the JSON required for the
             # matrix input of the build step
 
@@ -106,7 +105,7 @@ jobs:
     with:
       release_stage: development
       tag: "${{ needs.define-matrix.outputs.tag }}"
-      prefix: ${TICKET}
+      prefix: test
       branch: "${{ needs.define-matrix.outputs.branch }}"
 
   call-localise:
