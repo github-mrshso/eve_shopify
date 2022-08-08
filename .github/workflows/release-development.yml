@@ -42,7 +42,9 @@ jobs:
           PASSWORD_REF: 'DEV039_PASSWORD'
           STORE: "${{ github.event.inputs.store }}"
         run: |
+          echo ${{ secrets.DEV039_PASSWORD }}
           echo ${{ env.PASSWORD_REF }}
+          echo ${{ secrets[env.PASSWORD_REF] }}
           echo "STORES=${STORE}" >> $GITHUB_ENV
           echo "TAG=${GITHUB_REF_NAME}" >> $GITHUB_ENV
           echo "BRANCH=${GITHUB_REF}" >> $GITHUB_ENV
