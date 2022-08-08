@@ -48,7 +48,7 @@ jobs:
           ./ngrok authtoken ${NGROK_TOKEN}
 
           echo "Starting ngrok = $(pwd)"
-          ./ngrok http "file://$(pwd)/"
+          ./ngrok http "file://$(pwd)/"  > /dev/null &
 
           echo "Waiting for ngrok to register urls"
           sleep 5
