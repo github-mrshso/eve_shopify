@@ -115,7 +115,6 @@ jobs:
             # Create the payload for the Shopify API with the ngrok url interpolated
             payload="{\"theme\":{\"name\":\"${theme_name}\", \"src\":\"${src_url}\",\"role\":\"unpublished\"}}"
             echo ${payload}
-            sleep 50
             echo "Posting payload to ${endpoint}"
             theme=$(curl -X POST \
               -H "X-Shopify-Access-Token: ${password}" \
