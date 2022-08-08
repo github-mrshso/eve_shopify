@@ -47,7 +47,7 @@ jobs:
           echo "Configuring ngrok"
           ./ngrok authtoken ${NGROK_TOKEN}
 
-          echo "Starting ngrok"
+          echo "Starting ngrok $(pwd)"
           ./ngrok http "file://$(pwd)/"  > /dev/null &
 
           echo "Waiting for ngrok to register urls"
@@ -75,6 +75,7 @@ jobs:
       # }
       - name: Test ngrok public URL
         run: |
+          echo ${tunnels}
           ngrok_tunnels=$(curl -s 'http://localhost:4040/api/tunnels')
           echo ${ngrok_tunnels}
           ngrok_url=$(jq -r '.tunnels[] | select(.public_url | contains("https")) | .public_url' <<< ${ngrok_tunnels})
