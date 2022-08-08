@@ -44,7 +44,6 @@ jobs:
           echo "STORES=${STORE}" >> $GITHUB_ENV
           echo "TAG=${GITHUB_REF_NAME}" >> $GITHUB_ENV
           echo "BRANCH=${GITHUB_REF}" >> $GITHUB_ENV
-          
 
       # If this event was triggered via a PR comment then we need to extract the
       # instructions and set the ENV vars in the same way as if it were a manual
@@ -55,21 +54,15 @@ jobs:
           BODY: "${{ github.event.comment.body }}"
           ISSUE_NUMBER: "${{ github.event.issue.number }}"
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PASSWORD: "${{ secrets[env.PASSWORD_REF] }}"
         run: |
           # Search for instances of "deploy:<store>:<ticket>" in the PR comment body
           # and pull out the store names.
           DEPLOY=$(awk -F: '{print $1}' <<< ${BODY})
           STORE=$(awk -F: '{print $2}' <<< ${BODY})
           TICKET=$(awk -F: '{print $3}' <<< ${BODY})
-
-          password_ref=$(echo "${STORE}_PASSWORD" | tr [:lower:] [:upper:] | tr '-' '_')
-          echo ${password_ref}
-          # echo "PASSWORD=$(echo ${secrets[$password_ref]} | cut -c 1-6)" >> $GITHUB_ENV
-          echo ${{ secrets[${password_ref}] }}
-          
           echo ${DEPLOY} == ${STORE} == ${TICKET}
-                    
+          
+          # STORE="$(cut -d':' -f2 <<<"${BODY}")"
           echo "STORES=$(echo $STORE | cut -c 1-6)" >> $GITHUB_ENV
           echo "TICKET=$(echo $TICKET | cut -c 1-6)" >> $GITHUB_ENV
          
@@ -80,7 +73,7 @@ jobs:
       - name: Prepare build inputs
         id: prepare
         run: |
-          if [[ ! -z "${STORES// }" ]] && [[ ! -z "${TAGS// }" ]]; then
+          if [[ ! -z "${STORES// }" ]] && [[ ! -z "${TAG// }" ]]; then
             # Loop over the store names and generate the JSON required for the
             # matrix input of the build step
 
