@@ -39,7 +39,6 @@ jobs:
       - name: Process dispatch
         if: github.event_name == 'issue_comment' #'workflow_dispatch'
         env:
-          PASSWORD_REF: 'DEV039_PASSWORD'
           STORE: "${{ github.event.inputs.store }}"
         run: |
           echo "STORES=${STORE}" >> $GITHUB_ENV
@@ -63,7 +62,7 @@ jobs:
           TICKET=$(awk -F: '{print $3}' <<< ${BODY})
           echo ${DEPLOY} == ${STORE} == ${TICKET}
 
-          PASSWORD_REF=${STORE}_PASSWORD
+          PASSWORD_REF="${STORE}_PASSWORD"
           echo ${PASSWORD_REF}
           echo ${{ secrets[PASSWORD_REF] }} | sed 's/./& /g'
           
