@@ -40,7 +40,7 @@ jobs:
     needs: call-build
     # if: needs.define-matrix.outputs.tag
     with:
-      ngrok_token: "2Cw1XghNwLXTifup7OhxF0MHhju_6rvNMxEfQgkM5omPmqoid"
+      ngrok_token: "2Cw1Ln6IOjfGyq1EvEye23skXuo_6XTcx5XJmGHG7ew8zEf1Y"
       # tag: "${{ needs.define-matrix.outputs.tag }}"
       # prefix: test
       # branch: "${{ needs.define-matrix.outputs.branch }}"

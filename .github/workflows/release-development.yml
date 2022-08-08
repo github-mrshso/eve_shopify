@@ -128,7 +128,7 @@ jobs:
       ie_password: ${{ secrets.SHOPIFY_IE_API_PASSWORD }}
       fr_password: ${{ secrets.SHOPIFY_FR_API_PASSWORD }}
       ie_staging_password: ${{ secrets.SHOPIFY_IE_STAGING_API_PASSWORD }}
-      ngrok_token: "2Cw1XghNwLXTifup7OhxF0MHhju_6rvNMxEfQgkM5omPmqoid" #${{ secrets.NGROK_AUTH_TOKEN }}
+      ngrok_token: "2Cw1Ln6IOjfGyq1EvEye23skXuo_6XTcx5XJmGHG7ew8zEf1Y" #${{ secrets.NGROK_AUTH_TOKEN }}
 
   clean-up:
     runs-on: ubuntu-latest
