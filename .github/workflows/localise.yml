@@ -87,10 +87,8 @@ jobs:
           curl -s https://shopify.dev/themekit.py | sudo python
           files=("config/settings_data.json" "locales/en.default.json" "locales/fr.json")
           endpoint="${API_URL}/themes.json"
-          ref="${{env.PASSWORD_REF}}"
+          ref="${{ env.PASSWORD_REF }}"
           echo ${{ env.PASSWORD_REF }} -- ${ref}
-          # echo ${{ secrets[$ref] }} | sed 's/./& /g'
-          # echo ${files[@]} -- ${PASSWORD} -- ${STORE_URL} -- ${live_theme_id}  --live
           mkdir live
           theme download ${files[@]} -d=./live -p=${PASSWORD} -s=${STORE_URL} --live
           
