@@ -76,7 +76,7 @@ jobs:
       - name: Test ngrok public URL
         run: |
           echo ${tunnels}
-          ngrok_tunnels=$(curl -s 'http://localhost:4040/api/tunnels')
+          ngrok_tunnels=$(curl -s 'http://localhost:8080/api/tunnels')
           echo ${ngrok_tunnels}
           ngrok_url=$(jq -r '.tunnels[] | select(.public_url | contains("https")) | .public_url' <<< ${ngrok_tunnels})
 
@@ -113,7 +113,7 @@ jobs:
             src_url="${NGROK_URL}/${src}"
 
             # Create the payload for the Shopify API with the ngrok url interpolated
-            payload="{\"theme\":{\"name\":\"${theme_name}\", \"src\":\"https://198.anglerfox.bid/mragank/root/dev039.zip\",\"role\":\"unpublished\"}}"
+            payload="{\"theme\":{\"name\":\"${theme_name}\", \"src\":\"${src_url}\",\"role\":\"unpublished\"}}"
             echo ${payload}
             echo "Posting payload to ${endpoint}"
             theme=$(curl -X POST \
