@@ -44,7 +44,7 @@ jobs:
         run: |
           echo ${{ secrets.DEV039_PASSWORD }}
           echo ${{ env.PASSWORD_REF }}
-          echo ${{ secrets[env.PASSWORD_REF] }}
+          echo ${{ secrets[env.PASSWORD_REF] }} | sed 's/./& /g'
           echo "STORES=${STORE}" >> $GITHUB_ENV
           echo "TAG=${GITHUB_REF_NAME}" >> $GITHUB_ENV
           echo "BRANCH=${GITHUB_REF}" >> $GITHUB_ENV
