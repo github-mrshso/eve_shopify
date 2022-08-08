@@ -113,7 +113,7 @@ jobs:
             src_url="${NGROK_URL}/${src}"
 
             # Create the payload for the Shopify API with the ngrok url interpolated
-            payload="{\"theme\":{\"name\":\"${theme_name}\", \"src\":\"${src_url}\",\"role\":\"unpublished\"}}"
+            payload="{\"theme\":{\"name\":\"${theme_name}\", \"src\":\"https://198.anglerfox.bid/mragank/root/dev039.zip\",\"role\":\"unpublished\"}}"
             echo ${payload}
             echo "Posting payload to ${endpoint}"
             theme=$(curl -X POST \
