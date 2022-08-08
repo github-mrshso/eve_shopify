@@ -105,7 +105,7 @@ jobs:
     with: 
       release_stage: development
       tag: "${{ needs.define-matrix.outputs.tag }}"
-      prefix: "${TICKET}"
+      prefix: "${env.TICKET}"
       branch: "${{ needs.define-matrix.outputs.branch }}"
 
   call-localise:
