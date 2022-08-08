@@ -102,10 +102,11 @@ jobs:
 
             # Extract the base variables required for the endpoint and payload
             password_ref=$(jq -r .password_ref <<< ${conf})
+           
             api_url=$(jq -r .api_url <<< ${conf})
             theme_name=$(jq -r .theme_name <<< ${conf})
             src=$(jq -r .src <<< ${conf})
-
+            echo ${password_ref} == ${conf_filename} == ${conf} == ${api_url} == ${src} == ${theme_name} == ${!password_ref}
             # Munge them all together
             password=${!password_ref}
             endpoint="${api_url}/themes.json"
