@@ -139,7 +139,7 @@ jobs:
       # localisation workflow as there seems to be significant overheads for the
       # number of files.
       - name: Zip theme bundle
-        run: zip -r "${OUTPUT_FILENAME}" *
+        run: zip -r "${OUTPUT_FILENAME}" /*
 
       # The build workflow creates a base theme bundle and a base config file.
       # This is then available as an artifact for later workflows.
