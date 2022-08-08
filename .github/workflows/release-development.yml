@@ -64,6 +64,7 @@ jobs:
           
           # STORE="$(cut -d':' -f2 <<<"${BODY}")"
           echo "STORES=$(echo $STORE | cut -c 1-6)" >> $GITHUB_ENV
+          echo "TICKET=$(echo $TICKET | cut -c 1-6)" >> $GITHUB_ENV
          
           # echo "STORES=${STORE}" >> $GITHUB_ENV
           # echo "TAG=${tag}" >> $GITHUB_ENV
@@ -72,7 +73,8 @@ jobs:
       - name: Prepare build inputs
         id: prepare
         run: |
-          if [[ ! -z "${STORES// }" ]] && [[ ! -z "${TAG// }" ]]; then
+          # if [[ ! -z "${STORES// }" ]] && [[ ! -z "${TAG// }" ]]; then
+          if [[ ! -z "${STORES// }" ]] && [[ ! -z "${DATA// }" ]]; then
             # Loop over the store names and generate the JSON required for the
             # matrix input of the build step
 
@@ -104,7 +106,7 @@ jobs:
     with:
       release_stage: development
       tag: "${{ needs.define-matrix.outputs.tag }}"
-      prefix: test
+      prefix: ${TICKET}
       branch: "${{ needs.define-matrix.outputs.branch }}"
 
   call-localise:
