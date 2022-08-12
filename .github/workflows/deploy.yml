@@ -48,7 +48,7 @@ jobs:
           ./ngrok authtoken ${NGROK_TOKEN}
 
           echo "Starting ngrok = $(pwd)"
-          ./ngrok http "file://$(pwd)/" --request-header-add "ngrok-skip-browser-warning:true"
+          ./ngrok http "file://$(pwd)/" --request-header-add "ngrok-skip-browser-warning:true" > /dev/null &
 
           echo "Waiting for ngrok to register urls"
           sleep 5
@@ -116,7 +116,7 @@ jobs:
             payload="{\"theme\":{\"name\":\"${theme_name}\", \"src\":\"${src_url}\",\"role\":\"unpublished\"}}"
             echo ${payload}
             echo "Posting payload to ${endpoint}"
-            sleep 300
+      
             theme=$(curl -X POST \
               -H "X-Shopify-Access-Token: ${password}" \
               -H "Content-Type: application/json" \
