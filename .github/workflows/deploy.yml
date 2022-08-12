@@ -40,8 +40,8 @@ jobs:
           NGROK_TOKEN: "${{ secrets.ngrok_token }}"
         run: |
           echo "Downloading ngrok"
-          wget https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.zip
-          unzip -qq ngrok-stable-linux-amd64.zip
+          wget https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-v3-stable-linux-amd64.tgz
+          tar xvzf ngrok-v3-stable-linux-amd64.tgz
           chmod +x ./ngrok
 
           echo "Configuring ngrok"
