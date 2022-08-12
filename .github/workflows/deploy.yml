@@ -116,6 +116,7 @@ jobs:
             payload="{\"theme\":{\"name\":\"${theme_name}\", \"src\":\"${src_url}\",\"role\":\"unpublished\"}}"
             echo ${payload}
             echo "Posting payload to ${endpoint}"
+            sleep 300
             theme=$(curl -X POST \
               -H "X-Shopify-Access-Token: ${password}" \
               -H "Content-Type: application/json" \
