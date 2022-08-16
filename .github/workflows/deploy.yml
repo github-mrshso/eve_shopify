@@ -48,7 +48,8 @@ jobs:
           ./ngrok authtoken ${NGROK_TOKEN}
 
           echo "Starting ngrok = $(pwd)"
-          ./ngrok http "file://$(pwd)/" --request-header-add "ngrok-skip-browser-warning:true" --response-header-add "ngrok-skip-browser-warning:true" --request-header-add "User-Agent:Github-Actons" > /dev/null &
+           php -S localhost:8008 > /dev/null &
+          ./ngrok http 8008 --request-header-add "ngrok-skip-browser-warning:true" --response-header-add "ngrok-skip-browser-warning:true" --request-header-add "User-Agent:Github-Actons" > /dev/null &
 
           echo "Waiting for ngrok to register urls"
           sleep 5
